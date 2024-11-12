@@ -1,0 +1,1 @@
+﻿export const INPUT_WIDTH = 'w-full max-w-[680px]'

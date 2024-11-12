@@ -1,17 +1,21 @@
-﻿import {ChangeEvent, useCallback, useEffect, useState} from "react";
+﻿import {ChangeEvent, useCallback, useState} from "react";
 import axios from "axios";
 import {BASE_URL} from "@/constants";
-import {MessageFeedProps} from "@/pages/Main.tsx";
 
-const useMessage = ({registerConversation} : {registerConversation : (message : MessageFeedProps['message'], sender : MessageFeedProps['sender']) => void }) => {
+type UseMessageProps = {
+    registerConversation : (message: string, sender : 'user' | 'bot' ) => void;
+}
+
+const useMessage = ({registerConversation} : UseMessageProps) => {
     const [message, setMessage] = useState('');
     const [submitting, setSubmitting] = useState(false);
     
     
-    const handleInput = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    const handleInput = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
         setMessage(e.target.value)
     }, []);
-    const handleSubmit = async () => {
+
+    const handleSubmitMessage = async () => {
         // -TODO : Sending api request
         if (message === '')
             return
@@ -35,22 +39,11 @@ const useMessage = ({registerConversation} : {registerConversation : (message : 
         }
     }
 
-    useEffect(() => {
-        const handleKeyPress = (e: KeyboardEvent) => {
-            if (e.key === 'Enter' && !submitting && message.trim() !== '') {
-                handleSubmit();
-            }
-        };
-
-        document.addEventListener('keypress', handleKeyPress);
-
-        return () => {
-            document.removeEventListener('keypress', handleKeyPress);
-        };
-    }, [submitting, message])
     
     
-    return {message, submitting, handleSubmit, handleInput};
+    return {
+        message, submitting, handleInput, handleSubmitMessage, setMessage
+    }
 }
 
-export default useMessage;
+export default useMessage; 

@@ -6,6 +6,7 @@
     width: 0;
 }
 
+
 @keyframes slide-in {
     from {
         opacity: 0;
