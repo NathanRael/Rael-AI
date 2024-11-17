@@ -8,12 +8,12 @@ type LoaderProps = {
 }
 const LoaderUI = ({customLoader, title, className} : LoaderProps) => {
     return (
-        <Stack className={cn('', className)} gap={8}>
+        <Stack className={cn('text-white dark:text-white text-base', className)} gap={8}>
             {
                 !customLoader && <Loader size={32} className={'animate-spin'}/>
             }
             {customLoader}
-            {title && <p className={'text-black'}>{title}</p>}
+            {title && <p >{title}</p>}
         </Stack>
     )
 }

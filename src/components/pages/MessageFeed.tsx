@@ -6,7 +6,6 @@ import {Code2, Copy} from "lucide-react";
 import {Prism as SyntaxHighlighter} from "react-syntax-highlighter";
 import {dracula} from "react-syntax-highlighter/dist/esm/styles/prism";
 import useWindowSize from "@/hooks/useWindowSize.ts";
-import {useRef} from "react";
 
 export type MessageFeedProps = {
     sender: 'user' | 'bot';
@@ -14,7 +13,6 @@ export type MessageFeedProps = {
 }
 const MessageFeed = ({message, sender}: MessageFeedProps) => {
     const {toast, renderToastContainer} = useToast();
-    const stackRef = useRef<HTMLDivElement>(null);
 
     const {width} = useWindowSize();
     
@@ -56,7 +54,7 @@ const MessageFeed = ({message, sender}: MessageFeedProps) => {
                 {
                     sender === 'bot' &&
                     (
-                        <div className={'prose prose-code: dark:prose-invert'}>
+                        <div className={'prose prose-style'}>
                             <ReactMarkdown className={'text-wrap w-full'} children={message} remarkPlugins={[remarkGfm]}
                                            components={{
                                                code(props) {

@@ -6,6 +6,25 @@
     width: 0;
 }
 
+@layer components {
+    .prose-code-style{
+        @apply 
+    }
+    .prose-style{
+        @apply dark:prose-invert; 
+    }
+    
+    
+}
+
+@layer utilities {
+    .flex-centered {
+        @apply flex flex-col items-center justify-center
+    }
+}
+
+
+
 
 @keyframes slide-in {
     from {

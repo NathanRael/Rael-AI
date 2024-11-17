@@ -8,6 +8,8 @@ interface ChatContext {
     conversations: MessageFeedProps[];
     registerConversation: (message: MessageFeedProps['message'], sender: MessageFeedProps['sender']) => void;
     fetchConversations: () => Promise<() => void>;
+    selectedModel : string;
+    setSelectedModel : React.Dispatch<React.SetStateAction<string>>;
 }
 
 const ChatContext = createContext<ChatContext | undefined>(undefined);

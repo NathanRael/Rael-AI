@@ -19,7 +19,7 @@ const MessageList = ({conversations, loading, error}: MessageListProps) => {
             <Stack  gap={16}>
                 <Stack className={'text-center text-danger'} direction={'horizontal'} gap={8}>
                     <Info/>
-                    <p>{error}</p>
+                    <p>Error : {error}</p>
                 </Stack>
                 <Button variant={'secondary'} size={'sm'} radius={'2xl'} onClick={() => fetchConversations()} block>Retry</Button>
             </Stack>
