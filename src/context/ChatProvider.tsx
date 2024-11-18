@@ -7,7 +7,7 @@ interface ChatContext {
     error: string;
     conversations: MessageFeedProps[];
     registerConversation: (message: MessageFeedProps['message'], sender: MessageFeedProps['sender']) => void;
-    fetchConversations: () => Promise<() => void>;
+    fetchConversations: (chatId : string) => Promise<() => void>;
     selectedModel : string;
     setSelectedModel : React.Dispatch<React.SetStateAction<string>>;
 }

@@ -10,7 +10,7 @@ function App() {
         <Routes>
             <Route element={<AppLayout/>}>
                 <Route index path={"/"} element={<Main/>}/>
-                <Route path={'/chat/:id'} element={<ChatPage/>}/>
+                <Route path={'/chat/:chatId'} element={<ChatPage/>}/>
             </Route>
         </Routes>
     )

@@ -1,7 +1,7 @@
 ﻿import axios from "axios";
 import {BASE_URL} from "@/constants";
 import {MessageFeedProps} from "@/components/pages/MessageFeed.tsx";
-import {useCallback, useEffect, useState} from "react";
+import {useCallback, useState} from "react";
 
 export interface BackendMessages {
     "user_message": string;
@@ -15,14 +15,15 @@ const useFetchConversations = () => {
     const abortController = new AbortController();
     const signal = abortController.signal;
     
-    const fetchConversations = useCallback(async () => {
+    const fetchConversations = useCallback(async (chatId : string) => {
         setLoading(true);
         try {
-            const response = await axios.get(`${BASE_URL}/api/messages`, {signal});
+            const response = await axios.get(`${BASE_URL}/api/messages/${chatId}`, {signal});
             const backendMessages = response.data as BackendMessages[];
             
+            
             if (response.status !== 200)
-                new Error(`Error fetching conversations`);
+                throw  new Error(`Error fetching conversations`);
             
             // await new Promise((resolve) => setTimeout(() => resolve(true), 2000))
             
@@ -34,7 +35,7 @@ const useFetchConversations = () => {
             );
         }catch (e) {
             console.error(e);
-            setError((e as any).message || e);
+            setError((e as any).message);
         } finally {
             setLoading(false);
         }
@@ -47,9 +48,6 @@ const useFetchConversations = () => {
     }, []);
     
     
-    useEffect(() => {
-        fetchConversations();
-    }, [])
     
     return {
         conversations,

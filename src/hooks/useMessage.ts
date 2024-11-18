@@ -22,12 +22,14 @@ const useMessage = ({registerConversation, selectedModel} : UseMessageProps) => 
         setMessage(e.target.value)
     }, []);
 
-    const handleSubmitMessage = async (message : string, setMessage : React.Dispatch<React.SetStateAction<string>>) => {
+    const handleSubmitMessage = async (message : string, chatId : string,  setMessage : React.Dispatch<React.SetStateAction<string>>) => {
         console.log('message : ', message)
         
         // -TODO : Sending api request
         if (message === '' || !message)
             return
+        
+        
         
         if (selectedModel === '') {
             toast({
@@ -41,8 +43,9 @@ const useMessage = ({registerConversation, selectedModel} : UseMessageProps) => 
         registerConversation(message, 'user');
         setSubmitting(true);
         setMessage('');
+
         try {
-            const response = await axios.post(`${BASE_URL}/api/message`, {message, model : selectedModel});
+            const response = await axios.post(`${BASE_URL}/api/message`, {message, model : selectedModel, historyId : chatId});
 
             if (response.status === 200){
                 console.log('Response : ', response)
@@ -54,7 +57,7 @@ const useMessage = ({registerConversation, selectedModel} : UseMessageProps) => 
             console.error('Error from the backend : ', (e as any).message || e)
         } finally {
             setSubmitting(false);
-            scrollToBottom(9999999);
+            scrollToBottom(document.body.scrollHeight);
         }
     }
 

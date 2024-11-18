@@ -6,7 +6,7 @@ import * as React from "react";
 interface MessageContext {
     message: string;
     setMessage : React.Dispatch<React.SetStateAction<string>>;
-    handleSubmitMessage : (message : string, setMessage : React.Dispatch<React.SetStateAction<string>>) => Promise<void>;
+    handleSubmitMessage : (message : string, chatId : string, setMessage : React.Dispatch<React.SetStateAction<string>>) => Promise<void>;
     submitting : boolean;
     setSubmitting : React.Dispatch<React.SetStateAction<boolean>>;
     handleInput : (e : ChangeEvent<HTMLTextAreaElement>) => void;

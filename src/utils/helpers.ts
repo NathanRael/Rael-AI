@@ -12,6 +12,6 @@
 }
 
 
-export const limitTextLen = (text : string, limit : number = 25)  => {
+export const limitTextLen = (text : string, limit : number = 20 )  => {
     return text.length >= limit ? text.slice(0,limit) + '...' : text;
 }
