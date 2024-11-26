@@ -1,21 +1,20 @@
-﻿import {ChangeEvent, createContext, useContext} from "react";
-import useMessage from "@/hooks/useMessage.ts";
-import {useChatContext} from "@/context/ChatProvider.tsx";
+﻿import {createContext, useContext} from "react";
 import * as React from "react";
+import {useUserPrefContext} from "@/context/UserPrefProvider.tsx";
+import useMessages from "@/hooks/useMessages.ts";
+import {Message} from "@/api/MessagesApi.ts";
 
 interface MessageContext {
-    message: string;
-    setMessage : React.Dispatch<React.SetStateAction<string>>;
-    handleSubmitMessage : (message : string, chatId : string, setMessage : React.Dispatch<React.SetStateAction<string>>) => Promise<void>;
+    handleSubmitMessage : (inputValue : string, chatId : string,  setInputValue : React.Dispatch<React.SetStateAction<string>>) => Promise<void>;
     submitting : boolean;
-    setSubmitting : React.Dispatch<React.SetStateAction<boolean>>;
-    handleInput : (e : ChangeEvent<HTMLTextAreaElement>) => void;
+    optimisticMessage : string
 }
 
 const MessageContext = createContext<MessageContext | undefined>(undefined);
 const MessageProvider = ({children}: { children: React.ReactNode }) => {
-    const {registerConversation, selectedModel} = useChatContext();
-    const props = useMessage({registerConversation, selectedModel});
+    const {selectedModel} = useUserPrefContext();
+    const props = useMessages({selectedModel});
+    
     return (
         <MessageContext.Provider value={props}>
             {children}

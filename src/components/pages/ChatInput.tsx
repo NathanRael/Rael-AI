@@ -1,18 +1,33 @@
-﻿import {useChatContext} from "@/context/ChatProvider.tsx";
-import {useMessageContext} from "@/context/MessageProvider.tsx";
-import useMessage from "@/hooks/useMessage.ts";
+﻿import {useMessageContext} from "@/context/MessageProvider.tsx";
 import useScroll from "@/hooks/useScroll.ts";
 import useSmartTextarea from "@/hooks/useSmartTextarea.ts";
 import {ArrowUp} from "lucide-react";
 import {Icon, Textarea} from "rael-ui";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
+import {useEffect, useState} from "react";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
+import { newConversation} from "@/api/conversationsApi.ts";
+import useFetchConversations from "@/hooks/useFetchConversations.ts";
 
 const ChatInput = () => {
     const {chatId} = useParams();
-    const {registerConversation} = useChatContext();
     const {submitting, handleSubmitMessage} = useMessageContext();
-    const {message, setMessage} = useMessage({registerConversation});
+    const [message, setMessage] = useState("");
     const {scrollToBottom} = useScroll();
+    const queryClient = useQueryClient();
+    const navigate = useNavigate();
+    const [success, setSuccess] = useState(false)
+    
+    const {data : conversations, isLoading : isConversationLoading} = useFetchConversations({})
+
+    const {mutateAsync: newConversationMutation} = useMutation({
+        mutationFn: newConversation,
+        onSuccess: () => {
+            queryClient.invalidateQueries(["conversations"])
+            setSuccess(true)
+        }
+    })
+
 
     const {rows, handleKeyPress} = useSmartTextarea({
         onShiftAndEnter: () => {
@@ -24,11 +39,41 @@ const ChatInput = () => {
         },
         value: message
     });
+    
+    
+    const createConversation = async () => {
+        setSuccess(false)
+        try {
+            await newConversationMutation({
+                user_id: '1',
+                title: JSON.parse(localStorage.getItem('userInput') || ''),
+            })
+        } catch (e) {
+            console.error(e)
+        }
+    }
 
     const handleSubmit = () => {
-        handleSubmitMessage(message, chatId || '' ,setMessage)
+        if (chatId) {
+            handleSubmitMessage(message, chatId, setMessage)
+            return
+        }
+        localStorage.setItem('userInput', JSON.stringify(message))
+        setMessage('')
+        createConversation()
     }
+
+    useEffect(() => {
+        if (conversations && !isConversationLoading && success){
+            const newConversationId = conversations[conversations.length - 1].id
+            const userInput = JSON.parse(localStorage.getItem('userInput') || '')
+            // navigate(`/chat/${newConversationId}`);
+            
+            // handleSubmitMessage(userInput, newConversationId, setMessage)
+        }
+    }, [conversations]);
     
+
     return (
         <Textarea value={message}
                   rows={rows}
@@ -38,7 +83,8 @@ const ChatInput = () => {
                   }}
                   className={`w-full shadow-md  border border-gray-400 dark:border-neutral-700 rounded-3xl text-lg   min-h-[32px] h-fit resize-none ${rows === 1 ? 'items-center' : 'items-end'} `}
                   placeholder={'Your message ...'} size={'md'}
-                  rightContent={<Icon role={'button'} type={'submit'} disabled={submitting} className={'rounded-2xl'}
+                  rightContent={<Icon role={'button'} type={'submit'} disabled={submitting || message === ''}
+                                      className={'rounded-2xl'}
                                       onClick={handleSubmit}><ArrowUp
                       size={16}/></Icon>}
         />

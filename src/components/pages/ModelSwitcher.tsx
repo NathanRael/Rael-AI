@@ -13,14 +13,14 @@ import {ChevronDownIcon} from "lucide-react";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {BASE_URL} from "@/constants";
-import {useChatContext} from "@/context/ChatProvider.tsx";
+import {useUserPrefContext} from "@/context/UserPrefProvider.tsx";
 
 const ModelSwitcher = () => {
     const [models, setModels] = useState([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState("");
     const {renderToastContainer } = useToast();
-    const {setSelectedModel} = useChatContext();
+    const {setSelectedModel} = useUserPrefContext();
      
     const getModels = async () => {
         setLoading(true);

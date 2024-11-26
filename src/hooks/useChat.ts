@@ -1,17 +1,7 @@
 ﻿
-import {MessageFeedProps} from "@/components/pages/MessageFeed.tsx";
-import useFetchConversations from "@/hooks/useFetchConversations.ts";
-import {useState} from "react";
 
-const useChat = () => {
-    const {conversations, setConversations, loading, error, fetchConversations} = useFetchConversations();
-    const [selectedModel, setSelectedModel] = useState('');
+const useChat = ({chatId} : {chatId : string}) => {
     
-    const registerConversation = (message: MessageFeedProps['message'], sender: MessageFeedProps['sender']): void => {
-        setConversations(prev => [...prev, {message, sender}])
-    }
-    
-    return {registerConversation, loading, error, conversations, fetchConversations, selectedModel, setSelectedModel};
 }
 
 export default useChat;

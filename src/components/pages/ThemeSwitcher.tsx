@@ -1,11 +1,11 @@
 ﻿import {Switch, cn, Stack, SwitchLabel} from "rael-ui"
-import {useThemeContext} from "@/context/ThemeProvider.tsx";
+import {useUserPrefContext} from "@/context/UserPrefProvider.tsx";
 
 type ThemeSwitcherProps = {
     className?: string
 }
 const ThemeSwitcher = ({className} : ThemeSwitcherProps) => {
-    const {toggleDarkMode,darkMode} = useThemeContext();
+    const {toggleDarkMode,darkMode} = useUserPrefContext();
     
     return (
         <Stack className={cn("", className)} direction={'horizontal'} >
