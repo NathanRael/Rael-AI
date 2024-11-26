@@ -13,6 +13,7 @@ import MessageList from "@/components/pages/MessageList.tsx";
 import {useQuery} from "@tanstack/react-query";
 import {fetchMessages} from "@/api/MessagesApi.ts";
 import MessageFeed from "@/components/pages/MessageFeed.tsx";
+import {queryKeys} from "@/api/queryKeys.ts";
 
 const ChatPage = () => {
     const {chatId} = useParams();
@@ -28,14 +29,8 @@ const ChatPage = () => {
     } =  useQuery({
         enabled : !!chatId,
         queryFn : () => fetchMessages(chatId!),
-        queryKey : ["chat", chatId],
+        queryKey : [queryKeys.chat, chatId],
     })
-    
-    useEffect(() => {
-        if (submitting)
-            console.log('mess', optimisticMessage)
-    }, [submitting])
-    
     
     const handleScrollToBottom = () => {
         if (!ref.current) return;
@@ -56,7 +51,7 @@ const ChatPage = () => {
                 </Stack>
                 <Stack className={`pb-[128px] ${INPUT_WIDTH}`} align={'start'}>
                     <MessageList messages={messages!} error={error as any} loading={isLoading}/>
-                    {submitting &&<Stack className={`max-md:w-full ${INPUT_WIDTH}`}> <MessageFeed sender={'user'} content={optimisticMessage}/></Stack>}
+                    {submitting &&<Stack className={`max-md:w-full ${INPUT_WIDTH}`}> <MessageFeed sender={'user'} content={optimisticMessage!}/></Stack>}
                     {submitting && <MessageLoader/>}
                 </Stack>
                 <div className={cn(`fixed bottom-10 left-1/2 -translate-x-1/2  ${INPUT_WIDTH}`, 'max-md:w-[96%]')}>

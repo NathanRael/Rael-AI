@@ -4,6 +4,7 @@ import {useToast} from "rael-ui"
 import useScroll from "@/hooks/useScroll.ts";
 import {newMessage} from "@/api/MessagesApi.ts";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
+import {queryKeys} from "@/api/queryKeys.ts";
 
 type UseMessageProps = {
     selectedModel: string;
@@ -19,7 +20,7 @@ const useMessages = ({selectedModel}: UseMessageProps) => {
     const {mutateAsync: newMessageMutation, isLoading: submitting, variables} = useMutation({
         mutationFn: newMessage,
         onSuccess : () => {
-            queryClient.invalidateQueries(["chat", "conversations"])
+            queryClient.invalidateQueries([queryKeys.chat, queryKeys.conversationList])
         }
     })
     

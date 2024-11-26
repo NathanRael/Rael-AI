@@ -2,12 +2,11 @@
 import * as React from "react";
 import {useUserPrefContext} from "@/context/UserPrefProvider.tsx";
 import useMessages from "@/hooks/useMessages.ts";
-import {Message} from "@/api/MessagesApi.ts";
 
 interface MessageContext {
     handleSubmitMessage : (inputValue : string, chatId : string,  setInputValue : React.Dispatch<React.SetStateAction<string>>) => Promise<void>;
     submitting : boolean;
-    optimisticMessage : string
+    optimisticMessage?: string
 }
 
 const MessageContext = createContext<MessageContext | undefined>(undefined);

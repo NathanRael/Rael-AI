@@ -8,6 +8,7 @@ import {useEffect, useState} from "react";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import { newConversation} from "@/api/conversationsApi.ts";
 import useFetchConversations from "@/hooks/useFetchConversations.ts";
+import {queryKeys} from "@/api/queryKeys.ts";
 
 const ChatInput = () => {
     const {chatId} = useParams();
@@ -23,12 +24,11 @@ const ChatInput = () => {
     const {mutateAsync: newConversationMutation} = useMutation({
         mutationFn: newConversation,
         onSuccess: () => {
-            queryClient.invalidateQueries(["conversations"])
+            queryClient.invalidateQueries([queryKeys.conversationList])
             setSuccess(true)
         }
     })
-
-
+    
     const {rows, handleKeyPress} = useSmartTextarea({
         onShiftAndEnter: () => {
             setMessage(prev => prev + '\n')
@@ -63,13 +63,14 @@ const ChatInput = () => {
         createConversation()
     }
 
+    // Redirecting the user to the  created conversation
     useEffect(() => {
         if (conversations && !isConversationLoading && success){
             const newConversationId = conversations[conversations.length - 1].id
             const userInput = JSON.parse(localStorage.getItem('userInput') || '')
-            // navigate(`/chat/${newConversationId}`);
+            navigate(`/chat/${newConversationId}`);
             
-            // handleSubmitMessage(userInput, newConversationId, setMessage)
+            handleSubmitMessage(userInput, newConversationId, setMessage)
         }
     }, [conversations]);
     

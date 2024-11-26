@@ -6,10 +6,17 @@ export interface Conversation {
     title : string;
     "user_id": string;
 }
-export const fetchConversations = async () => {
+
+export interface ConversationFilters {
+    search?: string
+}
+export const fetchConversations = async (options?: ConversationFilters) => {
     const response = await axios.get<Conversation[]>(`${BASE_URL}/api/conversations/1`)
+    const conversationList = response.data
+    if (options?.search)
+        return conversationList.filter(conversation => conversation.title.toLowerCase().includes(options.search!.toLowerCase()));
     
-    return response.data
+    return conversationList;
 }
 
 export const newConversation = async ({title, user_id} : Omit<Conversation, 'id'>) => {

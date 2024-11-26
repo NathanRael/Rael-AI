@@ -1,18 +1,21 @@
-﻿import {cn, Button, Stack, TextInput, Icon} from "rael-ui"
-import {Plus, Search, SidebarIcon} from "lucide-react";
+﻿import {cn, Button, Stack, Icon} from "rael-ui"
+import {Plus, SidebarIcon} from "lucide-react";
 import {useRef, useState} from "react";
 import useOutsideClicked from "@/hooks/useOutsideClicked.ts";
 import ConversationList from "@/components/pages/ConversationList.tsx";
 import {useNavigate} from "react-router-dom";
 import useFetchConversations from "@/hooks/useFetchConversations.ts";
+import ConversationListFilters from "@/components/pages/ConversationListFilters.tsx";
+import {ConversationFilters} from "@/api/conversationsApi.ts";
 
 
 const Sidebar = ({className}: { className?: string }) => {
     const navigate = useNavigate();
     const [showSidebar, setShowSidebar] = useState(false);
     const sidebarRef = useRef<HTMLDivElement | null>(null);
-    
-    const {data: conversations, isLoading, error} = useFetchConversations({})
+    const [search, setSearch] = useState<ConversationFilters['search']>();
+
+    const {data: conversations, isLoading, error} = useFetchConversations({search})
     useOutsideClicked({
         ref: sidebarRef,
         action: () => {
@@ -31,8 +34,8 @@ const Sidebar = ({className}: { className?: string }) => {
             </Icon>
             <Button onClick={() => navigate('/')} block size={'sm'}><Plus size={16}/> New chat </Button>
             <Stack className={'w-full h-full justify-start'} gap={24}>
-                <TextInput block placeholder={'Search chat type or histories'}
-                           leftContent={<Search size={16}/>}/>
+                <ConversationListFilters onChange={(filters) =>
+                    setSearch(filters.search)}/>
                 <div className={'w-full space-y-7 '}>
                     <Stack className={'w-full'}>
                         <p className={'text-sm text-start w-full text-meta-fill-l-text-sec dark:text-meta-fill-d-text-sec'}>Chat

@@ -1,7 +1,6 @@
 ﻿import ChatHistory from "@/components/pages/ChatHistory.tsx";
 import {Stack} from "rael-ui";
 import LoaderUI from "@/components/ui/LoaderUI.tsx";
-import {useNavigate} from "react-router-dom";
 import {Conversation} from "@/api/conversationsApi.ts";
 
 type HistoryListProps = {
@@ -19,6 +18,7 @@ const ConversationList = ({conversations, loading, error}: HistoryListProps) => 
     
     return (
         <Stack className={'w-full'} gap={8}>
+            {conversations.length === 0 && <p>No conversation yet</p>}
             {
                 conversations?.map((conversation) => (
                     <ChatHistory id={conversation.id} name={conversation.title}

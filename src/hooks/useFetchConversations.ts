@@ -1,11 +1,15 @@
 ﻿import {useQuery} from "@tanstack/react-query";
-import {fetchConversations} from "@/api/conversationsApi.ts";
+import {ConversationFilters, fetchConversations} from "@/api/conversationsApi.ts";
+import {queryKeys} from "@/api/queryKeys.ts";
 
-const useFetchConversations = ({enabled} : {enabled?: boolean}) => {
+type UseFetchConversationsProps = ConversationFilters & {
+    enabled?: boolean;
+}
+const useFetchConversations = ({enabled, search} : UseFetchConversationsProps) => {
     return useQuery(({
         enabled,
-        queryFn: fetchConversations,
-        queryKey: ['conversations'],
+        queryFn: () => fetchConversations({search}),
+        queryKey: [queryKeys.conversationList, {search}],
     }))
 }
 
