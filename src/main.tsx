@@ -23,7 +23,7 @@ createRoot(document.getElementById('root')!).render(
     <StrictMode>
          <Router>
             <QueryClientProvider client={queryClient}>
-                <ReactQueryDevtools initialIsOpen={false}/>
+                <ReactQueryDevtools  initialIsOpen={false}/>
                     <UserPrefProvider>
                         <MessageProvider>
                             <App/>

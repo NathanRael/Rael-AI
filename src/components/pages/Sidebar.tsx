@@ -7,6 +7,8 @@ import {useNavigate} from "react-router-dom";
 import useFetchConversations from "@/hooks/useFetchConversations.ts";
 import ConversationListFilters from "@/components/pages/ConversationListFilters.tsx";
 import {ConversationFilters} from "@/api/conversationsApi.ts";
+import ModelSwitcher from "@/components/pages/ModelSwitcher.tsx";
+import ThemeSwitcher from "@/components/pages/ThemeSwitcher.tsx";
 
 
 const Sidebar = ({className}: { className?: string }) => {
@@ -32,7 +34,12 @@ const Sidebar = ({className}: { className?: string }) => {
                   variant={'ghost'}>
                 <SidebarIcon/>
             </Icon>
-            <Button onClick={() => navigate('/')} block size={'sm'}><Plus size={16}/> New chat </Button>
+            <ModelSwitcher/>
+            
+            <Button onClick={() => {
+                navigate('/')
+                setShowSidebar(false)
+            }} block size={'sm'}><Plus size={16}/> New chat </Button>
             <Stack className={'w-full h-full justify-start'} gap={24}>
                 <ConversationListFilters onChange={(filters) =>
                     setSearch(filters.search)}/>
@@ -51,6 +58,10 @@ const Sidebar = ({className}: { className?: string }) => {
                         <ConversationList conversations={conversations!} error={error as any} loading={isLoading}/>
                     </Stack>
                 </div>
+            </Stack>
+            <Stack direction={'horizontal'} className={'w-full items-end justify-center'}>
+                <ThemeSwitcher className={''}/>
+
             </Stack>
         </div>
     )

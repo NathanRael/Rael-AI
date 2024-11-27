@@ -30,10 +30,6 @@ const ChatHistory = ({name, id}: { name: string, id: string }) => {
         
         onError: (error, id, context) => {
             queryClient.setQueryData([queryKeys.conversationList], context?.previousConversation);
-            toast({
-                title: 'Success',
-                message: 'Conversation deleted!',
-            });
         }
     })
 

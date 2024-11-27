@@ -3,6 +3,11 @@
 @tailwind utilities;
 
 
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+    display: none;
+}
+
 .hide-scrollbar::-webkit-scrollbar {
     background: transparent;
     width: 8px;
@@ -14,6 +19,8 @@
     background: #9ca3af;
 
 }
+
+
 @layer components {
     .prose-code-style {
         @apply

@@ -2,8 +2,6 @@
 import useScroll from "@/hooks/useScroll.ts";
 import {useEffect, useRef, useState} from "react";
 import useInView from "@/hooks/useInView.ts";
-import ModelSwitcher from "@/components/pages/ModelSwitcher.tsx";
-import ThemeSwitcher from "@/components/pages/ThemeSwitcher.tsx";
 import {INPUT_WIDTH} from "@/constants/style.ts";
 import ChatInput from "@/components/pages/ChatInput.tsx";
 import {ArrowDown} from "lucide-react";
@@ -29,7 +27,7 @@ const ChatPage = () => {
     } =  useQuery({
         enabled : !!chatId,
         queryFn : () => fetchMessages(chatId!),
-        queryKey : [queryKeys.chat, chatId],
+        queryKey : [queryKeys.chat, {chatId}],
     })
     
     const handleScrollToBottom = () => {
@@ -37,13 +35,17 @@ const ChatPage = () => {
         scrollToBottom(ref.current.scrollHeight)
     }
     
+    useEffect(
+        () => {
+            console.log('optMessage', optimisticMessage)
+        }
+    , [optimisticMessage])
+    
     
     return (
         <section ref={ref} className={'h-full  pt-[256px] px-4 overflow-y-hidden'}>
-            <Stack>
-                <ModelSwitcher/>
-                <ThemeSwitcher className={'pb-10'}/>
-            </Stack>
+            {/*<ModelSwitcher className={'fixed left-14 top-2'} />*/}
+          
             <Stack direction={'vertical'} gap={40}>
                 <Stack className={'w-full'} direction={'vertical'} gap={8}>
                     <h1 className={'text-[56px] text-center text-black  font-bold dark:text-white'}>Rael AI</h1>

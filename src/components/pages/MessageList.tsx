@@ -15,11 +15,11 @@ type MessageListProps = {
 const MessageList = ({messages, loading, error}: MessageListProps) => {
     
     if (loading && !error?.message)
-        return <LoaderUI title={'Loading conversations ...'} />
+        return <LoaderUI className={'flex items-center justify-center  w-full'} title={'Loading conversations ...'} />
     
     if (error)
         return (
-            <Stack  gap={16}>
+            <Stack  gap={16} className={'w-full'}>
                 <Stack className={'text-center text-danger'} direction={'horizontal'} gap={8}>
                     <Info/>
                     <p className={'text-danger text-sm'}>Error : {error?.message}</p>

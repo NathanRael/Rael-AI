@@ -15,7 +15,7 @@ import axios from "axios";
 import {BASE_URL} from "@/constants";
 import {useUserPrefContext} from "@/context/UserPrefProvider.tsx";
 
-const ModelSwitcher = () => {
+const ModelSwitcher = ({className} : {className?: string}) => {
     const [models, setModels] = useState([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState("");
@@ -48,29 +48,32 @@ const ModelSwitcher = () => {
     }, []);
     
     return (
-        <Stack>
+        <Stack className={className}>
             {renderToastContainer()}
-            <Select
-                defaultValue={'llama3'}
-                className={'w-fit'}
-                onChange={(e) => changeModel(e.target.value as string)}
-            >
-                <SelectTrigger className={'bg-transparent  dark:bg-transparent'}>
-                    <SelectLabel placeholder={"Select a model"}/>
-                    <ChevronDownIcon/>
-                </SelectTrigger>
-                <SelectGroupContainer>
-                    <SelectGroup>
-                        <SelectGroupTitle>{loading ? 'Getting models' : 'Models'}</SelectGroupTitle>
-                        {
-                            !loading && !error && models.map(model => (
-                                <SelectItem key={model} value={model}>{model}</SelectItem>
-                            ))
-                        }
-                    </SelectGroup>
+            <div className={'flex flex-col items-start justify-start gap-1'}>
+                <p className={'text-[12px] text-meta-fill-l-text-sec dark:text-meta-fill-d-text-sec'}>Select a model</p>
+                <Select
+                    variant={'fill'}
+                    defaultValue={'llama3'}
+                    className={'w-fit'}
+                    onChange={(e) => changeModel(e.target.value as string)}
+                >
+                    <SelectTrigger >
+                        <SelectLabel placeholder={"Select a model"}/>
+                        <ChevronDownIcon/>
+                    </SelectTrigger>
+                    <SelectGroupContainer>
+                        <SelectGroup>
+                            <SelectGroupTitle>{loading ? 'Getting models' : 'Models'}</SelectGroupTitle>
+                            {
+                                !loading && !error && models.map(model => (
+                                    <SelectItem key={model} value={model}>{model}</SelectItem>
+                                ))
+                            }
+                        </SelectGroup>
 
-                </SelectGroupContainer>
-            </Select>
+                    </SelectGroupContainer>
+                </Select></div>
         </Stack>
     )
 }

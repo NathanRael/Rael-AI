@@ -20,8 +20,9 @@ const useMessages = ({selectedModel}: UseMessageProps) => {
     const {mutateAsync: newMessageMutation, isLoading: submitting, variables} = useMutation({
         mutationFn: newMessage,
         onSuccess : () => {
-            queryClient.invalidateQueries([queryKeys.chat, queryKeys.conversationList])
-        }
+            queryClient.invalidateQueries([queryKeys.chat]);
+            queryClient.invalidateQueries([queryKeys.conversationList]);
+        },
     })
     
     const optimisticMessage = useMemo(() => variables?.content, [variables?.content])

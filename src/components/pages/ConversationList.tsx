@@ -18,7 +18,7 @@ const ConversationList = ({conversations, loading, error}: HistoryListProps) => 
     
     return (
         <Stack className={'w-full'} gap={8}>
-            {conversations.length === 0 && <p>No conversation yet</p>}
+            {conversations.length === 0 && <p className={'text-meta-fill-l-text dark:text-meta-fill-d-text'}>No conversation found</p>}
             {
                 conversations?.map((conversation) => (
                     <ChatHistory id={conversation.id} name={conversation.title}

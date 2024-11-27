@@ -15,8 +15,9 @@ const useSmartTextarea = ({maxRows = 10, onEnter, onShiftAndEnter, value} : UseS
         }else if (e.key === "Backspace" && (value === "")) {
             setRows((prev) => prev > 1 ? prev - 1 : 1)
         }else if (e.key === "Enter"){
+            setRows(0)
             onEnter()
-            setRows(1)
+            
         }
     }
     

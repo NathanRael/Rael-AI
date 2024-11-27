@@ -12,7 +12,7 @@ const Main = () => {
         <section className={'h-full  pt-[256px] px-4 '}>
             <Stack>
                 <ModelSwitcher/>
-                <ThemeSwitcher className={'pb-10'}/>
+                {/*<ThemeSwitcher className={'pb-10'}/>*/}
             </Stack>
             <Stack direction={'vertical'} gap={40}>
                 <Stack className={'w-full'} direction={'vertical'} gap={8}>
