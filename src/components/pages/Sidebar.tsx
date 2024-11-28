@@ -1,6 +1,6 @@
 ﻿import {cn, Button, Stack, Icon} from "rael-ui"
 import {Plus, SidebarIcon} from "lucide-react";
-import {useRef, useState} from "react";
+import {useMemo, useRef, useState} from "react";
 import useOutsideClicked from "@/hooks/useOutsideClicked.ts";
 import ConversationList from "@/components/pages/ConversationList.tsx";
 import {useNavigate} from "react-router-dom";
@@ -10,13 +10,11 @@ import {ConversationFilters} from "@/api/conversationsApi.ts";
 import ModelSwitcher from "@/components/pages/ModelSwitcher.tsx";
 import ThemeSwitcher from "@/components/pages/ThemeSwitcher.tsx";
 
-
 const Sidebar = ({className}: { className?: string }) => {
     const navigate = useNavigate();
     const [showSidebar, setShowSidebar] = useState(false);
     const sidebarRef = useRef<HTMLDivElement | null>(null);
     const [search, setSearch] = useState<ConversationFilters['search']>();
-
     const {data: conversations, isLoading, error} = useFetchConversations({search})
     useOutsideClicked({
         ref: sidebarRef,

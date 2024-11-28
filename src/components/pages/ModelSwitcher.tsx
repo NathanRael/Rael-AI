@@ -55,7 +55,7 @@ const ModelSwitcher = ({className} : {className?: string}) => {
                 <Select
                     variant={'fill'}
                     defaultValue={'llama3'}
-                    className={'w-fit'}
+                    className={''}
                     onChange={(e) => changeModel(e.target.value as string)}
                 >
                     <SelectTrigger >

@@ -2,7 +2,7 @@
 import typography from '@tailwindcss/typography';
 const colors = {
     'primary': '#421BDD',
-    'secondary' : '#423A5E',
+    'secondary' : '#821BDE',
     'danger': '#e74c3c',
     'black': '#12161C',
     // 'black': '#09090b',
@@ -37,7 +37,8 @@ export default {
                     input: {
                         fill: {
                             d: {
-                                'bg': '#27272a',
+                                'bg': '#1b1d22',
+                                // 'bg': '#27272a',
                                 'placeholder' : '#737373',
                                 'text' : colors.white,
                                 'border' : colors.black,
@@ -69,6 +70,7 @@ export default {
                         fill : {
                             d: {
                                 'bg': '#18181b',
+                                // 'bg': '#18181b',
                                 'border': '#262626',
                                 'text' : colors.white,
                                 'text-sec' : '#9ca3af',

@@ -2,11 +2,11 @@
 
 type UseSmartTextareaProps = {
     maxRows?: number;
-    onShiftAndEnter : () => void;
+    onShiftAndEnter?: () => void;
     onEnter : () => void;
     value : string;
 }
-const useSmartTextarea = ({maxRows = 10, onEnter, onShiftAndEnter, value} : UseSmartTextareaProps) => {
+const useSmartTextarea = ({maxRows = 10, onEnter, onShiftAndEnter = () => {}, value} : UseSmartTextareaProps) => {
     const [rows, setRows] = useState(1);
     const handleKeyPress = (e : KeyboardEvent) => {
         if (e.shiftKey && e.key === 'Enter') {

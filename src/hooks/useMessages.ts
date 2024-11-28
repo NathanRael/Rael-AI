@@ -1,5 +1,4 @@
 ﻿import {useMemo} from "react";
-import * as React from "react";
 import {useToast} from "rael-ui"
 import useScroll from "@/hooks/useScroll.ts";
 import {newMessage} from "@/api/MessagesApi.ts";
@@ -12,7 +11,6 @@ type UseMessageProps = {
 
 
 const useMessages = ({selectedModel}: UseMessageProps) => {
-    // const [submitting, setSubmitting] = useState(false);
     const {toast} = useToast();
     const {scrollToBottom} = useScroll();
     const queryClient = useQueryClient();
@@ -28,9 +26,8 @@ const useMessages = ({selectedModel}: UseMessageProps) => {
     const optimisticMessage = useMemo(() => variables?.content, [variables?.content])
 
     
-    const handleSubmitMessage = async (inputValue: string, conversationId: string, setInputValue: React.Dispatch<React.SetStateAction<string>>) => {
-
-        // -TODO : Sending api request
+    const handleSubmitMessage = async (inputValue: string, conversationId: string, onValidInput : () => void, chatbotTypeId : string) => {
+        
         if (inputValue === '' || !inputValue)
             return
         
@@ -41,13 +38,14 @@ const useMessages = ({selectedModel}: UseMessageProps) => {
             })
             return console.error('Please select a model')
         }
-        setInputValue('');
+        onValidInput();
         
         try {
          await newMessageMutation({
              conversation_id : conversationId,
              content : inputValue,
-             model : selectedModel
+             model : selectedModel,
+             chatbot_type_id : chatbotTypeId,
          })
         } catch (e) {
             console.error(e)

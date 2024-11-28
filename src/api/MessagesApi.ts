@@ -12,7 +12,7 @@ interface FetchedMessage {
 */
 
 export interface Message {
-    id : string;
+    id: string;
     sender: 'user' | 'bot';
     content: string;
 }
@@ -25,10 +25,22 @@ export const fetchMessages = async (conversationId: string) => {
 
 }
 
-export const newMessage = async ({content, model, conversation_id, sender = 'user'} : {content: string, model: string, conversation_id: string, sender?: 'user' | 'bot'}) => {
-    const response = await axios.post(`${BASE_URL}/api/messages`, {content, model, conversation_id, sender})
+export const newMessage = async ({content, model, conversation_id, sender = 'user', chatbot_type_id}: {
+    content: string,
+    model: string,
+    conversation_id: string,
+    sender?: 'user' | 'bot',
+    chatbot_type_id: string
+}) => {
+    const response = await axios.post(`${BASE_URL}/api/messages`, {
+        content,
+        model,
+        conversation_id,
+        sender,
+        chatbot_type_id
+    })
     if (response.status !== 200)
         throw new Error(response.statusText)
-    
+
     return response.data as Message;
 }

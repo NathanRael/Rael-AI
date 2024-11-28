@@ -3,12 +3,13 @@ import useScroll from "@/hooks/useScroll.ts";
 import useSmartTextarea from "@/hooks/useSmartTextarea.ts";
 import {ArrowUp} from "lucide-react";
 import {Icon, Textarea} from "rael-ui";
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams, useSearchParams} from "react-router-dom";
 import {useEffect, useMemo, useState} from "react";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {newConversation} from "@/api/conversationsApi.ts";
 import useFetchConversations from "@/hooks/useFetchConversations.ts";
 import {queryKeys} from "@/api/queryKeys.ts";
+import {USER_ID} from "@/constants";
 
 const ChatInput = () => {
     const {chatId} = useParams();
@@ -18,11 +19,9 @@ const ChatInput = () => {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
     const [success, setSuccess] = useState(false)
+    const [searchParams] = useSearchParams();
 
     const {data: conversations, isLoading: isConversationLoading} = useFetchConversations({})
-    
-    const canSubmit : boolean = useMemo(() => !submitting && message.trim() !== '', [submitting, message])
-
     const {mutateAsync: newConversationMutation} = useMutation({
         mutationFn: newConversation,
         onSuccess: () => {
@@ -30,11 +29,7 @@ const ChatInput = () => {
             setSuccess(true)
         }
     })
-
     const {rows, handleKeyPress} = useSmartTextarea({
-        onShiftAndEnter: () => {
-            // setMessage(prev => prev + '')
-        },
         onEnter: () => {
             setMessage("");
             if (!canSubmit)
@@ -46,27 +41,32 @@ const ChatInput = () => {
         value: message
     });
 
+    const canSubmit : boolean = useMemo(() => !submitting && message.trim() !== '', [submitting, message])
+    const chatbotTypeIdInParams = useMemo(() => searchParams.get('chatType'), [searchParams]);
+   
 
-    const createConversation = async () => {
+    const handleSubmit = async () => {
+        if (chatId && !isConversationLoading) {
+            // console.log('chatId', chatId, conversations[0].chatbot_type_id);
+            // console.log('conv', conversations!.find(conv => conv.chatbot_type_id === chatId))
+            const chatbotTypeId = conversations!.find(conversation => conversation.id === chatId)!.chatbot_type_id
+            handleSubmitMessage(message, chatId, () => setMessage(''), chatbotTypeId)
+            return
+        }
+        
+        // Creating new conversation , when the user is in the main page
+        localStorage.setItem('userInput', JSON.stringify(message))
+        setMessage('')
         setSuccess(false)
         try {
             await newConversationMutation({
-                user_id: '1',
+                user_id: USER_ID,
                 title: JSON.parse(localStorage.getItem('userInput') || ''),
+                chatbot_type_id : chatbotTypeIdInParams || ''
             })
         } catch (e) {
             console.error(e)
         }
-    }
-
-    const handleSubmit = () => {
-        if (chatId) {
-            handleSubmitMessage(message, chatId, setMessage)
-            return
-        }
-        localStorage.setItem('userInput', JSON.stringify(message))
-        setMessage('')
-        createConversation()
     }
 
     // Redirecting the user to the  created conversation
@@ -76,7 +76,7 @@ const ChatInput = () => {
             const userInput = JSON.parse(localStorage.getItem('userInput') || '')
             navigate(`/chat/${newConversationId}`);
 
-            handleSubmitMessage(userInput, newConversationId, setMessage)
+            handleSubmitMessage(userInput, newConversationId, () => setMessage(''), chatbotTypeIdInParams!)
         }
     }, [conversations]);
 
