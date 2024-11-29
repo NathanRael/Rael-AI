@@ -103,7 +103,10 @@ export default {
                     "button": "17px"
                 },
                 fontFamily: {
-                    sans: ['Roboto', 'sans-serif'],
+                    sans: ['SchibsetGrotesk'],
+                    md: ['SchibsetGroteskMd'],
+                    semibold: ['SchibsetGroteskSemibold'],
+                    bold: ['SchibsetGroteskBold'],
                 },
                 animation: {
                     'slide-in': 'slide-in 0.3s ease-out forwards',

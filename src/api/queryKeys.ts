@@ -4,6 +4,7 @@
     chat: 'chat',
     users: 'users', 
     chatbotType: 'chatbotType',
-    chatbotTypeList: 'chatbotTypeList'
-
+    chatbotTypeList: 'chatbotTypeList',
+    userPreferences : 'userPreference',
+    modelList : 'modelList',
 }

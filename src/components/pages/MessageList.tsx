@@ -27,9 +27,12 @@ const MessageList = ({messages, loading, error}: MessageListProps) => {
                 <Button variant={'secondary'} size={'sm'} radius={'2xl'} onClick={() => {}} block>Retry</Button>
             </Stack>
         )
+
+    // console.log(messages.map(message => message.content).join('').length);
+    // console.log(messages)
     
     return (
-        <Stack direction={'vertical'} className={`max-md:w-full ${INPUT_WIDTH}`} gap={24}>
+        <Stack direction={'vertical'} className={`max-md:w-full ${INPUT_WIDTH}`} gap={64}>
             {
                 messages?.map((message) => (<MessageFeed key={message.id} {...message}/>))
             }

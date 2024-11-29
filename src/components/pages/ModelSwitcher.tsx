@@ -10,42 +10,46 @@
     useToast
 } from "rael-ui"
 import {ChevronDownIcon} from "lucide-react";
-import {useEffect, useState} from "react";
-import axios from "axios";
-import {BASE_URL} from "@/constants";
 import {useUserPrefContext} from "@/context/UserPrefProvider.tsx";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
+import {fetchModels} from "@/api/modelsApi.ts";
+import {queryKeys} from "@/api/queryKeys.ts";
+import {fetchUserPreferences, updateUserPreferences} from "@/api/userPreferencesApi.ts";
+import {USER_ID} from "@/constants";
 
 const ModelSwitcher = ({className} : {className?: string}) => {
-    const [models, setModels] = useState([]);
-    const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState("");
     const {renderToastContainer } = useToast();
     const {setSelectedModel} = useUserPrefContext();
-     
-    const getModels = async () => {
-        setLoading(true);
-        axios.get(`${BASE_URL}/api/models`).then(res => {
-            if (res.status !== 200)
-                new Error('Error while fetching models')
-            // console.log('models : ', res.data.models)
-            setModels(res.data.models);
-        }).catch(e => {
-            console.error(e);
-            setError(e)
-        }).finally(() => setLoading(false));  
-    }
+    const queryClient = useQueryClient()
+    
+    const {data : models, error : modelsError, isLoading : isFetchingModels} = useQuery({
+        queryFn : fetchModels,
+        queryKey : [queryKeys.modelList]
+    })
+
+    const {data : userPreferences, isLoading : isFetchingUserPreferences, error : userPreferencesError} = useQuery({
+        queryFn : () => fetchUserPreferences(USER_ID),
+        queryKey : [queryKeys.userPreferences],
+    })
+    
+    const {mutateAsync : updateUserPreferencesMutation} = useMutation({
+        mutationFn : updateUserPreferences,
+        onSuccess : data => {
+            queryClient.invalidateQueries([queryKeys.userPreferences])
+        }
+    })
     
     const changeModel = async (model: string) => {
         setSelectedModel(model);
-/*        toast({
-            title: "Success",
-            message: `Model changed to ${model}`,
-        });*/
+        await updateUserPreferencesMutation({
+            model,
+            user_id : USER_ID,
+        })
     }
     
-    useEffect(() => {
-        getModels()
-    }, []);
+    if (isFetchingUserPreferences || isFetchingModels)
+        return <div className=" h-12 animate-pulse rounded-lg w-full bg-black/20 dark:bg-white/20"/>
+    
     
     return (
         <Stack className={className}>
@@ -54,7 +58,7 @@ const ModelSwitcher = ({className} : {className?: string}) => {
                 <p className={'text-[12px] text-meta-fill-l-text-sec dark:text-meta-fill-d-text-sec'}>Select a model</p>
                 <Select
                     variant={'fill'}
-                    defaultValue={'llama3'}
+                    defaultValue={ userPreferences!.model ||'llama3.2'}
                     className={''}
                     onChange={(e) => changeModel(e.target.value as string)}
                 >
@@ -64,9 +68,9 @@ const ModelSwitcher = ({className} : {className?: string}) => {
                     </SelectTrigger>
                     <SelectGroupContainer>
                         <SelectGroup>
-                            <SelectGroupTitle>{loading ? 'Getting models' : 'Models'}</SelectGroupTitle>
+                            <SelectGroupTitle>{isFetchingModels ? 'Getting models' : 'Models'}</SelectGroupTitle>
                             {
-                                !loading && !error && models.map(model => (
+                                (!modelsError && !isFetchingModels && models) && models.map(model => (
                                     <SelectItem key={model} value={model}>{model}</SelectItem>
                                 ))
                             }

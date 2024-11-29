@@ -10,6 +10,7 @@ import {newConversation} from "@/api/conversationsApi.ts";
 import useFetchConversations from "@/hooks/useFetchConversations.ts";
 import {queryKeys} from "@/api/queryKeys.ts";
 import {USER_ID} from "@/constants";
+import {generateMessage} from "@/api/promptsApi.ts";
 
 const ChatInput = () => {
     const {chatId} = useParams();
@@ -47,8 +48,6 @@ const ChatInput = () => {
 
     const handleSubmit = async () => {
         if (chatId && !isConversationLoading) {
-            // console.log('chatId', chatId, conversations[0].chatbot_type_id);
-            // console.log('conv', conversations!.find(conv => conv.chatbot_type_id === chatId))
             const chatbotTypeId = conversations!.find(conversation => conversation.id === chatId)!.chatbot_type_id
             handleSubmitMessage(message, chatId, () => setMessage(''), chatbotTypeId)
             return
@@ -59,9 +58,11 @@ const ChatInput = () => {
         setMessage('')
         setSuccess(false)
         try {
+            const userInput = JSON.parse(localStorage.getItem('userInput') || '')
+            const generatedTitle : string = await generateMessage({prompt : `Give me a suitable title for this message : ${userInput}.I only want you to return the title without additional response`})
             await newConversationMutation({
                 user_id: USER_ID,
-                title: JSON.parse(localStorage.getItem('userInput') || ''),
+                title: generatedTitle,
                 chatbot_type_id : chatbotTypeIdInParams || ''
             })
         } catch (e) {
@@ -72,7 +73,7 @@ const ChatInput = () => {
     // Redirecting the user to the  created conversation
     useEffect(() => {
         if (conversations && !isConversationLoading && success) {
-            const newConversationId = conversations[conversations.length - 1].id
+            const newConversationId = conversations[0].id
             const userInput = JSON.parse(localStorage.getItem('userInput') || '')
             navigate(`/chat/${newConversationId}`);
 
@@ -94,7 +95,7 @@ const ChatInput = () => {
                 e.target.style.height = 'auto'
                 e.target.style.height = `${e.target.scrollHeight >= 320 ? 320 : e.target.scrollHeight}px`
             }}
-            className={`w-full shadow-md   rounded-3xl text-lg    min-h-[32px]  resize-none ${rows === 1 ? 'items-center' : 'items-end'} `}
+            className={`w-full shadow-md z-40   rounded-3xl text-lg    min-h-[32px]  resize-none ${rows === 1 ? 'items-center' : 'items-end'} `}
             inputClassName={'hide-scrollbar overflow-y-hidden'}
             placeholder={'Your message ...'}
             rightContent={<Icon role={'button'} type={'submit'} disabled={!canSubmit}

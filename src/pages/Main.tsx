@@ -5,12 +5,16 @@ import ChatInput from "@/components/pages/ChatInput.tsx";
 import {useQuery} from "@tanstack/react-query";
 import {fetchUsers, User} from "@/api/usersApi.ts";
 import {queryKeys} from "@/api/queryKeys.ts";
-import {useMemo} from "react";
+import {useEffect, useMemo} from "react";
 import LoaderUI from "@/components/ui/LoaderUI.tsx";
 import {Info} from "lucide-react";
 import {Button} from "rael-ui"
 import ChatbotTypeList from "@/components/pages/ChatbotTypeList.tsx";
 import {fetchChatbotTypes} from "@/api/chatbotTypesApi.ts";
+import {fetchUserPreferences} from "@/api/userPreferencesApi.ts";
+import {USER_ID} from "@/constants";
+import {useSearchParams} from "react-router-dom";
+import Copyright from "@/components/pages/Copyright.tsx";
 
 const Main = () => {
     const {data : users, isLoading : isFetchingUsers, error : usersError, refetch : reFetchUsers} = useQuery({
@@ -23,11 +27,22 @@ const Main = () => {
         queryKey : [queryKeys.chatbotTypeList]
     })
     
+    const {data : userPreferences, isLoading : isFetchingUserPreferences, error : userPreferencesError} = useQuery({
+        queryFn : () => fetchUserPreferences(USER_ID),
+        queryKey : [queryKeys.userPreferences],
+    })
+    
+    const [_, updateSearchParams] = useSearchParams();
+    
     const user = useMemo(() => !isFetchingUsers && !usersError ? users![0] : {} as User, [users])
+    
+    useEffect(() => {
+        if (!isFetchingUserPreferences && !userPreferencesError && userPreferences)
+            updateSearchParams({"chatType": userPreferences.chatbot_type_id})
+    }, [userPreferences, isFetchingUserPreferences])
     
     if (isFetchingUsers) 
         return <LoaderUI title={'Getting things ready'} className={'fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'} />
-    
     
     
     if (usersError) 
@@ -59,7 +74,7 @@ const Main = () => {
                     <ChatInput/>
                 </div>
             </Stack>
-            
+            <Copyright className={'absolute bottom-[32px] left-1/2 -translate-x-1/2'}/>
         </section>
     )
 }

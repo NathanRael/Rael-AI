@@ -4,8 +4,8 @@ import {useEffect, useRef, useState} from "react";
 import useInView from "@/hooks/useInView.ts";
 import {INPUT_WIDTH} from "@/constants/style.ts";
 import ChatInput from "@/components/pages/ChatInput.tsx";
-import {ArrowDown, Bot} from "lucide-react";
-import {Badge, cn, Icon, Stack} from "rael-ui";
+import {ArrowDown, LoaderCircle} from "lucide-react";
+import {cn, Icon, Stack} from "rael-ui";
 import {useParams} from "react-router-dom";
 import MessageList from "@/components/pages/MessageList.tsx";
 import {useQuery} from "@tanstack/react-query";
@@ -42,14 +42,14 @@ const ChatPage = () => {
         if (!ref.current) return;
         scrollToBottom(ref.current.scrollHeight)
     }
-
+    
 
     return (
         <section ref={ref} className={'h-full  pt-[256px] px-4 overflow-y-hidden'}>
             {/*<Badge size={'md'} className={'fixed bg-secondary border-secondary flex items-center flex-row top-6 text-base left-1/2 -translate-x-1/2'}> <Bot size={16}/> {chatbotType?.name}</Badge>*/}
             <Stack direction={'vertical'} className={' pb-[160px]'} gap={40}>
-                <Stack className={` h-fit ${INPUT_WIDTH}`} align={'start'}>
-                    <MessageList messages={messages!} error={error as any} loading={isLoading}/>
+                <Stack className={` h-fit ${INPUT_WIDTH} space-y-6`} align={'start'}>
+                    <MessageList messages={messages!} error={error as Error} loading={isLoading}/>
                     {submitting && <Stack className={`max-md:w-full ${INPUT_WIDTH}`}> <MessageFeed sender={'user'} content={optimisticMessage!}/></Stack>}
                     {submitting && <MessageLoader/>}
                 </Stack>
@@ -94,7 +94,10 @@ const MessageLoader = () => {
         return () => clearTimeout(timeoutId)
     }, [loadingMessage, index])
     return (
-        <p className={'animate-pulse text-black dark:text-white'}>{loadingMessage}</p>
+        <div className={'flex items-center justify-center gap-2'}>
+            <LoaderCircle className={'animate-spin text-black dark:text-white'} size={20}/>
+            <p className={'animate-pulse text-black dark:text-white'}>{loadingMessage}</p>
+        </div>
     )
 }
 

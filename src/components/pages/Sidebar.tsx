@@ -1,6 +1,6 @@
 ﻿import {cn, Button, Stack, Icon} from "rael-ui"
 import {Plus, SidebarIcon} from "lucide-react";
-import {useMemo, useRef, useState} from "react";
+import {useRef, useState} from "react";
 import useOutsideClicked from "@/hooks/useOutsideClicked.ts";
 import ConversationList from "@/components/pages/ConversationList.tsx";
 import {useNavigate} from "react-router-dom";
@@ -9,6 +9,7 @@ import ConversationListFilters from "@/components/pages/ConversationListFilters.
 import {ConversationFilters} from "@/api/conversationsApi.ts";
 import ModelSwitcher from "@/components/pages/ModelSwitcher.tsx";
 import ThemeSwitcher from "@/components/pages/ThemeSwitcher.tsx";
+import {generateMessage} from "@/api/promptsApi.ts";
 
 const Sidebar = ({className}: { className?: string }) => {
     const navigate = useNavigate();
@@ -51,7 +52,7 @@ const Sidebar = ({className}: { className?: string }) => {
                             }
                         </Stack>
                     </Stack>
-                    <Stack className={'w-full max-h-[520px] overflow-y-auto hide-scrollbar'}>
+                    <Stack className={'w-full max-h-[440px]  overflow-y-auto hide-scrollbar'}>
                         <p className={'text-sm text-start w-full text-meta-fill-l-text-sec dark:text-meta-fill-d-text-sec'}>Histories</p>
                         <ConversationList conversations={conversations!} error={error as any} loading={isLoading}/>
                     </Stack>

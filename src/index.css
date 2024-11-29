@@ -20,6 +20,23 @@ input[type="password"]::-ms-clear {
 
 }
 
+@font-face {
+    font-family: "SchibsetGrotesk";
+    src: url("./assets/fonts/SchibstedGrotesk-Regular.ttf") format("truetype");
+}
+@font-face {
+    font-family: "SchibsetGroteskMd";
+    src: url("./assets/fonts/SchibstedGrotesk-Medium.ttf") format("truetype");
+}
+@font-face {
+    font-family: "SchibsetGroteskSemiBold";
+    src: url("./assets/fonts/SchibstedGrotesk-SemiBold.ttf") format("truetype");
+}
+@font-face {
+    font-family: "SchibsetGroteskBold";
+    src: url("./assets/fonts/SchibstedGrotesk-Bold.ttf") format("truetype");
+}
+
 
 @layer components {
     .prose-code-style {
