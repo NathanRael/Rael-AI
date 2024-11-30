@@ -30,8 +30,7 @@ export default {
                     'black': colors.black,
                     'white': colors.white,
                     'dark': colors.dark,
-
-
+                    
                     // Component colors
 
                     input: {
@@ -99,8 +98,13 @@ export default {
                     }
                 },
                 fontSize: {
-                    "title": "56px",
-                    "button": "17px"
+                    title : '24px',
+                    subtitle : '20px',
+                    lead : '18px',
+                    base : '16px',
+                    small : '14px',
+                    'small-2' : '12px',
+                    "button": "17px",
                 },
                 fontFamily: {
                     sans: ['SchibsetGrotesk'],

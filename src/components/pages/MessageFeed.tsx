@@ -17,12 +17,12 @@ const MessageFeed = ({content, sender}: Omit<Message, 'id'>) => {
     const handleCopyToClipboard = async (text: string) => {
         const cleanedText = text.trim();
         await copyToClipboard(cleanedText, () => {
-            toast({
-                title: 'Copied!',
-                message: 'Text copied',
-                position: 'bottom-left',
-                duration: 2000,
-            })
+            // toast({
+            //     title: 'Copied!',
+            //     message: 'Text copied',
+            //     position: 'bottom-left',
+            //     duration: 2000,
+            // })
         })
     }
     return (

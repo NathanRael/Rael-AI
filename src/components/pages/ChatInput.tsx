@@ -11,6 +11,7 @@ import useFetchConversations from "@/hooks/useFetchConversations.ts";
 import {queryKeys} from "@/api/queryKeys.ts";
 import {USER_ID} from "@/constants";
 import {generateMessage} from "@/api/promptsApi.ts";
+import useLocalStorage from "@/hooks/useLocalStorage.ts";
 
 const ChatInput = () => {
     const {chatId} = useParams();
@@ -21,6 +22,8 @@ const ChatInput = () => {
     const navigate = useNavigate();
     const [success, setSuccess] = useState(false)
     const [searchParams] = useSearchParams();
+    
+    const storage = useLocalStorage();
 
     const {data: conversations, isLoading: isConversationLoading} = useFetchConversations({})
     const {mutateAsync: newConversationMutation} = useMutation({
@@ -30,6 +33,9 @@ const ChatInput = () => {
             setSuccess(true)
         }
     })
+    
+    
+    
     const {rows, handleKeyPress} = useSmartTextarea({
         onEnter: () => {
             setMessage("");
@@ -53,16 +59,15 @@ const ChatInput = () => {
             return
         }
         
-        // Creating new conversation , when the user is in the main page
-        localStorage.setItem('userInput', JSON.stringify(message))
+        storage.setItem('userInput', message )
         setMessage('')
         setSuccess(false)
         try {
-            const userInput = JSON.parse(localStorage.getItem('userInput') || '')
-            const generatedTitle : string = await generateMessage({prompt : `Give me a suitable title for this message : ${userInput}.I only want you to return the title without additional response`})
+            const userInput =  storage.getItem('userInput')
+            const generatedTitle : string = await generateMessage({prompt : `Give me a suitable title for this message : '${userInput}'.Don't be verbose.Just give the response without commentary`})
             await newConversationMutation({
                 user_id: USER_ID,
-                title: generatedTitle,
+                title: generatedTitle.replace("\"", ''),
                 chatbot_type_id : chatbotTypeIdInParams || ''
             })
         } catch (e) {

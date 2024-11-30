@@ -50,7 +50,8 @@ const ChatPage = () => {
             <Stack direction={'vertical'} className={' pb-[160px]'} gap={40}>
                 <Stack className={` h-fit ${INPUT_WIDTH} space-y-6`} align={'start'}>
                     <MessageList messages={messages!} error={error as Error} loading={isLoading}/>
-                    {submitting && <Stack className={`max-md:w-full ${INPUT_WIDTH}`}> <MessageFeed sender={'user'} content={optimisticMessage!}/></Stack>}
+                    {submitting && <Stack className={`max-md:w-full ${INPUT_WIDTH}`}> <MessageFeed sender={'user'}
+                                                                                                   content={optimisticMessage!}/></Stack>}
                     {submitting && <MessageLoader/>}
                 </Stack>
                 {
@@ -59,18 +60,19 @@ const ChatPage = () => {
                             <ChatbotTypeFeed className={'cursor-default'}  {...chatbotType!} selected={false}/>
                         </Stack>
                     )
-                   
+
                 }
                 <div className={cn(`fixed bottom-10 left-1/2 -translate-x-1/2  ${INPUT_WIDTH}`, 'max-md:w-[96%]')}>
                     <ChatInput/>
                 </div>
+                <div ref={containerRef}/>
 
             </Stack>
+
             <Icon onClick={() => handleScrollToBottom()}
                   className={cn('rounded-2xl fixed bottom-[132px] left-1/2 -translate-x-1/2 transition', !arrowDownInView ? 'opacity-1 scale-1' : 'opacity-0 scale-0')}>
                 <ArrowDown size={16}/>
             </Icon>
-            <div ref={containerRef}/>
         </section>
     )
 }

@@ -13,7 +13,7 @@ const ConversationListFilters = ({onChange}: ConversationListFilters) => {
     const debouncedSearch = useDebounce(search)
 
     useEffect(() => {
-        onChange({search : debouncedSearch})
+        onChange({search: debouncedSearch});
     }, [debouncedSearch]);
 
     return (
