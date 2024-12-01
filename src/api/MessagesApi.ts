@@ -1,5 +1,6 @@
 ﻿import axios from "axios";
 import {BASE_URL} from "@/constants";
+import {Conversation} from "@/api/conversationsApi.ts";
 
 
 /*
@@ -25,14 +26,16 @@ export const fetchMessages = async (conversationId: string) => {
 
 }
 
-export const newMessage = async ({content, model, conversation_id, sender = 'user', chatbot_type_id}: {
+
+
+export const createMessage = async ({content, model, conversation_id, sender = 'user', chatbot_type_id}: {
     content: string,
     model: string,
     conversation_id: string,
     sender?: 'user' | 'bot',
     chatbot_type_id: string
 }) => {
-    const response = await axios.post(`${BASE_URL}/api/messages`, {
+    const response = await axios.post(`${BASE_URL}/api/messages/create`, {
         content,
         model,
         conversation_id,
@@ -44,3 +47,82 @@ export const newMessage = async ({content, model, conversation_id, sender = 'use
 
     return response.data as Message;
 }
+export const newStreamedMessage = async ({
+                                             content,
+                                             model,
+                                             conversation_id,
+                                             sender = 'user',
+                                             chatbot_type_id,
+                                             onFinish,
+                                             onChange
+                                         }: {
+    content: string,
+    model: string,
+    conversation_id: string,
+    sender?: 'user' | 'bot',
+    chatbot_type_id: string
+} & {
+    onChange: (chunk: string) => void,
+    onFinish: (fullMessage : string) => void
+}) => {
+    const response = await fetch(`${BASE_URL}/api/messages/streamed`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            content,
+            model,
+            conversation_id,
+            sender,
+            chatbot_type_id
+        })
+    });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    if (!response.body) {
+        throw new Error('No response body available.');
+    }
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let fullMessage = '';
+    
+    while (true) {
+        const {done, value} = await reader.read();
+        
+        if (done) {
+            onFinish(fullMessage);
+            break;
+        }
+        
+        const chunk = decoder.decode(value, {stream: true});
+        fullMessage += chunk;
+        onChange(chunk)
+    }
+}
+
+
+
+// export const newMessage = async ({content, model, conversation_id, sender = 'user', chatbot_type_id}: {
+//     content: string,
+//     model: string,
+//     conversation_id: string,
+//     sender?: 'user' | 'bot',
+//     chatbot_type_id: string
+// }) => {
+//     const response = await axios.post(`${BASE_URL}/api/messages`, {
+//         content,
+//         model,
+//         conversation_id,
+//         sender,
+//         chatbot_type_id
+//     })
+//     if (response.status !== 200)
+//         throw new Error(response.statusText)
+//
+//     return response.data as Message;
+// }

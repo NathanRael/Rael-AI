@@ -17,7 +17,7 @@ import ChatbotTypeFeed from "@/components/pages/ChatbotTypeFeed.tsx";
 
 const ChatPage = () => {
     const {chatId} = useParams();
-    const {submitting, optimisticMessage} = useMessageContext();
+    const {submitting, optimisticMessage, streamedMessage} = useMessageContext();
     const {scrollToBottom} = useScroll();
     const ref = useRef<HTMLDivElement>(null);
     const {inView: arrowDownInView, containerRef} = useInView({});
@@ -42,11 +42,11 @@ const ChatPage = () => {
         if (!ref.current) return;
         scrollToBottom(ref.current.scrollHeight)
     }
-    
+
     useEffect(() => {
         handleScrollToBottom()
     }, [chatId])
-    
+
 
     return (
         <section ref={ref} className={'h-full  pt-[256px] px-4 overflow-y-hidden'}>
@@ -56,6 +56,8 @@ const ChatPage = () => {
                     <MessageList messages={messages!} error={error as Error} loading={isLoading}/>
                     {submitting && <Stack className={`max-md:w-full ${INPUT_WIDTH}`}> <MessageFeed sender={'user'}
                                                                                                    content={optimisticMessage!}/></Stack>}
+                    {streamedMessage && submitting && <Stack className={`max-md:w-full ${INPUT_WIDTH}`}> <MessageFeed sender={'bot'}
+                                                                                                   content={streamedMessage!}/></Stack>}
                     {submitting && <MessageLoader/>}
                 </Stack>
                 {
@@ -82,27 +84,27 @@ const ChatPage = () => {
 }
 
 const MessageLoader = () => {
-    const LOADING_TEXTS = [
-        "Getting things ready",
-        "Almost there",
-        "Generating answer",
-        "Hold on a minute"
-    ]
-    const [loadingMessage, setLoadingMessage] = useState("Getting things ready");
-    const [index, setIndex] = useState(0);
-
-    useEffect(() => {
-        const timeoutId = setTimeout(() => {
-            setIndex(prev => (prev + 1) % LOADING_TEXTS.length);
-            setLoadingMessage(LOADING_TEXTS[index]);
-        }, 8000)
-
-        return () => clearTimeout(timeoutId)
-    }, [loadingMessage, index])
+    // const LOADING_TEXTS = [
+    //     "Getting things ready",
+    //     "Almost there",
+    //     "Generating answer",
+    //     "Hold on a minute"
+    // ]
+    // const [loadingMessage, setLoadingMessage] = useState("Getting things ready");
+    // const [index, setIndex] = useState(0);
+    //
+    // useEffect(() => {
+    //     const timeoutId = setTimeout(() => {
+    //         setIndex(prev => (prev + 1) % LOADING_TEXTS.length);
+    //         setLoadingMessage(LOADING_TEXTS[index]);
+    //     }, 8000)
+    //
+    //     return () => clearTimeout(timeoutId)
+    // }, [loadingMessage, index])
     return (
         <div className={'flex items-center justify-center gap-2'}>
             <LoaderCircle className={'animate-spin text-black dark:text-white'} size={20}/>
-            <p className={'animate-pulse text-black dark:text-white'}>{loadingMessage}</p>
+            <p className={'animate-pulse text-black dark:text-white'}>Generating response</p>
         </div>
     )
 }

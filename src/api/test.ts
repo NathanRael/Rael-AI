@@ -23,8 +23,8 @@ import {BASE_URL} from "@/constants";
 
 
 
-export async function fetchStreamedResponse(onChange : (data: string) => void){
-    const response = await fetch(`${BASE_URL}/streamed`, {
+export async function fetchStreamedResponse(message : string,  onChange : (data: string) => void){
+    const response = await fetch(`${BASE_URL}/streamed/${message}`, {
         method: "POST",
     });
 

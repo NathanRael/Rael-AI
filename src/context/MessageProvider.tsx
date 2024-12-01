@@ -6,7 +6,8 @@ import useMessages from "@/hooks/useMessages.ts";
 interface MessageContext {
     handleSubmitMessage : (inputValue : string, chatId : string,  onValidInput : () => void, chatbotTypeId : string) => Promise<void>;
     submitting : boolean;
-    optimisticMessage?: string
+    optimisticMessage?: string;
+    streamedMessage : string;
 }
 
 const MessageContext = createContext<MessageContext | undefined>(undefined);

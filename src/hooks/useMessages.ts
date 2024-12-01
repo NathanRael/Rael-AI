@@ -1,8 +1,8 @@
-﻿import {useMemo} from "react";
+﻿import {useState} from "react";
 import {useToast} from "rael-ui"
 import useScroll from "@/hooks/useScroll.ts";
-import {newMessage} from "@/api/MessagesApi.ts";
-import {useMutation, useQueryClient} from "@tanstack/react-query";
+import {createMessage, newStreamedMessage} from "@/api/MessagesApi.ts";
+import {useQueryClient} from "@tanstack/react-query";
 import {queryKeys} from "@/api/queryKeys.ts";
 
 type UseMessageProps = {
@@ -15,22 +15,28 @@ const useMessages = ({selectedModel}: UseMessageProps) => {
     const {scrollToBottom} = useScroll();
     const queryClient = useQueryClient();
     
-    const {mutateAsync: newMessageMutation, isLoading: submitting, variables} = useMutation({
-        mutationFn: newMessage,
-        onSuccess : () => {
-            queryClient.invalidateQueries([queryKeys.chat]);
-            queryClient.invalidateQueries([queryKeys.conversationList]);
-        },
-    })
     
-    const optimisticMessage = useMemo(() => variables?.content, [variables?.content])
+    const [submitting, setSubmitting] = useState(false);
+    const [streamedMessage, setStreamedMessage] = useState('');
+    const [optimisticMessage, setOptimisticMessage] = useState('');
 
-    
-    const handleSubmitMessage = async (inputValue: string, conversationId: string, onValidInput : () => void, chatbotTypeId : string) => {
-        
+
+    // const {mutateAsync: newMessageMutation, isLoading: submitting, variables} = useMutation({
+    //     mutationFn: newMessage,
+    //     onSuccess : () => {
+    //         queryClient.invalidateQueries([queryKeys.chat]);
+    //         queryClient.invalidateQueries([queryKeys.conversationList]);
+    //     },
+    // })
+
+    // const optimisticMessage = useMemo(() => variables?.content, [variables?.content])
+
+
+    const handleSubmitMessage = async (inputValue: string, conversationId: string, onValidInput: () => void, chatbotTypeId: string) => {
+
         if (inputValue === '' || !inputValue)
             return
-        
+
         if (selectedModel === '') {
             toast({
                 title: 'Error',
@@ -40,24 +46,62 @@ const useMessages = ({selectedModel}: UseMessageProps) => {
         }
         onValidInput();
         
+        setSubmitting(true);
+        setOptimisticMessage(inputValue);
         try {
-         await newMessageMutation({
-             conversation_id : conversationId,
-             content : inputValue,
-             model : selectedModel,
-             chatbot_type_id : chatbotTypeId,
-         })
+            
+            await newStreamedMessage({
+                
+                conversation_id: conversationId,
+                content: inputValue,
+                model: selectedModel,
+                chatbot_type_id: chatbotTypeId,
+                
+                
+                onChange: (v) => setStreamedMessage(prevState => prevState + v),
+                onFinish: async (fullMessage) => {
+                    setSubmitting(false)
+                    // Saving the chatbot message in the db
+                    
+                    
+                    
+                    await createMessage({
+                        content : fullMessage,
+                        conversation_id: conversationId,
+                        model: selectedModel,
+                        chatbot_type_id: chatbotTypeId,
+                        sender : 'bot'
+                    })
+                    
+                    setStreamedMessage('');
+                    setOptimisticMessage('');
+                    
+                    await queryClient.invalidateQueries([queryKeys.chat]);
+                    await queryClient.invalidateQueries([queryKeys.conversationList]);
+                    
+
+                }
+            })
+            // await newMessageMutation({
+            //     conversation_id : conversationId,
+            //     content : inputValue,
+            //     model : selectedModel,
+            //     chatbot_type_id : chatbotTypeId,
+            // })
+
+
         } catch (e) {
             console.error(e)
-        }finally {
+        } finally {
             scrollToBottom(document.body.scrollHeight)
+            setSubmitting(false)
         }
-        
+
     }
 
 
     return {
-         submitting, handleSubmitMessage, optimisticMessage
+        submitting, handleSubmitMessage, optimisticMessage,streamedMessage
     }
 }
 

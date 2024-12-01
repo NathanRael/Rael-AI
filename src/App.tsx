@@ -36,8 +36,9 @@ function App() {
 
 const Test = () => {
     const [data, setData] = useState("");
+    const prompt = "Who are you ?"
     const handleClick = async () => {
-            await fetchStreamedResponse((v) => setData(prevState => prevState + v));
+            await fetchStreamedResponse(prompt, (v) => setData(prevState => prevState + v));
     }
 
     return (

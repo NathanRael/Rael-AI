@@ -35,7 +35,6 @@ const ChatInput = () => {
     })
     
     
-    
     const {rows, handleKeyPress} = useSmartTextarea({
         onEnter: () => {
             setMessage("");
@@ -67,7 +66,7 @@ const ChatInput = () => {
             const generatedTitle : string = await generateMessage({prompt : `Give me a suitable title for this message : '${userInput}'.Don't be verbose.Just give the response without commentary`})
             await newConversationMutation({
                 user_id: USER_ID,
-                title: generatedTitle.replace("\"", ''),
+                title: generatedTitle.slice(1,generatedTitle.length-1),
                 chatbot_type_id : chatbotTypeIdInParams || ''
             })
         } catch (e) {
