@@ -1,5 +1,5 @@
 ﻿import ChatHistory from "@/components/pages/ChatHistory.tsx";
-import {Stack} from "rael-ui";
+import {Stack, cn} from "rael-ui";
 import LoaderUI from "@/components/ui/LoaderUI.tsx";
 import {Conversation} from "@/api/conversationsApi.ts";
 import {useParams} from "react-router-dom";
@@ -8,9 +8,10 @@ type HistoryListProps = {
     conversations: Conversation[];
     loading: boolean;
     error: { message : string };
+    className? : string;
     
 }
-const ConversationList = ({conversations, loading, error}: HistoryListProps) => {
+const ConversationList = ({conversations, loading, error, className}: HistoryListProps) => {
     const {chatId} = useParams();
     if (loading) 
         return <LoaderUI title={'Fetching conversation'} />;
@@ -20,7 +21,7 @@ const ConversationList = ({conversations, loading, error}: HistoryListProps) => 
     
     
     return (
-        <Stack className={'w-full'} gap={8}>
+        <Stack className={cn('w-full justify-start', className)}  gap={8}>
             {conversations.length === 0 && <p className={'text-meta-fill-l-text dark:text-meta-fill-d-text'}>No conversation found</p>}
             {
                 conversations?.map((conversation) => (

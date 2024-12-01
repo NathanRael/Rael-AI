@@ -53,7 +53,7 @@ const ChatHistory = ({name, id, active}: { name: string, id: string, active?: bo
                className={cn(' w-full p-3  rounded-xl  hover:bg-black/10 dark:hover:bg-white/20 justify-between', active && 'bg-black/10 dark:bg-white/20')}>
             {renderToastContainer()}
             <p onClick={handleNavigateToConversation}
-               className={'text-md text-meta-fill-l-text-sec dark:text-meta-fill-d-text-sec cursor-pointer hover:underline'}>{limitTextLen(name, 25)}</p>
+               className={'text-md text-meta-fill-l-text-sec text-nowrap dark:text-meta-fill-d-text-sec cursor-pointer hover:underline'}>{limitTextLen(name, 25)}</p>
             <Stack direction={'horizontal'} gap={8}>
                 {/*<Icon variant={'ghost'} size={'sm'}> <Pencil size={16}/></Icon>*/}
                 <Icon onClick={handleDelete} variant={'ghost'} size={'sm'}> <Trash2 size={16}/></Icon>

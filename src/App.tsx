@@ -5,9 +5,10 @@ import ChatPage from "@/pages/ChatPage.tsx";
 import AppLayout from "@/layout/AppLayout.tsx";
 import ChatLayout from "@/layout/ChatLayout.tsx";
 import {Button} from "rael-ui"
-import {fetchTest} from "@/api/test.ts";
 import ExploreChatPage from "@/pages/ExploreChatPage.tsx";
 import Sidebar from "@/components/pages/Sidebar.tsx";
+import {useState} from "react";
+import {fetchStreamedResponse} from "@/api/test.ts";
 
 
 function App() {
@@ -34,10 +35,16 @@ function App() {
 }
 
 const Test = () => {
-
+    const [data, setData] = useState("");
+    const handleClick = async () => {
+            await fetchStreamedResponse((v) => setData(prevState => prevState + v));
+    }
 
     return (
-        <Button className={'m-10'} onClick={() => fetchTest()}>Send</Button>
+        <div className={'p-10 space-y-6'}>
+            <div className={'text-white w-[480px] '}>{data}</div>
+            <Button onClick={() => handleClick()}>Send</Button>
+        </div>
     )
 }
 

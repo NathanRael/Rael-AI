@@ -73,9 +73,9 @@ const Sidebar = ({className}: { className?: string }) => {
                         </Button>
 
                     </Stack>
-                    <Stack className={'w-full max-h-[440px]  overflow-y-auto hide-scrollbar'}>
+                    <Stack className={'w-full  '}>
                         <p className={'text-sm text-start w-full text-meta-fill-l-text-sec dark:text-meta-fill-d-text-sec'}>Histories</p>
-                        <ConversationList conversations={conversations!} error={error as any} loading={isLoading}/>
+                        <ConversationList className={'overflow-y-auto hide-scrollbar max-h-[320px]'}  conversations={conversations!} error={error as any} loading={isLoading}/>
                     </Stack>
                 </div>
             </Stack>

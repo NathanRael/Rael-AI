@@ -5,6 +5,7 @@ export interface ChatbotType {
     id: string;
     name: string;
     description: string;
+    suggested_models :string;
 }
 
 interface FetchChatbotTypeOptions {

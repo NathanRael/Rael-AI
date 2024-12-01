@@ -43,6 +43,10 @@ const ChatPage = () => {
         scrollToBottom(ref.current.scrollHeight)
     }
     
+    useEffect(() => {
+        handleScrollToBottom()
+    }, [chatId])
+    
 
     return (
         <section ref={ref} className={'h-full  pt-[256px] px-4 overflow-y-hidden'}>
