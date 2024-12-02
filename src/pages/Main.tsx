@@ -7,7 +7,7 @@ import {fetchUsers, User} from "@/api/usersApi.ts";
 import {queryKeys} from "@/api/queryKeys.ts";
 import {useEffect, useMemo} from "react";
 import LoaderUI from "@/components/ui/LoaderUI.tsx";
-import {Info} from "lucide-react";
+import {ChevronRight, Slack} from "lucide-react";
 import {Button} from "rael-ui"
 import ChatbotTypeToggleList from "@/components/pages/ChatbotTypeToggleList.tsx";
 import {fetchChatbotTypes} from "@/api/chatbotTypesApi.ts";
@@ -15,53 +15,79 @@ import {fetchUserPreferences} from "@/api/userPreferencesApi.ts";
 import {USER_ID} from "@/constants";
 import Copyright from "@/components/pages/Copyright.tsx";
 import useLocalSearchParams from "@/hooks/useLocalSearchParams.ts";
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
+import ModelSwitcher from "@/components/pages/ModelSwitcher.tsx";
+import ErrorUI from "@/components/ui/ErrorUI.tsx";
 
 const Main = () => {
     const location = useLocation();
-    const {data : users, isLoading : isFetchingUsers, error : usersError, refetch : reFetchUsers} = useQuery({
-        queryFn : () => fetchUsers({}),
-        queryKey : [queryKeys.users],
+    const navigate = useNavigate();
+    const {data: users, isLoading: isFetchingUsers, error: usersError, refetch: reFetchUsers} = useQuery({
+        queryFn: () => fetchUsers({}),
+        queryKey: [queryKeys.users],
     })
-    
-    const {data : chatbotTypes, isLoading : isFetchingChatbotTypes, error : chatbotTypeError, refetch : reFetchChatbotTypes} = useQuery({
-        queryFn : () => fetchChatbotTypes({}),
-        queryKey : [queryKeys.chatbotTypeList]
+
+    const {
+        data: chatbotTypes,
+        isLoading: isFetchingChatbotTypes,
+        error: chatbotTypeError,
+        refetch: reFetchChatbotTypes
+    } = useQuery({
+        queryFn: () => fetchChatbotTypes({}),
+        queryKey: [queryKeys.chatbotTypeList]
     })
-    
-    const {data : userPreferences, isLoading : isFetchingUserPreferences, error : userPreferencesError} = useQuery({
-        queryFn : () => fetchUserPreferences(USER_ID),
-        queryKey : [queryKeys.userPreferences],
+
+    const {data: userPreferences, isLoading: isFetchingUserPreferences, error: userPreferencesError} = useQuery({
+        queryFn: () => fetchUserPreferences(USER_ID),
+        queryKey: [queryKeys.userPreferences],
     })
-    
+
     const {updateSearchParam} = useLocalSearchParams();
-    
+
     const user = useMemo(() => !isFetchingUsers && !usersError ? users![0] : {} as User, [users])
-    
+
     useEffect(() => {
         if (!isFetchingUserPreferences && !userPreferencesError && userPreferences)
-            updateSearchParam("chatType",userPreferences.chatbot_type_id)
+            updateSearchParam("chatType", userPreferences.chatbot_type_id)
     }, [userPreferences, isFetchingUserPreferences, location.pathname])
+
+    if (isFetchingUsers)
+        return <LoaderUI title={'Getting things ready'}
+                         className={'fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'}/>
     
-    if (isFetchingUsers) 
-        return <LoaderUI title={'Getting things ready'} className={'fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'} />
-    
-    
-    if (usersError) 
-        return (
-            <Stack  gap={16} className={'w-full'}>
-                <Stack className={'text-center text-danger'} direction={'horizontal'} gap={8}>
-                    <Info/>
-                    <p className={'text-danger text-sm'}>Error : {usersError?.message}</p>
-                </Stack>
-                <Button variant={'secondary'} size={'sm'} radius={'2xl'} onClick={() => reFetchUsers()} block>Retry</Button>
-            </Stack>
-        )
-    
+
+    if (usersError)
+        return <ErrorUI error={usersError as Error} onRetry={() => reFetchUsers()}/>
+
+
     return (
-        <section className={'h-full space-y-10 pt-[128px] px-4 '}>
-            <Stack>
-                <ChatbotTypeToggleList chatbotTypes={chatbotTypes!} loading={isFetchingChatbotTypes} error={chatbotTypeError as Error} onRetry={reFetchChatbotTypes}/>
+        <section className={'h-full space-y-10 pt-4 max-md:pt-16 pb-10 px-4 '}>
+
+            <Stack direction={'vertical'} className={'items-start w-fit mx-auto'} gap={32}>
+                <div className={'flex flex-col gap-8 items-start p-2 rounded-xl h-fit '}>
+                    <div className={'space-y-4'}>
+                        <h1 className={'text-lead text-black dark:text-white'}>Choose a model</h1>
+                        <ModelSwitcher/>
+                    </div>
+                    <Button onClick={() => navigate('/model/explore')} size={'sm'} variant={'ghost'} radius={'xl'}>
+                        <Slack size={16}/>
+                        Explore
+                        <ChevronRight/>
+                    </Button>
+                </div>
+                <div className={'flex flex-col gap-8 items-start p-2 rounded-xl '}>
+                    <div className={'space-y-4'}>
+                        <h1 className={'text-lead text-black dark:text-white'}>Select a chat type</h1>
+                        <ChatbotTypeToggleList chatbotTypes={chatbotTypes!} loading={isFetchingChatbotTypes}
+                                               error={chatbotTypeError as Error} onRetry={reFetchChatbotTypes}/>
+                    </div>
+                    <Button onClick={() => navigate('/chat/explore')} size={'sm'} variant={'ghost'} radius={'xl'}>
+                        <Slack size={16}/>
+                        Explore
+                        <ChevronRight/>
+                    </Button>
+                </div>
+
             </Stack>
             <Stack direction={'vertical'} gap={40}>
                 <Stack className={'w-full'} direction={'vertical'} gap={8}>
@@ -76,7 +102,7 @@ const Main = () => {
                     <ChatInput/>
                 </div>
             </Stack>
-            <Copyright className={'absolute bottom-[32px] left-1/2 -translate-x-1/2'}/>
+            <Copyright className={''}/>
         </section>
     )
 }

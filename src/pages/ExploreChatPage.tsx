@@ -24,7 +24,7 @@ const ExploreChatPage = () => {
                 <h1 className={'text-[32px] text-black dark:text-white font-bold'}>
                     <span>Chatbot types</span>
                 </h1>
-                <p className={'text-black/80 dark:text-white/80 text-lead'}>Find chatbot that matches your need </p>
+                <p className={'text-black/80 dark:text-white/80 text-lead'}>Find chatbot that match your need </p>
             </div>
             <div className={'flex-centered'}>
                 <ChatbotTyeListFilter onChange={setSearch} className={'w-[50%] max-md:w-[90%]'}/>

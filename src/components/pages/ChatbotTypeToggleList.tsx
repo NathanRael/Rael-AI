@@ -23,8 +23,8 @@ const ChatbotTypeToggleList = ({loading, error, chatbotTypes, onRetry}: ChatbotT
     
     
     return (
-        <Stack direction={'horizontal'} className={'items-start min-h-[180px] max-xl:flex-wrap max-md:visible visible'}
-               gap={32}>
+        <Stack direction={'horizontal'} className={'items-start h-fit  max-xl:flex-wrap justify-start '}
+               gap={24}>
             {
                 chatbotTypes?.slice(0, 3)?.map((chatbotType) => (
                     <ChatbotTypeFeed {...chatbotType}

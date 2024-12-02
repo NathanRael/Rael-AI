@@ -2,8 +2,6 @@
 import {CardSection, Card, CardDescription, CardTitle, Icon, cn, Badge} from "rael-ui";
 import {Bot} from "lucide-react";
 import {motion} from "framer-motion"
-import {useEffect, useState} from "react";
-import useWindowSize from "@/hooks/useWindowSize.ts";
 
 type ChatbotTypeFeedProps = Omit<ChatbotType, 'context'> & {
     description: string;
@@ -12,35 +10,20 @@ type ChatbotTypeFeedProps = Omit<ChatbotType, 'context'> & {
     className? : string;
 }
 
-const MAX_DESC_LENGTH = 40;
+// const MAX_DESC_LENGTH = 40;
 
 const ChatbotTypeFeed = ({id, name, description, selected, onClick = () => {}, className}: ChatbotTypeFeedProps) => {
-    // const showFullDesc = useRef<boolean>(false);
-    const [showFullDesc, setShowFullDesc] = useState(selected);
-    const {width} = useWindowSize();
-    
-    const maxCardHeight =  width <= 430 ? 'auto' : 180
-    const minCardHeight = width <= 430 ? 'auto' : 140
 
-    useEffect(() => {
-        setShowFullDesc(selected);
-    }, [selected]);
-    
     return (
         <motion.div
             onClick={() => {
-                // setShowFullDesc(!showFullDesc);
                 onClick(id)
-            }}
-            animate={{
-                height: showFullDesc ? maxCardHeight : minCardHeight,
-                // minHeight : showFullDesc ? 180 : 140,
             }}
             transition={{duration: 0.3}}
         >
             <Card
                 className={cn(
-                    'flex flex-col overflow-hidden select-none cursor-pointer items-start justify-start gap-4 p-4 dark:border-secondary/20 shadow-sm bg-transparent h-full dark:bg-transparent relative rounded-xl w-[360px]'
+                    'flex flex-col cursor-pointer overflow-hidden dark:border-none items-start justify-start gap-3 p-4  shadow-sm bg-meta-fill-l-bg h-full dark:bg-white/5 relative rounded-xl w-[240px] max-md:w-[340px]'
                 , className)}
             >
                 <Icon
@@ -52,7 +35,6 @@ const ChatbotTypeFeed = ({id, name, description, selected, onClick = () => {}, c
                     <Bot size={32}/>
                 </Icon>
                 <CardSection rFor={'meta'}>
-
                     <Badge
                         size={'sm'}
                         className={
@@ -61,20 +43,24 @@ const ChatbotTypeFeed = ({id, name, description, selected, onClick = () => {}, c
                     >
                         Active
                     </Badge>
-                
+                    
                     <CardTitle
                         className={cn(
-                            `text-black dark:text-white font-bold  text-[18px]`,
+                            `text-black dark:text-white  text-base`,
                             ''
                         )}
                     >
                         {name}
-                    </CardTitle></CardSection>
-                <CardDescription className={'visible max-md:hidden'}>
-                    {showFullDesc
-                        ? description
-                        : description?.slice(0, MAX_DESC_LENGTH) +
-                        (description?.length >= MAX_DESC_LENGTH ? ' ...' : '')}
+                    </CardTitle>
+                </CardSection>
+                <CardDescription>
+                    {/*{showFullDesc*/}
+                    {/*    ? description*/}
+                    {/*    : description?.slice(0, MAX_DESC_LENGTH) +*/}
+                    {/*    (description?.length >= MAX_DESC_LENGTH ? ' ...' : '')}*/}
+                    {
+                        description
+                    }
                 </CardDescription>
             </Card>
         </motion.div>

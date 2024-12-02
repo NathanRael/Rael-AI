@@ -1,6 +1,6 @@
 ﻿import {useMessageContext} from "@/context/MessageProvider.tsx";
 import useScroll from "@/hooks/useScroll.ts";
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useRef} from "react";
 import useInView from "@/hooks/useInView.ts";
 import {INPUT_WIDTH} from "@/constants/style.ts";
 import ChatInput from "@/components/pages/ChatInput.tsx";
@@ -50,6 +50,7 @@ const ChatPage = () => {
 
     return (
         <section ref={ref} className={'h-full  pt-[256px] px-4 overflow-y-hidden'}>
+
             {/*<Badge size={'md'} className={'fixed bg-secondary border-secondary flex items-center flex-row top-6 text-base left-1/2 -translate-x-1/2'}> <Bot size={16}/> {chatbotType?.name}</Badge>*/}
             <Stack direction={'vertical'} className={' pb-[160px]'} gap={40}>
                 <Stack className={` h-fit ${INPUT_WIDTH} space-y-6`} align={'start'}>
@@ -68,7 +69,7 @@ const ChatPage = () => {
                     )
 
                 }
-                <div className={cn(`fixed bottom-10 left-1/2 -translate-x-1/2  ${INPUT_WIDTH}`, 'max-md:w-[96%]')}>
+                <div className={cn(`fixed bottom-10 max-md:bottom-2 left-1/2 -translate-x-1/2  ${INPUT_WIDTH}`, 'max-md:w-[96%]')}>
                     <ChatInput/>
                 </div>
                 <div ref={containerRef}/>
@@ -76,7 +77,7 @@ const ChatPage = () => {
             </Stack>
 
             <Icon onClick={() => handleScrollToBottom()}
-                  className={cn('rounded-2xl fixed bottom-[132px] left-1/2 -translate-x-1/2 transition', !arrowDownInView ? 'opacity-1 scale-1' : 'opacity-0 scale-0')}>
+                  className={cn('rounded-2xl fixed bottom-[132px] max-md:bottom-[96px] left-1/2 -translate-x-1/2 transition', !arrowDownInView ? 'opacity-1 scale-1' : 'opacity-0 scale-0')}>
                 <ArrowDown size={16}/>
             </Icon>
         </section>

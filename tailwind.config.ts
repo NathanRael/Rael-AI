@@ -98,6 +98,7 @@ export default {
                     }
                 },
                 fontSize: {
+                    'big-title' : '40px',
                     title : '24px',
                     subtitle : '20px',
                     lead : '18px',

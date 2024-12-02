@@ -100,10 +100,10 @@ const ChatInput = () => {
                 e.target.style.height = `${e.target.scrollHeight >= 320 ? 320 : e.target.scrollHeight}px`
             }}
             className={`w-full shadow-md z-40   rounded-3xl text-lg    min-h-[32px]  resize-none ${rows === 1 ? 'items-center' : 'items-end'} `}
-            inputClassName={'hide-scrollbar overflow-y-hidden'}
+            inputClassName={'hide-scrollbar overflow-y-auto'}
             placeholder={'Your message ...'}
             rightContent={<Icon role={'button'} type={'submit'} disabled={!canSubmit}
-                                className={'rounded-2xl'}
+                                className={'rounded-2xl button-gradient'}
                                 onClick={handleSubmit}><ArrowUp
                 size={16}/></Icon>}
         />

@@ -14,7 +14,7 @@ type MessageListProps = {
 }
 const MessageList = ({messages, loading, error}: MessageListProps) => {
     
-    if (loading && !error?.message)
+    if (loading)
         return <LoaderUI className={'flex items-center justify-center  w-full'} title={'Loading conversations ...'} />
     
     if (error)

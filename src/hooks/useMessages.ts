@@ -19,18 +19,7 @@ const useMessages = ({selectedModel}: UseMessageProps) => {
     const [submitting, setSubmitting] = useState(false);
     const [streamedMessage, setStreamedMessage] = useState('');
     const [optimisticMessage, setOptimisticMessage] = useState('');
-
-
-    // const {mutateAsync: newMessageMutation, isLoading: submitting, variables} = useMutation({
-    //     mutationFn: newMessage,
-    //     onSuccess : () => {
-    //         queryClient.invalidateQueries([queryKeys.chat]);
-    //         queryClient.invalidateQueries([queryKeys.conversationList]);
-    //     },
-    // })
-
-    // const optimisticMessage = useMemo(() => variables?.content, [variables?.content])
-
+    
 
     const handleSubmitMessage = async (inputValue: string, conversationId: string, onValidInput: () => void, chatbotTypeId: string) => {
 
@@ -82,14 +71,7 @@ const useMessages = ({selectedModel}: UseMessageProps) => {
 
                 }
             })
-            // await newMessageMutation({
-            //     conversation_id : conversationId,
-            //     content : inputValue,
-            //     model : selectedModel,
-            //     chatbot_type_id : chatbotTypeId,
-            // })
-
-
+            
         } catch (e) {
             console.error(e)
         } finally {

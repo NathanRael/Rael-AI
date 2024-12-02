@@ -7,4 +7,5 @@
     chatbotTypeList: 'chatbotTypeList',
     userPreferences : 'userPreference',
     modelList : 'modelList',
+    ollamaModelList : 'ollamaModelList',
 }

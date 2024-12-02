@@ -1,5 +1,15 @@
 # Rael AI
 
+
+## Step 1 : Downloading model (default : ollama3.2 + Rael) : Showing suggested one or exploring other
+
+### SubStep : Downloading interface (showing progress of the download)
+
+## Step 2 : Choosing 3 main chatbot types (will be displayed in the Main chat)
+
+Done
+
+
 ## TODO:
 - Limit the conversation lenght
 - Choosing chat type and model

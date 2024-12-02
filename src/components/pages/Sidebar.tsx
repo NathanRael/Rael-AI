@@ -1,5 +1,5 @@
 ﻿import {cn, Button, Stack, Icon} from "rael-ui"
-import {Bot, Plus, SidebarIcon} from "lucide-react";
+import {Bot, Plus, SidebarIcon, SlackIcon} from "lucide-react";
 import {useRef, useState} from "react";
 import useOutsideClicked from "@/hooks/useOutsideClicked.ts";
 import ConversationList from "@/components/pages/ConversationList.tsx";
@@ -43,18 +43,17 @@ const Sidebar = ({className}: { className?: string }) => {
     return (
         <div
             ref={sidebarRef}
-            className={cn('sidebar', `${showSidebar ? 'translate-x-0' : '-translate-x-[340px]'}  ${className}`)}>
+            className={cn('sidebar  hide-scrollbar ', `${showSidebar ? 'translate-x-0' : '-translate-x-[340px]'}  ${className}`)}>
             <Icon onClick={() => setShowSidebar(prev => !prev)} className={'fixed left-[348px] top-4'}
                   variant={'ghost'}>
                 <SidebarIcon/>
             </Icon>
             <ModelSwitcher/>
-
             <Button onClick={() => {
                 navigate('/')
                 setShowSidebar(false)
             }} block size={'sm'}><Plus size={16}/> New chat </Button>
-            <Stack className={'w-full h-full justify-start'} gap={24}>
+            <Stack className={'w-full h-full justify-start pt-4   px-1 max-md:overflow-y-auto '} gap={24}>
                 <ConversationListFilters onChange={(filters) =>
                     setSearch(filters.search)}/>
                 <div className={'w-full space-y-7 '}>
@@ -68,14 +67,11 @@ const Sidebar = ({className}: { className?: string }) => {
                                                              error={chatbotTypeError as Error}
                                                              onRetry={() => reFetchChatTypeList()}/>
                         }
-                        <Button onClick={() => navigate('/chat/explore')} size={'sm'} className={'bg-black/10 text-black dark:text-white dark:bg-white/10'}>
-                            Explore
-                        </Button>
-
+                        
                     </Stack>
                     <Stack className={'w-full  '}>
                         <p className={'text-sm text-start w-full text-meta-fill-l-text-sec dark:text-meta-fill-d-text-sec'}>Histories</p>
-                        <ConversationList className={'overflow-y-auto hide-scrollbar max-h-[320px]'}  conversations={conversations!} error={error as any} loading={isLoading}/>
+                        <ConversationList className={'overflow-y-auto overflow-x-hidden hide-scrollbar max-h-[260px]'}  conversations={conversations!} error={error as Error} loading={isLoading}/>
                     </Stack>
                 </div>
             </Stack>
@@ -96,7 +92,7 @@ const ChatTypeList = ({loading, error, chatbotTypes, onRetry, className}: {
     onRetry: () => void,
     className?: string
 }) => {
-    
+    const navigate = useNavigate();
     const {selectedId, handleSelect} = useChatType();
     
     if (loading)
@@ -106,12 +102,16 @@ const ChatTypeList = ({loading, error, chatbotTypes, onRetry, className}: {
         return <ErrorUI error={error} onRetry={onRetry}/>
 
     return (
-        <Stack className={cn('w-full', className)} gap={8}>
+        <Stack className={cn('w-full', className)} gap={8} align={'start'}>
             {chatbotTypes.length === 0 &&
                 <p className={'text-meta-fill-l-text dark:text-meta-fill-d-text'}>No chat types found</p>}
             {
                 chatbotTypes.map(chat => (<ChatType onClick={() => handleSelect(chat.id)} selected={chat.id === selectedId} {...chat} key={chat.id}/>))
             }
+            <Button onClick={() => navigate('/chat/explore')} className={'mt-2'} size={'sm'} variant={'ghost'} >
+                <SlackIcon size={16}/>
+                Explore chat types
+            </Button>
         </Stack>
     )
 }

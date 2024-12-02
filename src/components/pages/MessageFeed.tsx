@@ -99,7 +99,7 @@ const BotMessage = ({content, handleCopy}: { content: string, handleCopy: (text:
                                            {/*      variant={'secondary'}*/}
                                            {/*      className={'absolute bottom-2 right-2 rounded-xl border border-gray-600'}><Copy*/}
                                            {/*    size={16}/></Icon>*/}
-                                           <CopyIcon forCode className={'absolute bottom-2 right-2'} onClick={() => handleCopy(codeContent)}/>
+                                           <CopyIcon forCode className={'absolute top-1 right-2'} onClick={() => handleCopy(codeContent)}/>
                                            <SyntaxHighlighter
                                                {...rest}
                                                PreTag="div"
