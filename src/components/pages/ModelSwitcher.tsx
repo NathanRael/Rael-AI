@@ -16,6 +16,7 @@ import {fetchModels} from "@/api/modelsApi.ts";
 import {queryKeys} from "@/api/queryKeys.ts";
 import {fetchUserPreferences, updateUserPreferences} from "@/api/userPreferencesApi.ts";
 import {USER_ID} from "@/constants";
+import ErrorUI from "@/components/ui/ErrorUI.tsx";
 
 const ModelSwitcher = ({className} : {className?: string}) => {
     const {renderToastContainer } = useToast();
@@ -34,7 +35,7 @@ const ModelSwitcher = ({className} : {className?: string}) => {
     
     const {mutateAsync : updateUserPreferencesMutation} = useMutation({
         mutationFn : updateUserPreferences,
-        onSuccess : data => {
+        onSuccess : () => {
             queryClient.invalidateQueries([queryKeys.userPreferences])
         }
     })
@@ -50,6 +51,8 @@ const ModelSwitcher = ({className} : {className?: string}) => {
     if (isFetchingUserPreferences || isFetchingModels)
         return <div className=" h-12 animate-pulse rounded-lg w-full bg-black/20 dark:bg-white/20"/>
     
+    if (modelsError)
+        return <ErrorUI error={modelsError as Error} onRetry={() => {}}/>
     
     return (
         <Stack className={className}>
@@ -70,7 +73,7 @@ const ModelSwitcher = ({className} : {className?: string}) => {
                         <SelectGroup>
                             <SelectGroupTitle>{isFetchingModels ? 'Getting models' : 'Models'}</SelectGroupTitle>
                             {
-                                (!modelsError && !isFetchingModels && models) && models.map(model => (
+                                (!modelsError && !isFetchingModels && models) && models?.map(model => (
                                     <SelectItem key={model} value={model}>{model}</SelectItem>
                                 ))
                             }

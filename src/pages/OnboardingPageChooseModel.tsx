@@ -8,9 +8,11 @@ import OllamaModelList from "@/components/pages/OllamaModelList.tsx";
 import {useMemo} from "react";
 import Stepper from "@/components/ui/Stepper.tsx";
 import {MainPageImageDark, MainPageImageLight} from "@/constants/images.ts";
+import {useUserPrefContext} from "@/context/UserPrefProvider.tsx";
 
 const OnboardingPageChooseModel = () => {
     const navigate = useNavigate();
+    const {darkMode} = useUserPrefContext();
     return (
         <section className="onboarding-page flex gap-6 h-screen w-full">
             <div className={"basis-1/2 flex flex-col gap-10"}>
@@ -23,7 +25,7 @@ const OnboardingPageChooseModel = () => {
                 <img src={MainPageImageDark} className={' border-black/10 dark:border-white/10 border-4  skew-x-2 object-cover rounded-xl overflow-hidden w-full object-top'}
                      alt={'Main chatbot page'}/>
                 <div className={'relative border-black/10 dark:border-white/10 border-4 overflow-hidden -skew-x-2 rounded-xl '}>
-                    <div className={'absolute w-full h-full bg-black/60'}/>
+                    {darkMode && <div className={'absolute w-full h-full bg-black/60'}/>}
                     <img src={MainPageImageLight} className={'  object-cover rounded-xl overflow-hidden  w-full'}
                          alt={'Main chatbot page'}/>
                 </div>
@@ -54,7 +56,7 @@ const PullModel = () => {
 
     }, [ollamaModels])
     return (
-        <div className=" flex flex-col gap-10 overflow-hidden">
+        <div className=" flex flex-col gap-10 ">
             <div className={'max-w-[540px]'}>
                 <h1 className={'text-black dark:text-white text-big-title font-bold'}>Choose a model</h1>
                 <p className={'text-lead text-black/80 dark:text-white/80'}>Select a model to download, the selected

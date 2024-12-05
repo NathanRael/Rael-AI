@@ -1,14 +1,14 @@
-﻿import {ChevronRight, Slack} from "lucide-react";
-import {Badge, Button} from "rael-ui";
+﻿import {Badge} from "rael-ui";
 import {useNavigate} from "react-router-dom";
 import {useQuery} from "@tanstack/react-query";
 import {queryKeys} from "@/api/queryKeys.ts";
 import {useMemo} from "react";
 import Stepper from "@/components/ui/Stepper.tsx";
-import {MainPageImageDark, MainPageImageLight, ChatPageImage} from "@/constants/images.ts";
+import {MainPageImageLight, ChatPageImage} from "@/constants/images.ts";
 import {ChatbotType, fetchChatbotTypes} from "@/api/chatbotTypesApi.ts";
 import LoaderUI from "@/components/ui/LoaderUI.tsx";
 import ErrorUI from "@/components/ui/ErrorUI.tsx";
+import {useUserPrefContext} from "@/context/UserPrefProvider.tsx";
 
 type ChatbotTypeSelectList = {
     error : Error;
@@ -17,6 +17,10 @@ type ChatbotTypeSelectList = {
 }
 const OnboardingPageChooseModel = () => {
     const navigate = useNavigate();
+    const {darkMode} = useUserPrefContext();
+    
+    console.log(darkMode);
+    
     return (
         <section className="onboarding-page flex gap-6 h-screen w-full">
             <div className={"basis-1/2 flex flex-col gap-10 justify-between pb-[128px]"}>
@@ -28,7 +32,7 @@ const OnboardingPageChooseModel = () => {
                 <img src={ChatPageImage} className={' border-black/10 dark:border-white/10 border-4  skew-x-2 object-cover rounded-xl overflow-hidden w-full object-top'}
                      alt={'Main chatbot page'}/>
                 <div className={'relative border-black/10 dark:border-white/10 border-4 overflow-hidden -skew-x-2 rounded-xl '}>
-                    <div className={'absolute w-full h-full bg-black/60'}/>
+                    {darkMode && <div className={'absolute w-full h-full bg-black/60'}/>}
                     <img src={MainPageImageLight} className={'  object-cover rounded-xl overflow-hidden  w-full'}
                          alt={'Main chatbot page'}/>
                 </div>

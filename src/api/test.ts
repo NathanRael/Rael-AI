@@ -23,9 +23,13 @@ import {BASE_URL} from "@/constants";
 
 
 
-export async function fetchStreamedResponse(message : string,  onChange : (data: string) => void){
-    const response = await fetch(`${BASE_URL}/streamed/${message}`, {
+export async function fetchStreamedResponse(model : string){
+    const response = await fetch(`http://localhost:11434/api/pull`, {
         method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({model : model}),
     });
 
     if (!response.body) {
@@ -41,6 +45,6 @@ export async function fetchStreamedResponse(message : string,  onChange : (data:
         if (done) break;
 
         const chunk = decoder.decode(value, { stream: true });
-        onChange(chunk)
+        console.log(chunk)
     }
 }
