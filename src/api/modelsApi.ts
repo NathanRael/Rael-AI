@@ -3,7 +3,7 @@ import {BASE_URL} from "@/constants";
 
 
 export const fetchModels = async () => {
-    const response = await axios.get<string[]>(`${BASE_URL}/api/models`)
+    const response = await axios.get<string[]>(`${BASE_URL}/api/models/?formated=false`)
     
     return response.data; 
 }

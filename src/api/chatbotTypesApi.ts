@@ -25,6 +25,15 @@ export const fetchChatbotTypes = async ({search}: { search?: string }) => {
     return response.data
 }
 
+export const fetchMainChatbotTypes = async (userId :string) => {
+    const response = await axios.get<ChatbotType[]>(`${BASE_URL}/api/chatbotTypes/mainChatbotTypes/${userId}`);
+    
+    if (response.status !== 200)
+        throw new Error(response.statusText);
+    
+    return response.data;
+}
+
 
 export const fetchChatbotType = async (options: FetchChatbotTypeOptions) => {
     let response: AxiosResponse<ChatbotType> = {} as AxiosResponse<ChatbotType>;

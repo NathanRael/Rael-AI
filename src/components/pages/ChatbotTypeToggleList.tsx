@@ -29,7 +29,7 @@ const ChatbotTypeToggleList = ({loading, error, chatbotTypes, onRetry}: ChatbotT
                 chatbotTypes?.slice(0, 3)?.map((chatbotType) => (
                     <ChatbotTypeFeed {...chatbotType}
                                      selected={selectedId === chatbotType.id}
-                                     onClick={(id) => handleSelect(id)} key={chatbotType.id}/>
+                                     onClick={(id) => selectedId !== chatbotType.id &&handleSelect(id)} key={chatbotType.id}/>
                 ))
             }
         </Stack>

@@ -7,11 +7,14 @@ export interface UserPreference {
     theme : string;
     chatbot_type_id : string;
     user_id : string;
-    model : string
+    model : string;
+    main_chatbot_types?: string[];
 }
 
 export const fetchUserPreferences = async (userId : string) => {
     const response = await axios.get<UserPreference>(`${BASE_URL}/api/userPreferences/${userId}`);
+    
+    // console.log("user", response.data)
     
     return response.data;
 }
@@ -22,6 +25,7 @@ export const updateUserPreferences = async (options : Partial<Omit<UserPreferenc
         theme : options.theme,
         chatbot_type_id : options.chatbot_type_id,
         model : options.model,
+        main_chatbot_types : options.main_chatbot_types,
     })
     
     return response.data;

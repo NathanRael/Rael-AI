@@ -9,15 +9,27 @@ import {useMemo} from "react";
 import Stepper from "@/components/ui/Stepper.tsx";
 import {MainPageImageDark, MainPageImageLight} from "@/constants/images.ts";
 import {useUserPrefContext} from "@/context/UserPrefProvider.tsx";
+import {fetchModels} from "@/api/modelsApi.ts";
 
 const OnboardingPageChooseModel = () => {
     const navigate = useNavigate();
     const {darkMode} = useUserPrefContext();
+    const {data : downloadedModels, isLoading} = useQuery({
+        queryFn : fetchModels,
+        queryKey : [queryKeys.modelList]
+    })
+    
+    const hasDownloadedModel = useMemo(() => {
+        if (isLoading || !downloadedModels)
+            return false
+        return downloadedModels.length > 0
+    }, [downloadedModels, isLoading])
+    
     return (
         <section className="onboarding-page flex gap-6 h-screen w-full">
             <div className={"basis-1/2 flex flex-col gap-10"}>
                 <PullModel/>
-                <Stepper disabled={{prevButton: true}} onNext={() => navigate('/onboarding/selectChatbotType')} onPrevious={() => {
+                <Stepper disabled={{prevButton: true, nextButton : !hasDownloadedModel || isLoading}} onNext={() => navigate('/onboarding/selectChatbotType')} onPrevious={() => {
                 }} className={''}/>
             </div>
             <div
@@ -48,17 +60,20 @@ const PullModel = () => {
         queryFn: () => fetchOllamaModels(),
         queryKey: [queryKeys.ollamaModelList]
     })
-
+ 
     const recommendedModel = useMemo(() => {
         if (isFetchingOllamaModels || ollamaModelError || !ollamaModels)
             return []
         return ollamaModels!.filter(model => model.name === 'llama3.2' || model.name === 'llama3')
 
     }, [ollamaModels])
+    
+    
+    
     return (
         <div className=" flex flex-col gap-10 ">
             <div className={'max-w-[540px]'}>
-                <h1 className={'text-black dark:text-white text-big-title font-bold'}>Choose a model</h1>
+                <h1 className={'text-black dark:text-white text-big-title font-bold'}>Download a model</h1>
                 <p className={'text-lead text-black/80 dark:text-white/80'}>Select a model to download, the selected
                     model will be used by default in you chat.</p>
             </div>

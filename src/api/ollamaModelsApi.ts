@@ -23,7 +23,7 @@ interface Options {
 }
 
 export const fetchOllamaModels = async (options?: Options) => {
-    const response = await axios.get<OllamaModel[]>(`${BASE_URL}/api/ollamaModels`, {})
+    const response = await axios.get<OllamaModel[]>(`${BASE_URL}/api/ollamaModels/?formated=true`, {})
 
     if (response.status !== 200)
         throw new Error(response.statusText);

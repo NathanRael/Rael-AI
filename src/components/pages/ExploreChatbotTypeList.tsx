@@ -32,7 +32,7 @@ const ExploreChatbotTypeList = ({loading, error, chatbotTypes, onRetry, classNam
 
             {
                 chatbotTypes?.map((chatbotType) => (
-                    <ChatbotCard {...chatbotType}
+                    <ChatbotCard  {...chatbotType}
                                  selected={selectedId === chatbotType.id}
                                  onClick={(id) => handleSelect(id)} key={chatbotType.id}/>
                 ))
@@ -101,7 +101,7 @@ const ChatbotCard = ({
                 <div className={'flex items-center justify-center gap-2'}>
                     {
                         suggested_models.split(',')?.map(suggestedModel => (
-                            <Badge size={'sm'} className={'bg-primary/70 dark:bg-primary/50'}>{suggestedModel}</Badge>
+                            <Badge key={suggestedModel} size={'sm'} className={'bg-primary/70 dark:bg-primary/50'}>{suggestedModel}</Badge>
 
                         ))
                     }

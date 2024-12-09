@@ -10,7 +10,7 @@ import LoaderUI from "@/components/ui/LoaderUI.tsx";
 import {ChevronRight, Slack} from "lucide-react";
 import {Button} from "rael-ui"
 import ChatbotTypeToggleList from "@/components/pages/ChatbotTypeToggleList.tsx";
-import {fetchChatbotTypes} from "@/api/chatbotTypesApi.ts";
+import {fetchChatbotTypes, fetchMainChatbotTypes} from "@/api/chatbotTypesApi.ts";
 import {fetchUserPreferences} from "@/api/userPreferencesApi.ts";
 import {USER_ID} from "@/constants";
 import Copyright from "@/components/pages/Copyright.tsx";
@@ -33,7 +33,7 @@ const Main = () => {
         error: chatbotTypeError,
         refetch: reFetchChatbotTypes
     } = useQuery({
-        queryFn: () => fetchChatbotTypes({}),
+        queryFn: () => fetchMainChatbotTypes(USER_ID),
         queryKey: [queryKeys.chatbotTypeList]
     })
 

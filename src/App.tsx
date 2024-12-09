@@ -8,19 +8,20 @@ import {Button} from "rael-ui"
 import ExploreChatPage from "@/pages/ExploreChatPage.tsx";
 import Sidebar from "@/components/pages/Sidebar.tsx";
 import {useRef, useState} from "react";
-import {fetchStreamedResponse} from "@/api/test.ts";
 import ExploreModelPage from "@/pages/ExploreModelPage.tsx";
 import OnboardingPageChooseModel from "@/pages/OnboardingPageChooseModel.tsx";
 import {createPortal} from "react-dom";
 import ThemeSwitcher from "@/components/pages/ThemeSwitcher.tsx";
 import OnboardingPageSelectChatType from "@/pages/OnboardingPageSelectChatType.tsx";
-import {downloadAbortController, downloadOllamaModels} from "@/api/ollamaModelsApi.ts";
+import {downloadOllamaModels} from "@/api/ollamaModelsApi.ts";
+import Login from "@/pages/Login.tsx";
 
 
 function App() {
     return (
         <Routes>
             <Route element={<DevLayout enable={true} />}>
+                <Route element={<Login/>} path={'/login'}/>
                 <Route element={<AppLayout/>}>
                     <Route element={
                         <>

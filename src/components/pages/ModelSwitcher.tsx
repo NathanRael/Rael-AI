@@ -42,6 +42,7 @@ const ModelSwitcher = ({className} : {className?: string}) => {
     
     const changeModel = async (model: string) => {
         setSelectedModel(model);
+        
         await updateUserPreferencesMutation({
             model,
             user_id : USER_ID,
