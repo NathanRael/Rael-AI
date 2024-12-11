@@ -7,6 +7,7 @@ import MessageProvider from "@/context/MessageProvider.tsx";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {ReactQueryDevtools} from "@tanstack/react-query-devtools";
 import UserPrefProvider from "@/context/UserPrefProvider.tsx";
+import AuthProvider from "@/context/AuthProvider.tsx";
 
 const queryClient = new QueryClient({
     defaultOptions : {
@@ -24,11 +25,11 @@ createRoot(document.getElementById('root')!).render(
          <Router>
             <QueryClientProvider client={queryClient}>
                 <ReactQueryDevtools  initialIsOpen={false}/>
-                    <UserPrefProvider>
-                        <MessageProvider>
-                            <App/>
-                        </MessageProvider>
-                    </UserPrefProvider>
+                        <UserPrefProvider>
+                            <MessageProvider>
+                                <App/>
+                            </MessageProvider>
+                        </UserPrefProvider>
             </QueryClientProvider>
         </Router>
     </StrictMode>,

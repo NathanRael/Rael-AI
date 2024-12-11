@@ -14,7 +14,9 @@
 } from "rael-ui";
 import {Bot} from "lucide-react";
 import {useMutation} from "@tanstack/react-query";
-import {LoginUser} from "@/api/authwApi.ts";
+import {loginUser} from "@/api/authApi.ts";
+import {useAuthStore} from "@/store/authStore.ts";
+import {useNavigate} from "react-router-dom";
 
 export type FormType = {
     email: string;
@@ -22,10 +24,13 @@ export type FormType = {
 }
 
 const Login = () => {
+    const updateToken = useAuthStore(state => state.updateToken)
+    const navigate = useNavigate();
     const {mutateAsync : LoginMutationAsync} = useMutation({
-        mutationFn : LoginUser,
+        mutationFn : loginUser,
         onSuccess : data => {
-            console.log(data)   
+            updateToken(data.access_token)
+            navigate('/')   
         }
     })
     const validations: ValidationRules<FormType>[] = [

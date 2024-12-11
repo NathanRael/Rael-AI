@@ -7,5 +7,8 @@
     chatbotTypeList: 'chatbotTypeList',
     userPreferences : 'userPreference',
     modelList : 'modelList',
-    ollamaModelList : 'ollamaModelList',
+    ollamaModelList : 'ollamaModelList', 
+    activeUser: 'activeUser',
+    newToken: 'newToken'
+
 }

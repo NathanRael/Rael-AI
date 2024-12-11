@@ -3,30 +3,24 @@ import {INPUT_WIDTH} from "@/constants/style.ts";
 
 import ChatInput from "@/components/pages/ChatInput.tsx";
 import {useQuery} from "@tanstack/react-query";
-import {fetchUsers, User} from "@/api/usersApi.ts";
 import {queryKeys} from "@/api/queryKeys.ts";
-import {useEffect, useMemo} from "react";
-import LoaderUI from "@/components/ui/LoaderUI.tsx";
+import {useEffect} from "react";
 import {ChevronRight, Slack} from "lucide-react";
 import {Button} from "rael-ui"
 import ChatbotTypeToggleList from "@/components/pages/ChatbotTypeToggleList.tsx";
-import {fetchChatbotTypes, fetchMainChatbotTypes} from "@/api/chatbotTypesApi.ts";
+import {fetchMainChatbotTypes} from "@/api/chatbotTypesApi.ts";
 import {fetchUserPreferences} from "@/api/userPreferencesApi.ts";
 import {USER_ID} from "@/constants";
 import Copyright from "@/components/pages/Copyright.tsx";
 import useLocalSearchParams from "@/hooks/useLocalSearchParams.ts";
 import {useLocation, useNavigate} from "react-router-dom";
 import ModelSwitcher from "@/components/pages/ModelSwitcher.tsx";
-import ErrorUI from "@/components/ui/ErrorUI.tsx";
-
+import {useUserStore} from "@/store/userStore.ts";
 const Main = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const {data: users, isLoading: isFetchingUsers, error: usersError, refetch: reFetchUsers} = useQuery({
-        queryFn: () => fetchUsers({}),
-        queryKey: [queryKeys.users],
-    })
-
+    const user = useUserStore(state => state.user)
+    
     const {
         data: chatbotTypes,
         isLoading: isFetchingChatbotTypes,
@@ -44,20 +38,14 @@ const Main = () => {
 
     const {updateSearchParam} = useLocalSearchParams();
 
-    const user = useMemo(() => !isFetchingUsers && !usersError ? users![0] : {} as User, [users])
 
     useEffect(() => {
         if (!isFetchingUserPreferences && !userPreferencesError && userPreferences)
             updateSearchParam("chatType", userPreferences.chatbot_type_id)
     }, [userPreferences, isFetchingUserPreferences, location.pathname])
-
-    if (isFetchingUsers)
-        return <LoaderUI title={'Getting things ready'}
-                         className={'fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'}/>
     
-
-    if (usersError)
-        return <ErrorUI error={usersError as Error} onRetry={() => reFetchUsers()}/>
+    
+    
 
 
     return (

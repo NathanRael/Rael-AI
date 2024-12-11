@@ -2,7 +2,7 @@ import './index.css'
 import {Navigate, Outlet, Route, Routes} from "react-router-dom";
 import Main from "./pages/Main.tsx";
 import ChatPage from "@/pages/ChatPage.tsx";
-import AppLayout from "@/layout/AppLayout.tsx";
+import AuthLayout from "@/layout/AuthLayout.tsx";
 import ChatLayout from "@/layout/ChatLayout.tsx";
 import {Button} from "rael-ui"
 import ExploreChatPage from "@/pages/ExploreChatPage.tsx";
@@ -15,14 +15,15 @@ import ThemeSwitcher from "@/components/pages/ThemeSwitcher.tsx";
 import OnboardingPageSelectChatType from "@/pages/OnboardingPageSelectChatType.tsx";
 import {downloadOllamaModels} from "@/api/ollamaModelsApi.ts";
 import Login from "@/pages/Login.tsx";
+import AuthProvider from "@/context/AuthProvider.tsx";
 
 
 function App() {
     return (
         <Routes>
-            <Route element={<DevLayout enable={true} />}>
+            <Route element={<DevLayout enable={true}/>}>
                 <Route element={<Login/>} path={'/login'}/>
-                <Route element={<AppLayout/>}>
+                <Route element={<AuthLayout/>}>
                     <Route element={
                         <>
                             <Sidebar/>
@@ -37,9 +38,11 @@ function App() {
                     <Route path={'/test'} element={<Test/>}/>
                     <Route path={'chat/explore'} element={<ExploreChatPage/>}/>
                     <Route path={'model/explore'} element={<ExploreModelPage/>}/>
+
+                    <Route path={'/onboarding/chooseModel'} element={<OnboardingPageChooseModel/>}/>
+                    <Route path={'/onboarding/selectChatbotType'} element={<OnboardingPageSelectChatType/>}/>
                 </Route>
-                <Route path={'/onboarding/chooseModel'} element={<OnboardingPageChooseModel/>}/>
-                <Route path={'/onboarding/selectChatbotType'} element={<OnboardingPageSelectChatType/>}/>
+                
                 <Route path={'*'} element={<Navigate to={'/'}/>}/></Route>
         </Routes>
     )
@@ -47,7 +50,7 @@ function App() {
 
 
 // For development only
-const DevLayout = ({enable} : {enable : boolean}) => {
+const DevLayout = ({enable}: { enable: boolean }) => {
     return (
         <>
             {
@@ -62,17 +65,17 @@ const DevLayout = ({enable} : {enable : boolean}) => {
 const Test = () => {
     const [data, setData] = useState("");
     const downloadAbortController = useRef<AbortController | null>(null);
-    
+
     const downloadModel = async () => {
-        try{
+        try {
             downloadAbortController.current = new AbortController();
-            
+
             await downloadOllamaModels({
-                model_name : "nomic-embed-text",
-                abortController : downloadAbortController,
-                onchange : chunk => console.log(chunk)
+                model_name: "nomic-embed-text",
+                abortController: downloadAbortController,
+                onchange: chunk => console.log(chunk)
             });
-        }catch (e){
+        } catch (e) {
             downloadAbortController.current?.abort('Error while downloading model');
         } finally {
             downloadAbortController.current = null;
@@ -89,7 +92,7 @@ const Test = () => {
     };
 
     const handleClick = async () => {
-           await downloadModel()
+        await downloadModel()
     }
 
     return (
