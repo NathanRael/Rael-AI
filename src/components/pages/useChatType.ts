@@ -4,12 +4,13 @@ import {useLocation} from "react-router-dom";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {updateUserPreferences} from "@/api/userPreferencesApi.ts";
 import {queryKeys} from "@/api/queryKeys.ts";
-import {USER_ID} from "@/constants";
+import {useUserStore} from "@/store/userStore.ts";
 
 const useChatType = () => {
     const {updateSearchParam, getSearchParam} = useLocalSearchParams();
     const [selectedId, setSelectedId] = useState<string>(getSearchParam('chatType'));
     const location = useLocation();
+    const user = useUserStore(state => state.user)
     const queryClient = useQueryClient();
 
     const {mutate : updateUserPreferencesMutation} = useMutation({
@@ -24,7 +25,7 @@ const useChatType = () => {
         setSelectedId(id)
         updateUserPreferencesMutation({
             chatbot_type_id : id,
-            user_id : USER_ID
+            user_id : user.id,
         })
     }
     

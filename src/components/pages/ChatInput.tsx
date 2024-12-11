@@ -65,7 +65,7 @@ const ChatInput = () => {
             const userInput =  storage.getItem('userInput')
             const generatedTitle : string = await generateMessage({prompt : `Give me a suitable title for this message : '${userInput}'.Don't be verbose.Just give the response without commentary`})
             await newConversationMutation({
-                user_id: USER_ID,
+                user_id: userInput.id,
                 title: generatedTitle,
                 chatbot_type_id : chatbotTypeIdInParams || ''
             })

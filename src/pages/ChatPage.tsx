@@ -13,7 +13,7 @@ import {fetchMessages} from "@/api/MessagesApi.ts";
 import MessageFeed from "@/components/pages/MessageFeed.tsx";
 import {queryKeys} from "@/api/queryKeys.ts";
 import {fetchChatbotType} from "@/api/chatbotTypesApi.ts";
-import ChatbotTypeFeed from "@/components/pages/ChatbotTypeFeed.tsx";
+import ChatbotTypeCard from "@/components/pages/ChatbotTypeCard.tsx";
 
 const ChatPage = () => {
     const {chatId} = useParams();
@@ -64,7 +64,7 @@ const ChatPage = () => {
                 {
                     (!isFetchingChatbotType && !isLoading && !submitting) && (
                         <Stack className={`min-h-[180px] ${INPUT_WIDTH}`}>
-                            <ChatbotTypeFeed className={'cursor-default'}  {...chatbotType!} selected={false}/>
+                            <ChatbotTypeCard className={'cursor-default'}  {...chatbotType!} selected={false}/>
                         </Stack>
                     )
 

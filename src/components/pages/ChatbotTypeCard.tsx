@@ -2,6 +2,7 @@
 import {CardSection, Card, CardDescription, CardTitle, Icon, cn, Badge} from "rael-ui";
 import {Bot} from "lucide-react";
 import {motion} from "framer-motion"
+import {limitTextLen} from "@/utils/helpers.ts";
 
 type ChatbotTypeFeedProps = Omit<ChatbotType, 'context'> & {
     description: string;
@@ -12,7 +13,7 @@ type ChatbotTypeFeedProps = Omit<ChatbotType, 'context'> & {
 
 // const MAX_DESC_LENGTH = 40;
 
-const ChatbotTypeFeed = ({id, name, description, selected, onClick = () => {}, className}: ChatbotTypeFeedProps) => {
+const ChatbotTypeCard = ({id, name, description, selected, onClick = () => {}, className}: ChatbotTypeFeedProps) => {
 
     return (
         <motion.div
@@ -59,7 +60,7 @@ const ChatbotTypeFeed = ({id, name, description, selected, onClick = () => {}, c
                     {/*    : description?.slice(0, MAX_DESC_LENGTH) +*/}
                     {/*    (description?.length >= MAX_DESC_LENGTH ? ' ...' : '')}*/}
                     {
-                        description
+                        limitTextLen(description, 40)
                     }
                 </CardDescription>
             </Card>
@@ -68,4 +69,4 @@ const ChatbotTypeFeed = ({id, name, description, selected, onClick = () => {}, c
     )
 }
 
-export default ChatbotTypeFeed
+export default ChatbotTypeCard

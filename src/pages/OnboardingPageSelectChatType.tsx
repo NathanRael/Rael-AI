@@ -11,7 +11,7 @@ import ErrorUI from "@/components/ui/ErrorUI.tsx";
 import {useUserPrefContext} from "@/context/UserPrefProvider.tsx";
 import {useChatbotTypeStore} from "@/store/chatbotTypeStore.ts";
 import {updateUserPreferences} from "@/api/userPreferencesApi.ts";
-import {USER_ID} from "@/constants";
+import {useUserStore} from "@/store/userStore.ts";
 
 type ChatbotTypeSelectList = {
     error: Error;
@@ -20,6 +20,7 @@ type ChatbotTypeSelectList = {
     onSelect: (formData: Record<string, boolean>[]) => void;
 }
 const OnboardingPageSelectChatType = () => {
+    const user = useUserStore(state => state.user)
     const navigate = useNavigate();
     const {darkMode} = useUserPrefContext();
     const selectedChatbotType = useChatbotTypeStore(state => state.selectedChatbotType)
@@ -35,7 +36,7 @@ const OnboardingPageSelectChatType = () => {
     
     const handleNext = async () => {
         await updateUserPreferencesMutation({
-            user_id : USER_ID,
+            user_id : user.id,
             main_chatbot_types : Object.entries(selectedChatbotType).map(([_, value]) => value) 
         })
     }

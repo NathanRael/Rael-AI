@@ -10,7 +10,6 @@ import {Button} from "rael-ui"
 import ChatbotTypeToggleList from "@/components/pages/ChatbotTypeToggleList.tsx";
 import {fetchMainChatbotTypes} from "@/api/chatbotTypesApi.ts";
 import {fetchUserPreferences} from "@/api/userPreferencesApi.ts";
-import {USER_ID} from "@/constants";
 import Copyright from "@/components/pages/Copyright.tsx";
 import useLocalSearchParams from "@/hooks/useLocalSearchParams.ts";
 import {useLocation, useNavigate} from "react-router-dom";
@@ -21,18 +20,21 @@ const Main = () => {
     const navigate = useNavigate();
     const user = useUserStore(state => state.user)
     
+    
     const {
         data: chatbotTypes,
         isLoading: isFetchingChatbotTypes,
         error: chatbotTypeError,
         refetch: reFetchChatbotTypes
     } = useQuery({
-        queryFn: () => fetchMainChatbotTypes(USER_ID),
+        enabled : !!user.id,
+        queryFn: () => fetchMainChatbotTypes(user.id),
         queryKey: [queryKeys.chatbotTypeList]
     })
 
     const {data: userPreferences, isLoading: isFetchingUserPreferences, error: userPreferencesError} = useQuery({
-        queryFn: () => fetchUserPreferences(USER_ID),
+        enabled : !!user.id,
+        queryFn: () => fetchUserPreferences(user.id),
         queryKey: [queryKeys.userPreferences],
     })
 
@@ -44,9 +46,6 @@ const Main = () => {
             updateSearchParam("chatType", userPreferences.chatbot_type_id)
     }, [userPreferences, isFetchingUserPreferences, location.pathname])
     
-    
-    
-
 
     return (
         <section className={'h-full space-y-10 pt-4 max-md:pt-16 pb-10 px-4 '}>

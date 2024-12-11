@@ -17,15 +17,15 @@ const AuthLayout = () => {
         queryFn: fetchActiveUser,
         queryKey: [queryKeys.activeUser],
     })
-    
-    
+
+
     useLayoutEffect(() => {
         const authInterceptor = api.interceptors.request.use((config) => {
             if (token)
                 config.headers.Authorization = `Bearer ${token}`
             return config;
         })
-        
+
         return () => api.interceptors.request.eject(authInterceptor)
     }, [token]);
 
@@ -36,7 +36,7 @@ const AuthLayout = () => {
                 const originalRequest = error.config;
                 if (error.response?.status === 401 && !originalRequest._retry) {
                     originalRequest._retry = true;
-                    const {access_token : accessToken} = await refreshToken();
+                    const {access_token: accessToken} = await refreshToken();
                     if (accessToken) {
                         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
                         return api(originalRequest);
@@ -45,7 +45,7 @@ const AuthLayout = () => {
                 return Promise.reject(error);
             }
         );
-        
+
         return () => api.interceptors.request.eject(refreshInterceptor)
     }, []);
 
@@ -55,8 +55,9 @@ const AuthLayout = () => {
             return console.log('Login out')
         }
 
-        if (isSuccess && user && !isLoading)
+        if (isSuccess && user && !isLoading) 
             updateUser(user)
+
 
     }, [user, isError, navigate, isSuccess, isLoading])
     

@@ -15,7 +15,7 @@ const OnboardingPageChooseModel = () => {
     const navigate = useNavigate();
     const {darkMode} = useUserPrefContext();
     const {data : downloadedModels, isLoading} = useQuery({
-        queryFn : fetchModels,
+        queryFn : () => fetchModels(),
         queryKey : [queryKeys.modelList]
     })
     

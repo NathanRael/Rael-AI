@@ -12,7 +12,7 @@ const OllamaModelCard = ({name, description, link, sizes, capability}: OllamaMod
     const {progress, downloadModel, handleAbort, downloading, downloadedModels} = useDownloadOllamaModels();
     const queryClient = new QueryClient();
     const {data, isLoading} = useQuery({
-        queryFn: fetchModels,
+        queryFn: () => fetchModels(true),
         queryKey: [queryKeys.modelList]
     })
 

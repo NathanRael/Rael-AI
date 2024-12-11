@@ -1,5 +1,5 @@
 ﻿import axios from "axios";
-import {BASE_URL, USER_ID} from "@/constants";
+import {BASE_URL} from "@/constants";
 import {api} from "@/utils/api.ts";
 import {useAuthStore} from "@/store/authStore.ts";
 

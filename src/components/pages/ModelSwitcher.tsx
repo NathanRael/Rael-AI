@@ -15,21 +15,23 @@ import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {fetchModels} from "@/api/modelsApi.ts";
 import {queryKeys} from "@/api/queryKeys.ts";
 import {fetchUserPreferences, updateUserPreferences} from "@/api/userPreferencesApi.ts";
-import {USER_ID} from "@/constants";
 import ErrorUI from "@/components/ui/ErrorUI.tsx";
+import {useUserStore} from "@/store/userStore.ts";
 
 const ModelSwitcher = ({className} : {className?: string}) => {
     const {renderToastContainer } = useToast();
     const {setSelectedModel} = useUserPrefContext();
+    const user = useUserStore(state => state.user)
     const queryClient = useQueryClient()
     
     const {data : models, error : modelsError, isLoading : isFetchingModels} = useQuery({
-        queryFn : fetchModels,
+        queryFn : () => fetchModels(),
         queryKey : [queryKeys.modelList]
     })
 
     const {data : userPreferences, isLoading : isFetchingUserPreferences, error : userPreferencesError} = useQuery({
-        queryFn : () => fetchUserPreferences(USER_ID),
+        enabled : !!user.id,
+        queryFn : () => fetchUserPreferences(user.id),
         queryKey : [queryKeys.userPreferences],
     })
     
@@ -45,7 +47,7 @@ const ModelSwitcher = ({className} : {className?: string}) => {
         
         await updateUserPreferencesMutation({
             model,
-            user_id : USER_ID,
+            user_id : user.id,
         })
     }
     
