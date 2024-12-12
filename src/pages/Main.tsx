@@ -76,7 +76,7 @@ const Main = () => {
                 </div>
 
             </Stack>
-            <Stack direction={'vertical'} gap={40}>
+            <Stack direction={'vertical'} gap={64}>
                 <Stack className={'w-full'} direction={'vertical'} gap={8}>
                     <h1 className={'text-[56px] text-center text-black  font-bold dark:text-white'}>Rael AI</h1>
                     <p className={'text-xl text-center text-gray-800 dark:text-gray-400 '}>

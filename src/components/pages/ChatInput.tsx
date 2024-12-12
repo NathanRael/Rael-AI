@@ -9,9 +9,12 @@ import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {newConversation} from "@/api/conversationsApi.ts";
 import useFetchConversations from "@/hooks/useFetchConversations.ts";
 import {queryKeys} from "@/api/queryKeys.ts";
-import {USER_ID} from "@/constants";
 import {generateMessage} from "@/api/promptsApi.ts";
 import useLocalStorage from "@/hooks/useLocalStorage.ts";
+import ToolList from "@/components/pages/ToolList.tsx";
+import {tools} from "@/api/toolsApi.ts";
+import useTool from "@/hooks/useTool.ts";
+import {useUserStore} from "@/store/userStore.ts";
 
 const ChatInput = () => {
     const {chatId} = useParams();
@@ -22,8 +25,10 @@ const ChatInput = () => {
     const navigate = useNavigate();
     const [success, setSuccess] = useState(false)
     const [searchParams] = useSearchParams();
-    
+    const user = useUserStore(state => state.user)
+
     const storage = useLocalStorage();
+    const {visible, setVisible, handleToolClicked, currentTool} = useTool();
 
     const {data: conversations, isLoading: isConversationLoading} = useFetchConversations({})
     const {mutateAsync: newConversationMutation} = useMutation({
@@ -33,8 +38,8 @@ const ChatInput = () => {
             setSuccess(true)
         }
     })
-    
-    
+
+
     const {rows, handleKeyPress} = useSmartTextarea({
         onEnter: () => {
             setMessage("");
@@ -47,9 +52,9 @@ const ChatInput = () => {
         value: message
     });
 
-    const canSubmit : boolean = useMemo(() => !submitting && message.trim() !== '', [submitting, message])
+    const canSubmit: boolean = useMemo(() => !submitting && message.trim() !== '', [submitting, message])
     const chatbotTypeIdInParams = useMemo(() => searchParams.get('chatType'), [searchParams]);
-   
+
 
     const handleSubmit = async () => {
         if (chatId && !isConversationLoading) {
@@ -57,17 +62,17 @@ const ChatInput = () => {
             handleSubmitMessage(message, chatId, () => setMessage(''), chatbotTypeId)
             return
         }
-        
-        storage.setItem('userInput', message )
+
+        storage.setItem('userInput', message)
         setMessage('')
         setSuccess(false)
         try {
-            const userInput =  storage.getItem('userInput')
-            const generatedTitle : string = await generateMessage({prompt : `Give me a suitable title for this message : '${userInput}'.Don't be verbose.Just give the response without commentary`})
+            const userInput = storage.getItem('userInput')
+            const generatedTitle: string = await generateMessage({prompt: `Give me a suitable title for this message : '${userInput}'.Don't be verbose.Just give the response without commentary`})
             await newConversationMutation({
-                user_id: userInput.id,
+                user_id: user.id,
                 title: generatedTitle,
-                chatbot_type_id : chatbotTypeIdInParams || ''
+                chatbot_type_id: chatbotTypeIdInParams || ''
             })
         } catch (e) {
             console.error(e)
@@ -86,27 +91,35 @@ const ChatInput = () => {
     }, [conversations]);
 
     return (
-        <Textarea
-            size={'lg'}
-            value={message}
-            variant={'fill'}
-            // rows={1}
-            onKeyDown={(e) => {
-                handleKeyPress(e as unknown as KeyboardEvent)
-            }}
-            onChange={(e) => {
-                setMessage(e.target.value)
-                e.target.style.height = 'auto'
-                e.target.style.height = `${e.target.scrollHeight >= 320 ? 320 : e.target.scrollHeight}px`
-            }}
-            className={`w-full shadow-md z-40   rounded-3xl text-lg    min-h-[32px]  resize-none ${rows === 1 ? 'items-center' : 'items-end'} `}
-            inputClassName={'hide-scrollbar overflow-y-auto'}
-            placeholder={'Your message ...'}
-            rightContent={<Icon role={'button'} type={'submit'} disabled={!canSubmit}
-                                className={'rounded-2xl button-gradient'}
-                                onClick={handleSubmit}><ArrowUp
-                size={16}/></Icon>}
-        />
+        <div className={'relative h-fit'}>
+            <ToolList onClick={(tool) => {
+                handleToolClicked(tool)
+                setMessage(prevState => '\t'.repeat(10) + prevState.trim())
+            }} className={'absolute -top-10'} tools={tools}/>
+            {visible && <span
+                className={'text-lead text-secondary  font-md absolute translate-y-2  translate-x-6 p-1 rounded-md '}>@{currentTool?.keyword}</span>}
+            <Textarea
+                size={'lg'}
+                value={message}
+                variant={'fill'}
+                // rows={1}
+                onKeyDown={(e) => {
+                    handleKeyPress(e as unknown as KeyboardEvent)
+                }}
+                onChange={(e) => {
+                    setMessage(e.target.value)
+                    e.target.style.height = 'auto'
+                    e.target.style.height = `${e.target.scrollHeight >= 320 ? 320 : e.target.scrollHeight}px`
+                }}
+                className={`w-full shadow-md z-40   rounded-3xl text-lg    min-h-[32px]  resize-none ${rows === 1 ? 'items-center' : 'items-end'} `}
+                inputClassName={'hide-scrollbar overflow-y-auto'}
+                placeholder={'Your message ...'}
+                rightContent={<Icon role={'button'} type={'submit'} disabled={!canSubmit}
+                                    className={'rounded-2xl button-gradient'}
+                                    onClick={handleSubmit}><ArrowUp
+                    size={16}/></Icon>}
+            />
+        </div>
     )
 }
 

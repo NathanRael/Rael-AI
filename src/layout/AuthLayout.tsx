@@ -1,5 +1,5 @@
 ﻿import {Outlet, useNavigate} from "react-router-dom";
-import {useLayoutEffect} from "react";
+import {useCallback, useLayoutEffect} from "react";
 import {useQuery} from "@tanstack/react-query";
 import {fetchActiveUser} from "@/api/usersApi.ts";
 import {queryKeys} from "@/api/queryKeys.ts";
@@ -10,6 +10,7 @@ import {refreshToken} from "@/api/authApi.ts";
 
 const AuthLayout = () => {
     const token = useAuthStore(state => state.token)
+    const updateToken = useAuthStore(state => state.updateToken)
     const navigate = useNavigate();
     const updateUser = useUserStore(state => state.updateUser)
 
@@ -21,8 +22,7 @@ const AuthLayout = () => {
 
     useLayoutEffect(() => {
         const authInterceptor = api.interceptors.request.use((config) => {
-            if (token)
-                config.headers.Authorization = `Bearer ${token}`
+            config.headers.Authorization = !config._retry && token ? `Bearer ${token}` : config.headers.Authorization;
             return config;
         })
 
@@ -34,13 +34,18 @@ const AuthLayout = () => {
             (response) => response,
             async (error) => {
                 const originalRequest = error.config;
-                if (error.response?.status === 401 && !originalRequest._retry) {
-                    originalRequest._retry = true;
-                    const {access_token: accessToken} = await refreshToken();
-                    if (accessToken) {
-                        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-                        return api(originalRequest);
-                    }
+                if (error.response?.status === 401 ) {
+                   try {
+                       const {access_token: accessToken} = await refreshToken();
+                       updateToken(accessToken)
+
+                       originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+                       originalRequest._retry = true;
+
+                       return api(originalRequest);
+                   }catch (e){
+                       updateToken(null)
+                   }
                 }
                 return Promise.reject(error);
             }
@@ -55,12 +60,11 @@ const AuthLayout = () => {
             return console.log('Login out')
         }
 
-        if (isSuccess && user && !isLoading) 
+        if (isSuccess && user && !isLoading)
             updateUser(user)
 
 
     }, [user, isError, navigate, isSuccess, isLoading])
-    
 
 
     return (
