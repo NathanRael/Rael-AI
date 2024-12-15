@@ -10,6 +10,7 @@
 Done
 
 
+
 ## TODO:
 - Limit the conversation lenght
 - Choosing chat type and model

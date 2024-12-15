@@ -15,10 +15,12 @@ import useLocalSearchParams from "@/hooks/useLocalSearchParams.ts";
 import {useLocation, useNavigate} from "react-router-dom";
 import ModelSwitcher from "@/components/pages/ModelSwitcher.tsx";
 import {useUserStore} from "@/store/userStore.ts";
+import {useModelStore} from "@/store/useModelStore.ts";
 const Main = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const user = useUserStore(state => state.user)
+    const updateSelectedModel = useModelStore(state => state.updateSelectedModel)
     
     
     const {
@@ -32,7 +34,7 @@ const Main = () => {
         queryKey: [queryKeys.chatbotTypeList]
     })
 
-    const {data: userPreferences, isLoading: isFetchingUserPreferences, error: userPreferencesError} = useQuery({
+    const {data: userPreferences, isLoading: isFetchingUserPreferences, error: userPreferencesError, isSuccess : isUserPrefFetched} = useQuery({
         enabled : !!user.id,
         queryFn: () => fetchUserPreferences(user.id),
         queryKey: [queryKeys.userPreferences],
@@ -40,7 +42,11 @@ const Main = () => {
 
     const {updateSearchParam} = useLocalSearchParams();
 
-
+    useEffect(() => {
+        if (!userPreferences || !isUserPrefFetched) return 
+        updateSelectedModel(userPreferences.model)
+    }, [isUserPrefFetched])
+        
     useEffect(() => {
         if (!isFetchingUserPreferences && !userPreferencesError && userPreferences)
             updateSearchParam("chatType", userPreferences.chatbot_type_id)

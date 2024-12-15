@@ -1,8 +1,8 @@
 ﻿import {useMessageContext} from "@/context/MessageProvider.tsx";
 import useScroll from "@/hooks/useScroll.ts";
 import useSmartTextarea from "@/hooks/useSmartTextarea.ts";
-import {ArrowUp} from "lucide-react";
-import {Icon, Textarea} from "rael-ui";
+import {ArrowUp, StopCircle} from "lucide-react";
+import {Icon, Textarea, useToast} from "rael-ui";
 import {useNavigate, useParams, useSearchParams} from "react-router-dom";
 import {useEffect, useMemo, useState} from "react";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
@@ -11,12 +11,16 @@ import useFetchConversations from "@/hooks/useFetchConversations.ts";
 import {queryKeys} from "@/api/queryKeys.ts";
 import {generateMessage} from "@/api/promptsApi.ts";
 import useLocalStorage from "@/hooks/useLocalStorage.ts";
-import ToolList from "@/components/pages/ToolList.tsx";
-import {tools} from "@/api/toolsApi.ts";
-import useTool from "@/hooks/useTool.ts";
 import {useUserStore} from "@/store/userStore.ts";
+import ChatFileInput from "@/components/ui/ChatFileInput.tsx";
+import ImageInputPreview from "@/components/ui/ImageInputPreview.tsx";
+import useFile from "@/hooks/useFile.ts";
+import {isModelExist} from "@/utils/helpers.ts";
+import {useModelStore} from "@/store/useModelStore.ts";
 
 const ChatInput = () => {
+    const [file, setFile] = useState<File | null>(null)
+    const {toast, renderToastContainer} = useToast();
     const {chatId} = useParams();
     const {submitting, handleSubmitMessage} = useMessageContext();
     const [message, setMessage] = useState("");
@@ -25,10 +29,14 @@ const ChatInput = () => {
     const navigate = useNavigate();
     const [success, setSuccess] = useState(false)
     const [searchParams] = useSearchParams();
-    const user = useUserStore(state => state.user)
+    const user = useUserStore(state => state.user);
+    const visionModels = useModelStore(state => state.visionModels)
+    const updateSelectedModel = useModelStore(state => state.updateSelectedModel)
+
+    const canSubmit: boolean = useMemo(() => !submitting && message.trim() !== '', [submitting, message])
+    const chatbotTypeIdInParams = useMemo(() => searchParams.get('chatType'), [searchParams]);
 
     const storage = useLocalStorage();
-    const {visible, setVisible, handleToolClicked, currentTool} = useTool();
 
     const {data: conversations, isLoading: isConversationLoading} = useFetchConversations({})
     const {mutateAsync: newConversationMutation} = useMutation({
@@ -38,33 +46,42 @@ const ChatInput = () => {
             setSuccess(true)
         }
     })
-
-
-    const {rows, handleKeyPress} = useSmartTextarea({
+    const {handleKeyPress} = useSmartTextarea({
         onEnter: () => {
             setMessage("");
             if (!canSubmit)
                 return
-
             handleSubmit()
             scrollToBottom(document.body.scrollHeight);
         },
         value: message
     });
 
-    const canSubmit: boolean = useMemo(() => !submitting && message.trim() !== '', [submitting, message])
-    const chatbotTypeIdInParams = useMemo(() => searchParams.get('chatType'), [searchParams]);
+    const {uploadedImage, setUploadedImage, handleFileUpload} = useFile(file);
 
+    const resetImageContent = () => {
+        setUploadedImage('')
+        setFile(null)
+    }
 
     const handleSubmit = async () => {
+        // Automatically change the selected model when having image
+        if (file)
+            updateSelectedModel(visionModels[0])
+
+        const uploadedFile = await handleFileUpload(file);
+
+        // Handle the submit when user already started a conversation
         if (chatId && !isConversationLoading) {
             const chatbotTypeId = conversations!.find(conversation => conversation.id === chatId)!.chatbot_type_id
-            handleSubmitMessage(message, chatId, () => setMessage(''), chatbotTypeId)
+            await handleSubmitMessage(message, chatId, () => setMessage(''), chatbotTypeId, uploadedFile?.id)
             return
         }
 
         storage.setItem('userInput', message)
+        storage.setItem('fileId', uploadedFile?.id || '')
         setMessage('')
+        resetImageContent()
         setSuccess(false)
         try {
             const userInput = storage.getItem('userInput')
@@ -79,25 +96,27 @@ const ChatInput = () => {
         }
     }
 
+
     // Redirecting the user to the  created conversation
     useEffect(() => {
         if (conversations && !isConversationLoading && success) {
             const newConversationId = conversations[0].id
             const userInput = JSON.parse(localStorage.getItem('userInput') || '')
+            const uploadedFile = JSON.parse(localStorage.getItem('fileId') || '')
             navigate(`/chat/${newConversationId}`);
 
-            handleSubmitMessage(userInput, newConversationId, () => setMessage(''), chatbotTypeIdInParams!)
+            handleSubmitMessage(userInput, newConversationId, () => setMessage(''), chatbotTypeIdInParams!, uploadedFile?.id)
         }
     }, [conversations]);
 
+
     return (
         <div className={'relative h-fit'}>
-            <ToolList onClick={(tool) => {
-                handleToolClicked(tool)
-                setMessage(prevState => '\t'.repeat(10) + prevState.trim())
-            }} className={'absolute -top-10'} tools={tools}/>
-            {visible && <span
-                className={'text-lead text-secondary  font-md absolute translate-y-2  translate-x-6 p-1 rounded-md '}>@{currentTool?.keyword}</span>}
+            {renderToastContainer()}
+            {uploadedImage &&
+                <ImageInputPreview className={'absolute -top-[132px]'} image={uploadedImage} onClose={() => {
+                    resetImageContent()
+                }}/>}
             <Textarea
                 size={'lg'}
                 value={message}
@@ -111,16 +130,42 @@ const ChatInput = () => {
                     e.target.style.height = 'auto'
                     e.target.style.height = `${e.target.scrollHeight >= 320 ? 320 : e.target.scrollHeight}px`
                 }}
-                className={`w-full shadow-md z-40   rounded-3xl text-lg    min-h-[32px]  resize-none ${rows === 1 ? 'items-center' : 'items-end'} `}
+                className={`w-full shadow-md z-40   rounded-3xl text-lg    min-h-[32px]  resize-none items-end`}
                 inputClassName={'hide-scrollbar overflow-y-auto'}
                 placeholder={'Your message ...'}
-                rightContent={<Icon role={'button'} type={'submit'} disabled={!canSubmit}
-                                    className={'rounded-2xl button-gradient'}
-                                    onClick={handleSubmit}><ArrowUp
-                    size={16}/></Icon>}
+                leftContent={<ChatFileInput disabled={visionModels.length === 0} deleteFileContent={file === null}
+                                            onChange={(file) => setFile(file)}/>}
+                rightContent={
+                    <>
+                        <SubmitButton canSubmit={canSubmit} handleSubmit={handleSubmit}/>
+                    </>
+
+                }
             />
         </div>
     )
 }
 
 export default ChatInput;
+
+
+const SubmitButton = ({canSubmit, handleSubmit}: { canSubmit: boolean, handleSubmit: () => Promise<void> }) => {
+    return (
+        <Icon role={'button'} type={'submit'} disabled={!canSubmit}
+              className={'rounded-2xl button-gradient'}
+              onClick={handleSubmit}><ArrowUp
+            size={16}/></Icon>
+    )
+}
+
+const CancelButton = () => {
+    const handleStopGenerating = () => {
+
+    }
+    return (
+        <Icon role={'button'} type={'submit'}
+              className={'rounded-2xl button-gradient'}
+              onClick={handleStopGenerating}><StopCircle
+            size={16}/></Icon>
+    )
+}

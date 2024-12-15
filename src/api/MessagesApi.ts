@@ -27,7 +27,6 @@ export const fetchMessages = async (conversationId: string) => {
 }
 
 
-
 export const createMessage = async ({content, model, conversation_id, sender = 'user', chatbot_type_id}: {
     content: string,
     model: string,
@@ -53,6 +52,7 @@ export const newStreamedMessage = async ({
                                              conversation_id,
                                              sender = 'user',
                                              chatbot_type_id,
+                                             file_id,
                                              onFinish,
                                              onChange
                                          }: {
@@ -60,10 +60,11 @@ export const newStreamedMessage = async ({
     model: string,
     conversation_id: string,
     sender?: 'user' | 'bot',
-    chatbot_type_id: string
+    chatbot_type_id: string,
+    file_id?: string,
 } & {
     onChange: (chunk: string) => void,
-    onFinish: (fullMessage : string) => void
+    onFinish: (fullMessage: string) => void
 }) => {
     const response = await fetch(`${BASE_URL}/api/messages/streamed`, {
         method: 'POST',
@@ -75,7 +76,8 @@ export const newStreamedMessage = async ({
             model,
             conversation_id,
             sender,
-            chatbot_type_id
+            chatbot_type_id,
+            file_id
         })
     });
 
@@ -90,21 +92,20 @@ export const newStreamedMessage = async ({
     const reader = response.body.getReader();
     const decoder = new TextDecoder();
     let fullMessage = '';
-    
+
     while (true) {
         const {done, value} = await reader.read();
-        
+
         if (done) {
             onFinish(fullMessage);
             break;
         }
-        
+
         const chunk = decoder.decode(value, {stream: true});
         fullMessage += chunk;
         onChange(chunk)
     }
 }
-
 
 
 // export const newMessage = async ({content, model, conversation_id, sender = 'user', chatbot_type_id}: {

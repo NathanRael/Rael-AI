@@ -2,9 +2,10 @@
 import * as React from "react";
 import {useUserPrefContext} from "@/context/UserPrefProvider.tsx";
 import useMessages from "@/hooks/useMessages.ts";
+import {useModelStore} from "@/store/useModelStore.ts";
 
 interface MessageContext {
-    handleSubmitMessage : (inputValue : string, chatId : string,  onValidInput : () => void, chatbotTypeId : string) => Promise<void>;
+    handleSubmitMessage : (inputValue : string, chatId : string,  onValidInput : () => void, chatbotTypeId : string, fileId?: string) => Promise<void>;
     submitting : boolean;
     optimisticMessage?: string;
     streamedMessage : string;
@@ -12,8 +13,7 @@ interface MessageContext {
 
 const MessageContext = createContext<MessageContext | undefined>(undefined);
 const MessageProvider = ({children}: { children: React.ReactNode }) => {
-    const {selectedModel} = useUserPrefContext();
-    const props = useMessages({selectedModel});
+    const props = useMessages();
     
     return (
         <MessageContext.Provider value={props}>

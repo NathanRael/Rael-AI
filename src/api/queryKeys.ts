@@ -9,6 +9,7 @@
     modelList : 'modelList',
     ollamaModelList : 'ollamaModelList', 
     activeUser: 'activeUser',
-    newToken: 'newToken'
+    newToken: 'newToken',
+    visionModelList: 'visionModelList'
 
 }

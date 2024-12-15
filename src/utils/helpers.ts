@@ -15,3 +15,7 @@
 export const limitTextLen = (text : string, limit : number = 20 )  => {
     return text.length >= limit ? text.slice(0,limit) + '...' : text;
 }
+
+export const isModelExist = (modelName: string, models : string[]) => {
+    return models.some(model => model.toLowerCase().includes(modelName))
+}

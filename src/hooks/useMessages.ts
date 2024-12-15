@@ -4,16 +4,15 @@ import useScroll from "@/hooks/useScroll.ts";
 import {createMessage, newStreamedMessage} from "@/api/MessagesApi.ts";
 import {useQueryClient} from "@tanstack/react-query";
 import {queryKeys} from "@/api/queryKeys.ts";
-
-type UseMessageProps = {
-    selectedModel: string;
-}
+import {useModelStore} from "@/store/useModelStore.ts";
 
 
-const useMessages = ({selectedModel}: UseMessageProps) => {
+
+const useMessages = () => {
     const {toast} = useToast();
     const {scrollToBottom} = useScroll();
     const queryClient = useQueryClient();
+    const selectedModel = useModelStore(state => state.selectedModel);
     
     
     const [submitting, setSubmitting] = useState(false);
@@ -21,7 +20,7 @@ const useMessages = ({selectedModel}: UseMessageProps) => {
     const [optimisticMessage, setOptimisticMessage] = useState('');
     
 
-    const handleSubmitMessage = async (inputValue: string, conversationId: string, onValidInput: () => void, chatbotTypeId: string) => {
+    const handleSubmitMessage = async (inputValue: string, conversationId: string, onValidInput: () => void, chatbotTypeId: string, fileId?: string) => {
 
         if (inputValue === '' || !inputValue)
             return
@@ -45,14 +44,12 @@ const useMessages = ({selectedModel}: UseMessageProps) => {
                 content: inputValue,
                 model: selectedModel,
                 chatbot_type_id: chatbotTypeId,
-                
+                file_id : fileId,
                 
                 onChange: (v) => setStreamedMessage(prevState => prevState + v),
                 onFinish: async (fullMessage) => {
                     setSubmitting(false)
                     // Saving the chatbot message in the db
-                    
-                    
                     
                     await createMessage({
                         content : fullMessage,
