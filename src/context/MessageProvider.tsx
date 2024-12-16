@@ -9,6 +9,7 @@ interface MessageContext {
     submitting : boolean;
     optimisticMessage?: string;
     streamedMessage : string;
+    fileId : string;
 }
 
 const MessageContext = createContext<MessageContext | undefined>(undefined);

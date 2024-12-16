@@ -18,6 +18,7 @@ const useMessages = () => {
     const [submitting, setSubmitting] = useState(false);
     const [streamedMessage, setStreamedMessage] = useState('');
     const [optimisticMessage, setOptimisticMessage] = useState('');
+    const [fileId, setFileId] = useState('')
     
 
     const handleSubmitMessage = async (inputValue: string, conversationId: string, onValidInput: () => void, chatbotTypeId: string, fileId?: string) => {
@@ -36,6 +37,7 @@ const useMessages = () => {
         
         setSubmitting(true);
         setOptimisticMessage(inputValue);
+        setFileId(fileId || '')
         try {
             
             await newStreamedMessage({
@@ -80,7 +82,7 @@ const useMessages = () => {
 
 
     return {
-        submitting, handleSubmitMessage, optimisticMessage,streamedMessage
+        submitting, handleSubmitMessage, optimisticMessage,streamedMessage, fileId
     }
 }
 

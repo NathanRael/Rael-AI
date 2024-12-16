@@ -24,3 +24,16 @@ export const uploadFile = async (file : File) => {
     
     return response.data;
 }
+
+export const downloadFile = async (file_id : string) => {
+    const response = await axios.get(`${BASE_URL}/api/files/${file_id}`, {
+        responseType : 'blob'
+    });
+    
+    if (response.status !== 200)
+        throw new Error(response.statusText);
+    
+    const blob = await response.data
+    
+    return URL.createObjectURL(blob);
+}

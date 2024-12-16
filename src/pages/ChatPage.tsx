@@ -17,7 +17,7 @@ import ChatbotTypeCard from "@/components/pages/ChatbotTypeCard.tsx";
 
 const ChatPage = () => {
     const {chatId} = useParams();
-    const {submitting, optimisticMessage, streamedMessage} = useMessageContext();
+    const {submitting, optimisticMessage, streamedMessage, fileId} = useMessageContext();
     const {scrollToBottom} = useScroll();
     const ref = useRef<HTMLDivElement>(null);
     const {inView: arrowDownInView, containerRef} = useInView({});
@@ -55,7 +55,7 @@ const ChatPage = () => {
             <Stack direction={'vertical'} className={' pb-[160px]'} gap={40}>
                 <Stack className={` h-fit ${INPUT_WIDTH} space-y-6`} align={'start'}>
                     <MessageList messages={messages!} error={error as Error} loading={isLoading}/>
-                    {submitting && <Stack className={`max-md:w-full ${INPUT_WIDTH}`}> <MessageFeed sender={'user'}
+                    {submitting && <Stack className={`max-md:w-full ${INPUT_WIDTH}`}> <MessageFeed file_id={fileId} sender={'user'}
                                                                                                    content={optimisticMessage!}/></Stack>}
                     {streamedMessage && submitting && <Stack className={`max-md:w-full ${INPUT_WIDTH}`}> <MessageFeed sender={'bot'}
                                                                                                    content={streamedMessage!}/></Stack>}

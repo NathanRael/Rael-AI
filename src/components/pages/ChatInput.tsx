@@ -70,10 +70,12 @@ const ChatInput = () => {
             updateSelectedModel(visionModels[0])
 
         const uploadedFile = await handleFileUpload(file);
+        
 
         // Handle the submit when user already started a conversation
         if (chatId && !isConversationLoading) {
             const chatbotTypeId = conversations!.find(conversation => conversation.id === chatId)!.chatbot_type_id
+            resetImageContent()
             await handleSubmitMessage(message, chatId, () => setMessage(''), chatbotTypeId, uploadedFile?.id)
             return
         }
@@ -82,6 +84,7 @@ const ChatInput = () => {
         storage.setItem('fileId', uploadedFile?.id || '')
         setMessage('')
         resetImageContent()
+        
         setSuccess(false)
         try {
             const userInput = storage.getItem('userInput')
@@ -102,10 +105,11 @@ const ChatInput = () => {
         if (conversations && !isConversationLoading && success) {
             const newConversationId = conversations[0].id
             const userInput = JSON.parse(localStorage.getItem('userInput') || '')
-            const uploadedFile = JSON.parse(localStorage.getItem('fileId') || '')
+            const uploadedFileId = JSON.parse(localStorage.getItem('fileId') || '')
+
             navigate(`/chat/${newConversationId}`);
 
-            handleSubmitMessage(userInput, newConversationId, () => setMessage(''), chatbotTypeIdInParams!, uploadedFile?.id)
+            handleSubmitMessage(userInput, newConversationId, () => setMessage(''), chatbotTypeIdInParams!, uploadedFileId)
         }
     }, [conversations]);
 

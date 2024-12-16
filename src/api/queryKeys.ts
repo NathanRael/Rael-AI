@@ -10,6 +10,7 @@
     ollamaModelList : 'ollamaModelList', 
     activeUser: 'activeUser',
     newToken: 'newToken',
-    visionModelList: 'visionModelList'
+    visionModelList: 'visionModelList',
+    downloadFile: 'downloadFile'
 
 }

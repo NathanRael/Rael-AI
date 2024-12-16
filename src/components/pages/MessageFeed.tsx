@@ -7,11 +7,21 @@ import {Prism as SyntaxHighlighter} from "react-syntax-highlighter";
 import {dracula} from "react-syntax-highlighter/dist/esm/styles/prism";
 import useWindowSize from "@/hooks/useWindowSize.ts";
 import {Message} from "@/api/MessagesApi.ts";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {downloadFile} from "@/api/fileApi.ts";
+import {useQuery} from "@tanstack/react-query";
+import {queryKeys} from "@/api/queryKeys.ts";
+import ErrorUI from "@/components/ui/ErrorUI.tsx";
+import LoaderUI from "@/components/ui/LoaderUI.tsx";
 
 
-const MessageFeed = ({content, sender}: Omit<Message, 'id'>) => {
+const MessageFeed = ({content, sender, file_id}: Omit<Message, 'id'>) => {
     const {toast, renderToastContainer} = useToast();
+    const {data: image, isLoading: isFetchingImage, error: imageFetchError, refetch: reFetchImage} = useQuery({
+        enabled: !!file_id,
+        queryFn: () => downloadFile(file_id),
+        queryKey: [queryKeys.downloadFile, {file_id}]
+    })
 
 
     const handleCopyToClipboard = async (text: string) => {
@@ -28,6 +38,8 @@ const MessageFeed = ({content, sender}: Omit<Message, 'id'>) => {
     return (
         <Stack className={'w-full'} direction={'vertical'} align={'start'}>
             {renderToastContainer()}
+            {file_id && <UserImageView image={image!} error={imageFetchError as Error} loading={isFetchingImage}
+                            reFetch={() => reFetchImage()}/>}
             <div
                 className={`w-fit relative py-3 px-4 flex justify-center gap-2 rounded-3xl text-base  ${sender === 'user' ? 'bg-gradient-to-br from-primary to-primary/60 text-white items-center' : ' items-start'}`}>
                 {
@@ -42,8 +54,12 @@ const MessageFeed = ({content, sender}: Omit<Message, 'id'>) => {
                     <BotMessage content={content} handleCopy={handleCopyToClipboard}/>
                 }
 
+
                 {
-                    sender === 'user' && <UserMessage content={content} handleCopy={handleCopyToClipboard}/>
+                    sender === 'user' &&
+                    (
+                            <UserMessage content={content} handleCopy={handleCopyToClipboard}/>
+                    )
                 }
 
             </div>
@@ -58,9 +74,27 @@ const UserMessage = ({content, handleCopy}: { content: string, handleCopy: (text
     return (
         <div className={'relative'}>
             <span>{content}</span>
-           <CopyIcon className={'absolute -bottom-12 py-1 -left-16 '} onClick={() => handleCopy(content)}/>
+            <CopyIcon className={'absolute -bottom-12 py-1 -left-16 '} onClick={() => handleCopy(content)}/>
         </div>
 
+    )
+}
+
+const UserImageView = ({image, loading, error, reFetch}: {
+    image: string,
+    error: Error,
+    reFetch: () => void,
+    loading: boolean
+}) => {
+
+    if (error)
+        return <ErrorUI error={error} onRetry={reFetch}/>
+
+    if (loading)
+        return <div className={'max-md:size-[128px] size-[210px] object-cover rounded-xl animate-pulse dark:bg-white/10 bg-black/20'}/>
+
+    return (
+        <img src={image} alt={'user Image'} className={'max-md:size-[128px] size-[210px]  object-cover rounded-xl'}/>
     )
 }
 
@@ -78,7 +112,7 @@ const BotMessage = ({content, handleCopy}: { content: string, handleCopy: (text:
             return '70vw'
 
     }
-    
+
     return (
         <div className={'prose prose-style relative'}>
             <CopyIcon className={'absolute -bottom-6 py-1 -left-2 '} onClick={() => handleCopy(content)}/>
@@ -95,7 +129,8 @@ const BotMessage = ({content, handleCopy}: { content: string, handleCopy: (text:
                                                <Code2 size={16}/>
                                                <span>{className?.split('language-')[1]}</span>
                                            </div>
-                                           <CopyIcon forCode className={'absolute top-1 right-2'} onClick={() => handleCopy(codeContent)}/>
+                                           <CopyIcon forCode className={'absolute top-1 right-2'}
+                                                     onClick={() => handleCopy(codeContent)}/>
                                            <SyntaxHighlighter
                                                {...rest}
                                                PreTag="div"
@@ -124,23 +159,26 @@ const BotMessage = ({content, handleCopy}: { content: string, handleCopy: (text:
                                }
                            }}
             />
-            
+
         </div>
     )
 }
 
-const CopyIcon = ({onClick = () => {}, className, forCode} : {onClick : () => void, className?: string, forCode? : boolean}) => {
+const CopyIcon = ({
+                      onClick = () => {
+                      }, className, forCode
+                  }: { onClick: () => void, className?: string, forCode?: boolean }) => {
     const [copied, setCopied] = useState(false);
     return (
         <Icon onClick={() => {
             setCopied(true);
             onClick()
-            
+
             setTimeout(() => setCopied(false), 5000)
         }} className={className} variant={'ghost'} size={'sm'}>
             <Copy size={16}/>
             {!forCode && <span className={'text-[12px]'}>{copied ? 'copied' : 'copy'}</span>}
-            {forCode && <span className={'text-[12px]'}>{copied ?'code copied' : 'copy code' }</span>}
+            {forCode && <span className={'text-[12px]'}>{copied ? 'code copied' : 'copy code'}</span>}
         </Icon>
     )
 }
