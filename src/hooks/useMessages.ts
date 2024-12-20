@@ -4,7 +4,7 @@ import useScroll from "@/hooks/useScroll.ts";
 import {createMessage, newStreamedMessage} from "@/api/MessagesApi.ts";
 import {useQueryClient} from "@tanstack/react-query";
 import {queryKeys} from "@/api/queryKeys.ts";
-import {useModelStore} from "@/store/useModelStore.ts";
+import {useModelStore} from "@/store/modelStore.ts";
 
 
 

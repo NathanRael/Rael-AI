@@ -31,7 +31,7 @@ export const fetchOllamaModels = async (options?: Options) => {
     if (options?.search)
         return response.data.filter(model => model.name.toLowerCase().includes(options.search!.toLowerCase()) || model.description.toLowerCase().includes(options.search!.toLowerCase()) || model.sizes.some(size => size.toLowerCase().includes(options.search!.toLowerCase()))
             || model.capability.toLowerCase().includes(options.search!.toLowerCase()));
-
+    
 
     return response.data;
 }

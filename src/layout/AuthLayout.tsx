@@ -1,5 +1,5 @@
 ﻿import {Outlet, useNavigate} from "react-router-dom";
-import {useCallback, useLayoutEffect} from "react";
+import {useEffect, useLayoutEffect} from "react";
 import {useQuery} from "@tanstack/react-query";
 import {fetchActiveUser} from "@/api/usersApi.ts";
 import {queryKeys} from "@/api/queryKeys.ts";
@@ -7,6 +7,7 @@ import {useUserStore} from "@/store/userStore.ts";
 import {useAuthStore} from "@/store/authStore.ts";
 import {api} from "@/utils/api.ts";
 import {refreshToken} from "@/api/authApi.ts";
+import {fetchUserPreferences} from "@/api/userPreferencesApi.ts";
 
 const AuthLayout = () => {
     const token = useAuthStore(state => state.token)
@@ -18,6 +19,13 @@ const AuthLayout = () => {
         queryFn: fetchActiveUser,
         queryKey: [queryKeys.activeUser],
     })
+
+    const {data: userPrefs, isLoading: isFetchingUserPrefs, isSuccess: isSuccessUserPrefs} = useQuery({
+        enabled: !!user?.id,
+        queryFn: () => fetchUserPreferences(user!.id),
+        queryKey: [queryKeys.userPreferences],
+    })
+
 
 
     useLayoutEffect(() => {
@@ -34,18 +42,18 @@ const AuthLayout = () => {
             (response) => response,
             async (error) => {
                 const originalRequest = error.config;
-                if (error.response?.status === 401 ) {
-                   try {
-                       const {access_token: accessToken} = await refreshToken();
-                       updateToken(accessToken)
+                if (error.response?.status === 401) {
+                    try {
+                        const {access_token: accessToken} = await refreshToken();
+                        updateToken(accessToken)
 
-                       originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-                       originalRequest._retry = true;
+                        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+                        originalRequest._retry = true;
 
-                       return api(originalRequest);
-                   }catch (e){
-                       updateToken(null)
-                   }
+                        return api(originalRequest);
+                    } catch (e) {
+                        updateToken(null)
+                    }
                 }
                 return Promise.reject(error);
             }
@@ -65,6 +73,11 @@ const AuthLayout = () => {
 
 
     }, [user, isError, navigate, isSuccess, isLoading])
+
+    useEffect(() => {
+        if (isFetchingUserPrefs || !userPrefs) return
+        if (!userPrefs.has_onboarded && isSuccessUserPrefs) navigate("/onboarding/chooseModel")
+    }, [isFetchingUserPrefs, isSuccessUserPrefs, userPrefs])
 
 
     return (

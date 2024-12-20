@@ -11,6 +11,7 @@
     activeUser: 'activeUser',
     newToken: 'newToken',
     visionModelList: 'visionModelList',
-    downloadFile: 'downloadFile'
+    downloadFile: 'downloadFile',
+    formatedModelList: 'formatedModelList'
 
 }

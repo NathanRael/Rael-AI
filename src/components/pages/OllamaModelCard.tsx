@@ -3,7 +3,7 @@ import {OllamaModel} from "@/api/ollamaModelsApi.ts";
 import {Check, CheckCircle, ChevronDown, Download, LoaderCircle, StopCircle} from "lucide-react";
 import useDownloadOllamaModels from "@/hooks/useDownloadOllamaModels.ts";
 import {QueryClient, useQuery} from "@tanstack/react-query";
-import {fetchModels} from "@/api/modelsApi.ts";
+import {fetchModels, Model} from "@/api/modelsApi.ts";
 import {queryKeys} from "@/api/queryKeys.ts";
 import {useMemo} from "react";
 
@@ -11,25 +11,24 @@ import {useMemo} from "react";
 const OllamaModelCard = ({name, description, link, sizes, capability}: OllamaModel) => {
     const {progress, downloadModel, handleAbort, downloading, downloadedModels} = useDownloadOllamaModels();
     const queryClient = new QueryClient();
-    const {data, isLoading} = useQuery({
+    const {data , isLoading, isError} = useQuery({
         queryFn: () => fetchModels(true),
-        queryKey: [queryKeys.modelList]
+        queryKey: [queryKeys.formatedModelList]
     })
 
     const isModelDownloaded = (modelName: string) => {
-        if (isLoading || !data)
+        if (isLoading || !data || isError)
             return false
-        // console.log(data, modelName)
         const modelJustDownloaded = downloadedModels.some((model) => model[modelName])
 
         if (modelJustDownloaded)
             queryClient.invalidateQueries([queryKeys.modelList])
 
-        return data.some(item => item.trim().toLowerCase() === modelName.trim().toLowerCase()) || modelJustDownloaded;
+        return (data as Model[]).some(item => item.name.toLowerCase() === modelName.trim().toLowerCase()) || modelJustDownloaded;
     }
 
     const isAllModelDownloaded = useMemo(() => {
-        if (isLoading || !data)
+        if (isLoading || !data || isError)
             return false
 
         return sizes.every(size => {

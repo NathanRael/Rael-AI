@@ -25,11 +25,12 @@ const OllamaModelList = ({error, loading, models, onRetry, className}: ChatModel
         return seeAll ? models.slice(0,100) : models.slice(0, 10)
     }, [seeAll, models, onRetry]);
 
-    if (loading)
+    if (loading || !models)
         return <LoaderUI title={"Getting models"}/>
 
     if (error)
         return <ErrorUI error={error} onRetry={onRetry}/>
+
     
 
     return (

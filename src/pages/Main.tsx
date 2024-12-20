@@ -1,4 +1,4 @@
-﻿import {Stack, cn} from "rael-ui"
+﻿import {Button, cn, Stack} from "rael-ui"
 import {INPUT_WIDTH} from "@/constants/style.ts";
 
 import ChatInput from "@/components/pages/ChatInput.tsx";
@@ -6,7 +6,6 @@ import {useQuery} from "@tanstack/react-query";
 import {queryKeys} from "@/api/queryKeys.ts";
 import {useEffect} from "react";
 import {ChevronRight, Slack} from "lucide-react";
-import {Button} from "rael-ui"
 import ChatbotTypeToggleList from "@/components/pages/ChatbotTypeToggleList.tsx";
 import {fetchMainChatbotTypes} from "@/api/chatbotTypesApi.ts";
 import {fetchUserPreferences} from "@/api/userPreferencesApi.ts";
@@ -15,7 +14,8 @@ import useLocalSearchParams from "@/hooks/useLocalSearchParams.ts";
 import {useLocation, useNavigate} from "react-router-dom";
 import ModelSwitcher from "@/components/pages/ModelSwitcher.tsx";
 import {useUserStore} from "@/store/userStore.ts";
-import {useModelStore} from "@/store/useModelStore.ts";
+import {useModelStore} from "@/store/modelStore.ts";
+
 const Main = () => {
     const location = useLocation();
     const navigate = useNavigate();

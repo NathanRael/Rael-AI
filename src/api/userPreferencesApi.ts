@@ -9,6 +9,7 @@ export interface UserPreference {
     user_id : string;
     model : string;
     main_chatbot_types?: string[];
+    has_onboarded?: boolean;
 }
 
 export const fetchUserPreferences = async (userId : string) => {
@@ -26,6 +27,7 @@ export const updateUserPreferences = async (options : Partial<Omit<UserPreferenc
         chatbot_type_id : options.chatbot_type_id,
         model : options.model,
         main_chatbot_types : options.main_chatbot_types,
+        has_onboarded : options.has_onboarded
     })
     
     return response.data;

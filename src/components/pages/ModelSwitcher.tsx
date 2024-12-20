@@ -11,13 +11,13 @@
 } from "rael-ui"
 import {ChevronDownIcon} from "lucide-react";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
-import {fetchModels} from "@/api/modelsApi.ts";
+import {fetchModels, Model} from "@/api/modelsApi.ts";
 import {queryKeys} from "@/api/queryKeys.ts";
 import {fetchUserPreferences, updateUserPreferences} from "@/api/userPreferencesApi.ts";
 import ErrorUI from "@/components/ui/ErrorUI.tsx";
 import {useUserStore} from "@/store/userStore.ts";
 import {useEffect} from "react";
-import {useModelStore} from "@/store/useModelStore.ts";
+import {useModelStore} from "@/store/modelStore.ts";
 
 const ModelSwitcher = ({className}: { className?: string }) => {
     const {renderToastContainer} = useToast();
@@ -25,7 +25,7 @@ const ModelSwitcher = ({className}: { className?: string }) => {
     const user = useUserStore(state => state.user)
     const queryClient = useQueryClient()
     const updateModels = useModelStore(state => state.updateModels)
-    const updateVisionModels = useModelStore(state => state.updateVisionModels)
+    const updateFormatedModel = useModelStore(state => state.updateFormatedModels)
 
     const {data: models, error: modelsError, isLoading: isFetchingModels, isSuccess} = useQuery({
         queryFn: () => fetchModels(),
@@ -33,8 +33,8 @@ const ModelSwitcher = ({className}: { className?: string }) => {
     })
 
     const {data: visionModels, error: visionModelsError, isSuccess: isVisionModelFetched} = useQuery({
-        queryFn: () => fetchModels(false, 'vision'),
-        queryKey: [queryKeys.visionModelList]
+        queryFn: () => fetchModels(true),
+        queryKey: [queryKeys.formatedModelList]
     })
 
 
@@ -62,14 +62,14 @@ const ModelSwitcher = ({className}: { className?: string }) => {
 
     useEffect(() => {
         if (!isSuccess || !models) return
-            updateModels(models)
+        updateModels(models as string[])
     }, [isSuccess])
 
     useEffect(() => {
         if (!isVisionModelFetched || !visionModels) return
-            updateVisionModels(visionModels)
+        updateFormatedModel(visionModels as Model[])
     }, [isVisionModelFetched]);
-    
+
 
     if (isFetchingUserPreferences || isFetchingModels)
         return <div className=" h-12 animate-pulse rounded-lg w-full bg-black/20 dark:bg-white/20"/>
@@ -97,7 +97,7 @@ const ModelSwitcher = ({className}: { className?: string }) => {
                         <SelectGroup>
                             <SelectGroupTitle>{isFetchingModels ? 'Getting models' : 'Models'}</SelectGroupTitle>
                             {
-                                (!modelsError && !isFetchingModels && models) && models?.map(model => (
+                                (!modelsError && !isFetchingModels && models) && (models as string[])?.map(model => (
                                     <SelectItem key={model} value={model}>{model}</SelectItem>
                                 ))
                             }

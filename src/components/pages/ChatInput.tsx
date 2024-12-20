@@ -15,8 +15,7 @@ import {useUserStore} from "@/store/userStore.ts";
 import ChatFileInput from "@/components/ui/ChatFileInput.tsx";
 import ImageInputPreview from "@/components/ui/ImageInputPreview.tsx";
 import useFile from "@/hooks/useFile.ts";
-import {isModelExist} from "@/utils/helpers.ts";
-import {useModelStore} from "@/store/useModelStore.ts";
+import {useModelStore} from "@/store/modelStore.ts";
 
 const ChatInput = () => {
     const [file, setFile] = useState<File | null>(null)
@@ -30,7 +29,8 @@ const ChatInput = () => {
     const [success, setSuccess] = useState(false)
     const [searchParams] = useSearchParams();
     const user = useUserStore(state => state.user);
-    const visionModels = useModelStore(state => state.visionModels)
+    const formatedModels = useModelStore(state => state.formatedModels)
+    const visionModels = useMemo(() => formatedModels.filter(model => model.capability === 'vision'), [formatedModels]);
     const updateSelectedModel = useModelStore(state => state.updateSelectedModel)
 
     const canSubmit: boolean = useMemo(() => !submitting && message.trim() !== '', [submitting, message])
@@ -67,7 +67,7 @@ const ChatInput = () => {
     const handleSubmit = async () => {
         // Automatically change the selected model when having image
         if (file)
-            updateSelectedModel(visionModels[0])
+            updateSelectedModel(visionModels[0].name)
 
         const uploadedFile = await handleFileUpload(file);
         

@@ -8,15 +8,15 @@ import OllamaModelList from "@/components/pages/OllamaModelList.tsx";
 import {useMemo} from "react";
 import Stepper from "@/components/ui/Stepper.tsx";
 import {MainPageImageDark, MainPageImageLight} from "@/constants/images.ts";
-import {useUserPrefContext} from "@/context/UserPrefProvider.tsx";
 import {fetchModels} from "@/api/modelsApi.ts";
+import {useUserPrefStore} from "@/store/userPrefStore.ts";
 
 const OnboardingPageChooseModel = () => {
     const navigate = useNavigate();
-    const {darkMode} = useUserPrefContext();
+    const darkMode = useUserPrefStore(state => state.darkMode);
     const {data : downloadedModels, isLoading} = useQuery({
-        queryFn : () => fetchModels(),
-        queryKey : [queryKeys.modelList]
+        queryFn : () => fetchModels(true),
+        queryKey : [queryKeys.formatedModelList]
     })
     
     const hasDownloadedModel = useMemo(() => {
@@ -62,6 +62,7 @@ const PullModel = () => {
     })
  
     const recommendedModel = useMemo(() => {
+        
         if (isFetchingOllamaModels || ollamaModelError || !ollamaModels)
             return []
         return ollamaModels!.filter(model => model.name === 'llama3.2' || model.name === 'llama3')

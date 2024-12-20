@@ -6,30 +6,28 @@ import './index.css'
 import MessageProvider from "@/context/MessageProvider.tsx";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {ReactQueryDevtools} from "@tanstack/react-query-devtools";
-import UserPrefProvider from "@/context/UserPrefProvider.tsx";
-import AuthProvider from "@/context/AuthProvider.tsx";
+
 
 const queryClient = new QueryClient({
-    defaultOptions : {
+    defaultOptions: {
         queries: {
-            networkMode : 'always'
+            networkMode: 'always'
         },
-        mutations : {
-            networkMode : 'always'
+        mutations: {
+            networkMode: 'always'
         }
     }
 })
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
-         <Router>
+        <Router>
             <QueryClientProvider client={queryClient}>
-                <ReactQueryDevtools  initialIsOpen={false}/>
-                        <UserPrefProvider>
-                            <MessageProvider>
-                                <App/>
-                            </MessageProvider>
-                        </UserPrefProvider>
+                <ReactQueryDevtools initialIsOpen={false}/>
+
+                <MessageProvider>
+                    <App/>
+                </MessageProvider>
             </QueryClientProvider>
         </Router>
     </StrictMode>,

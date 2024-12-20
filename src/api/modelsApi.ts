@@ -2,9 +2,17 @@
 import {BASE_URL} from "@/constants";
 
 
-export const fetchModels = async (formated: boolean = false, model_type: 'all' | 'vision' | 'embedding' | 'tool' = 'all') => {
-    const withModelType =  '&model_type=' + model_type
-    const response = await axios.get<string[]>(`${BASE_URL}/api/models/?formated=${formated}${withModelType}`);
+export interface Model {
+    name : string;
+    capability : string;
+}
+
+export const fetchModels = async (formated: boolean = false, model_type?:'vision' | 'embedding' | 'tool') => {
+    const response = await axios.get(`${BASE_URL}/api/models/?formated=${formated}`);
+
     
-    return response.data; 
+    if (model_type)
+        return (response.data as Model[]).filter((model) => model.capability === model_type);
+    
+    return response.data as string[];
 }

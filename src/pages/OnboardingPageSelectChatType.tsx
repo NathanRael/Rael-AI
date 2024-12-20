@@ -1,17 +1,17 @@
-﻿import {Badge, Checkbox, CheckboxLabel, cn, Form, FormControl} from "rael-ui";
+﻿import {Badge, Checkbox, CheckboxLabel, cn} from "rael-ui";
 import {useNavigate} from "react-router-dom";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {queryKeys} from "@/api/queryKeys.ts";
 import {useEffect, useMemo, useState} from "react";
 import Stepper from "@/components/ui/Stepper.tsx";
-import {MainPageImageLight, ChatPageImage} from "@/constants/images.ts";
+import {ChatPageImage, MainPageImageLight} from "@/constants/images.ts";
 import {ChatbotType, fetchChatbotTypes} from "@/api/chatbotTypesApi.ts";
 import LoaderUI from "@/components/ui/LoaderUI.tsx";
 import ErrorUI from "@/components/ui/ErrorUI.tsx";
-import {useUserPrefContext} from "@/context/UserPrefProvider.tsx";
 import {useChatbotTypeStore} from "@/store/chatbotTypeStore.ts";
 import {updateUserPreferences} from "@/api/userPreferencesApi.ts";
 import {useUserStore} from "@/store/userStore.ts";
+import {useUserPrefStore} from "@/store/userPrefStore.ts";
 
 type ChatbotTypeSelectList = {
     error: Error;
@@ -22,7 +22,7 @@ type ChatbotTypeSelectList = {
 const OnboardingPageSelectChatType = () => {
     const user = useUserStore(state => state.user)
     const navigate = useNavigate();
-    const {darkMode} = useUserPrefContext();
+    const darkMode = useUserPrefStore(state => state.darkMode);
     const selectedChatbotType = useChatbotTypeStore(state => state.selectedChatbotType)
     const queryClient = useQueryClient()
 
@@ -37,7 +37,8 @@ const OnboardingPageSelectChatType = () => {
     const handleNext = async () => {
         await updateUserPreferencesMutation({
             user_id : user.id,
-            main_chatbot_types : Object.entries(selectedChatbotType).map(([_, value]) => value) 
+            main_chatbot_types : Object.entries(selectedChatbotType).map(([_, value]) => value) ,
+            has_onboarded : true,
         })
     }
     
@@ -87,7 +88,6 @@ const SelectChatbotType = () => {
         if (isFetchingChatbotTypes || chatbotTypeError || !chatbotTypes)
             return []
         return chatbotTypes!
-
     }, [chatbotTypes])
     
 

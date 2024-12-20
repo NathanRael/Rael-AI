@@ -1,7 +1,6 @@
 ﻿import axios from "axios";
 import {BASE_URL} from "@/constants";
 import {api} from "@/utils/api.ts";
-import {useAuthStore} from "@/store/authStore.ts";
 
 interface Options {
     email? : string,
@@ -27,7 +26,7 @@ export const fetchActiveUser = async () => {
     try {
         
         const response = await api.get<User>(`api/me`);
-
+        
         if (response.status !== 200)
             throw new Error(response.statusText);
         return response.data;
