@@ -15,11 +15,13 @@ const ChatbotTypeToggleList = ({loading, error, chatbotTypes, onRetry}: ChatbotT
     const {selectedId, handleSelect} = useChatType();
     
 
-    if (loading)
+    if (loading )
         return <LoaderUI title={'Fetching stuff'}/>;
 
     if (error)
         return <ErrorUI error={error} onRetry={onRetry}/>
+    
+    
     
     
     return (

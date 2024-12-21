@@ -15,7 +15,6 @@ export interface UserPreference {
 export const fetchUserPreferences = async (userId : string) => {
     const response = await axios.get<UserPreference>(`${BASE_URL}/api/userPreferences/${userId}`);
     
-    // console.log("user", response.data)
     
     return response.data;
 }

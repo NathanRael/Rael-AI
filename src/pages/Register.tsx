@@ -1,11 +1,12 @@
 ﻿import {
     Button,
     Card,
-    CardSection, Checkbox, CheckboxLabel,
+    CardSection,
     Form,
     FormControl,
     FormItem,
-    FormLabel, FormMessage,
+    FormLabel,
+    FormMessage,
     PasswordInput,
     Stack,
     TextInput,
@@ -13,53 +14,75 @@
     ValidationRules
 } from "rael-ui";
 import {Bot} from "lucide-react";
-import {useMutation} from "@tanstack/react-query";
-import {loginUser} from "@/api/authApi.ts";
-import {useAuthStore} from "@/store/authStore.ts";
 import {useNavigate} from "react-router-dom";
+import {useMutation} from "@tanstack/react-query";
+import {createUser} from "@/api/usersApi.ts";
+
 
 export type FormType = {
     email: string;
     password: string;
+    username: string;
+    confirm: string;
 }
 
-const Login = () => {
-    const updateToken = useAuthStore(state => state.updateToken)
+
+const Register = () => {
     const navigate = useNavigate();
-    const {mutateAsync : LoginMutationAsync} = useMutation({
-        mutationFn : loginUser,
-        onSuccess : data => {
-            updateToken(data.access_token)
-            navigate('/')   
+    const {mutateAsync: CreateUserMutation} = useMutation({
+        mutationFn: createUser,
+        onSuccess: data => {
+            
+            navigate('/login')
         }
     })
     const validations: ValidationRules<FormType>[] = [
         {
             name: "email",
             required: true,
-            // pattern : /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+            pattern: /^(?![._-])[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+            message: "Please, enter a valid email address.",
         },
         {
             name: 'password',
-            required: true
+            required: true,
+            pattern: /^[\da-z.-_%+-]{4,}$/i,
+            message: 'Password must be at least 4 characters long'
+        },
+        {
+            name: 'confirm',
+            required: true,
+            valid: ({confirm, password}) => confirm === password,
+            message: 'Password does not match'
+        },
+        {
+            name: 'username',
+            required: true,
+            pattern: /^[a-zA-Z0-9.-]{3,}$/,
+            message: 'Name must be at least 3 characters long',
         }
     ]
     const form = useForm<FormType>({
         defaultValue: {
             email: "",
             password: "",
+            username: "",
+            confirm: "",
+
         },
         validations
     })
-    
+
     const formData = form.formData
 
     const handleSubmit = async () => {
-        await LoginMutationAsync({
-            password : formData.password,
-            email : formData.email
+        await CreateUserMutation({
+            password: formData.password,
+            email: formData.email,
+            username: formData.username,
         })
     }
+
     return (
         <Stack className={'p-10 absolute top-20 left-1/2 -translate-x-1/2 space-y-6'}>
             <Stack gap={0}>
@@ -75,6 +98,13 @@ const Login = () => {
                 <Card className={'dark:bg-white/5 dark:border-none rounded-xl w-[380px]'}>
                     <CardSection>
                         <FormItem>
+                            <FormLabel>Name</FormLabel>
+                            <FormControl name={'username'} render={(fields) => (
+                                <TextInput block radius={'xl'} placeholder={'Enter your username'} {...fields}/>
+                            )} type={'input'}/>
+                            <FormMessage name={'username'}/>
+                        </FormItem>
+                        <FormItem>
                             <FormLabel>Email</FormLabel>
                             <FormControl name={'email'} render={(fields) => (
                                 <TextInput block radius={'xl'} placeholder={'Ex : rael@gmail.com'} {...fields}/>
@@ -84,26 +114,28 @@ const Login = () => {
                         <FormItem>
                             <FormLabel>Password</FormLabel>
                             <FormControl name={'password'} render={(fields) => (
-                                <PasswordInput placeholder={'Enter you password'} block radius={'xl'} className={'dark:bg-input-fill-d-bg'} {...fields}/>
+                                <PasswordInput placeholder={'Enter you password'} block radius={'xl'}
+                                               className={'dark:bg-input-fill-d-bg'} {...fields}/>
                             )} type={'input'}/>
                             <FormMessage name={'password'}/>
                         </FormItem>
                         <FormItem>
-                            <FormControl name={'remember'} render={(fields) => (
-                                <Checkbox size={'sm'} radius={'md'} className={'dark:bg-input-fill-d-bg'} {...fields}>
-                                    <CheckboxLabel>Remember me</CheckboxLabel>
-                                </Checkbox>
+                            <FormLabel>Confirm</FormLabel>
+                            <FormControl name={'confirm'} render={(fields) => (
+                                <PasswordInput placeholder={'Confirm you password'} block radius={'xl'}
+                                               className={'dark:bg-input-fill-d-bg'} {...fields}/>
                             )} type={'input'}/>
-                            <FormMessage name={'remember'}/>
+                            <FormMessage name={'confirm'}/>
                         </FormItem>
                     </CardSection>
                     <CardSection>
-                        <Button block radius={'xl'} loading={form.isSubmitting} disabled={form.isSubmitting}>Login</Button>
+                        <Button block radius={'xl'} loading={form.isSubmitting}
+                                disabled={form.isSubmitting}>Login</Button>
                         <div className={'text-small-1 text-black/80 dark:text-white/40 flex gap-1'}>
                             <p className={''}>
-                                Don't have an account ?
+                               Have an account ?
                             </p>
-                            <span onClick={() => navigate('/register')} className={'text-black dark:text-white cursor-pointer underline'}>Create one</span>
+                            <span onClick={() => navigate('/login')} className={'text-black dark:text-white cursor-pointer underline'}>Login</span>
                         </div>
                     </CardSection>
                 </Card>
@@ -112,4 +144,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default Register;

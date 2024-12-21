@@ -16,7 +16,7 @@ export interface Message {
     id: string;
     sender: 'user' | 'bot';
     content: string;
-    file_id : string;
+    file_id: string;
 }
 
 
@@ -67,19 +67,23 @@ export const newStreamedMessage = async ({
     onChange: (chunk: string) => void,
     onFinish: (fullMessage: string) => void
 }) => {
+    let body: any = {
+        content,
+        model,
+        conversation_id,
+        sender,
+        chatbot_type_id,
+    }
+
+    if (file_id !== '')
+        body = {...body, file_id}
+
     const response = await fetch(`${BASE_URL}/api/messages/streamed`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-            content,
-            model,
-            conversation_id,
-            sender,
-            chatbot_type_id,
-            file_id
-        })
+        body: JSON.stringify(body)
     });
 
     if (!response.ok) {

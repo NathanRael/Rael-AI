@@ -16,6 +16,9 @@ export const loginUser = async ({email, password} : Pick<User, 'email' | 'passwo
     return response.data
 }
 
+
+
+
 export const fetchNewToken = async (token: string) => {
     const response = await axios.get<Token>(`${BASE_URL}/api/newToken`, {
         headers : {Authorization: `Bearer ${token}`}

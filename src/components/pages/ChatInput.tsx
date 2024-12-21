@@ -31,7 +31,9 @@ const ChatInput = () => {
     const user = useUserStore(state => state.user);
     const formatedModels = useModelStore(state => state.formatedModels)
     const visionModels = useMemo(() => formatedModels.filter(model => model.capability === 'vision'), [formatedModels]);
+    const models = useModelStore(state => state.models);
     const updateSelectedModel = useModelStore(state => state.updateSelectedModel)
+    const selectedModel = useModelStore(state => state.selectedModel)
 
     const canSubmit: boolean = useMemo(() => !submitting && message.trim() !== '', [submitting, message])
     const chatbotTypeIdInParams = useMemo(() => searchParams.get('chatType'), [searchParams]);
@@ -64,13 +66,18 @@ const ChatInput = () => {
         setFile(null)
     }
 
+
     const handleSubmit = async () => {
         // Automatically change the selected model when having image
-        if (file)
-            updateSelectedModel(visionModels[0].name)
+
+        if (file) {
+            const visionModel = models.filter(m => visionModels[0].name.split(':')[0].includes(m.split(':')[0]))[0]
+            updateSelectedModel(visionModel)
+        }
+
 
         const uploadedFile = await handleFileUpload(file);
-        
+
 
         // Handle the submit when user already started a conversation
         if (chatId && !isConversationLoading) {
@@ -84,7 +91,7 @@ const ChatInput = () => {
         storage.setItem('fileId', uploadedFile?.id || '')
         setMessage('')
         resetImageContent()
-        
+
         setSuccess(false)
         try {
             const userInput = storage.getItem('userInput')
@@ -93,6 +100,7 @@ const ChatInput = () => {
                 user_id: user.id,
                 title: generatedTitle,
                 chatbot_type_id: chatbotTypeIdInParams || ''
+
             })
         } catch (e) {
             console.error(e)

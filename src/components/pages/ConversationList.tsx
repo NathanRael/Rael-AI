@@ -18,6 +18,8 @@ const ConversationList = ({conversations, loading, error, className}: HistoryLis
     
     if (error)
         return <p className={'text-danger text-sm'}>{error?.message}</p>
+
+
     
     
     return (

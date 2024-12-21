@@ -12,8 +12,8 @@ import {createPortal} from "react-dom";
 import ThemeSwitcher from "@/components/pages/ThemeSwitcher.tsx";
 import OnboardingPageSelectChatType from "@/pages/OnboardingPageSelectChatType.tsx";
 import Login from "@/pages/Login.tsx";
-import ChatFileInput from "@/components/ui/ChatFileInput.tsx";
 import OnboardingLayout from "@/layout/OnboardingLayout.tsx";
+import Register from "@/pages/Register.tsx";
 
 
 function App() {
@@ -21,6 +21,7 @@ function App() {
         <Routes>
             <Route element={<DevLayout enable={true}/>}>
                 <Route element={<Login/>} path={'/login'}/>
+                <Route element={<Register/>} path={'/register'}/>
                 <Route element={<AuthLayout/>}>
                     <Route element={
                         <>
@@ -65,7 +66,6 @@ const DevLayout = ({enable}: { enable: boolean }) => {
 const Test = () => {
     return (
         <div className={'p-10'}>
-            <ChatFileInput/>
         </div>
     )
 }

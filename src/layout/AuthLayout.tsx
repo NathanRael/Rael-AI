@@ -25,8 +25,7 @@ const AuthLayout = () => {
         queryFn: () => fetchUserPreferences(user!.id),
         queryKey: [queryKeys.userPreferences],
     })
-
-
+    
 
     useLayoutEffect(() => {
         const authInterceptor = api.interceptors.request.use((config) => {
