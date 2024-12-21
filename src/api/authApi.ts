@@ -16,6 +16,10 @@ export const loginUser = async ({email, password} : Pick<User, 'email' | 'passwo
     return response.data
 }
 
+export const logout = async () => {
+    return await axios.post(`${BASE_URL}/api/logout`, {})
+}
+
 
 
 

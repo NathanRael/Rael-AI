@@ -15,6 +15,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import ModelSwitcher from "@/components/pages/ModelSwitcher.tsx";
 import {useUserStore} from "@/store/userStore.ts";
 import {useModelStore} from "@/store/modelStore.ts";
+import UserProfile from "@/components/pages/UserProfile.tsx";
 
 const Main = () => {
     const location = useLocation();
@@ -55,7 +56,7 @@ const Main = () => {
 
     return (
         <section className={'h-full space-y-10 pt-4 max-md:pt-16 pb-10 px-4 '}>
-
+            <UserProfile className={'absolute right-6 top-6'}/>
             <Stack direction={'vertical'} className={'items-start w-fit mx-auto'} gap={32}>
                 <div className={'flex flex-col gap-8 items-start p-2 rounded-xl h-fit '}>
                     <div className={'space-y-4'}>

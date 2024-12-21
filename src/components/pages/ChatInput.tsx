@@ -68,7 +68,6 @@ const ChatInput = () => {
 
 
     const handleSubmit = async () => {
-        // Automatically change the selected model when having image
 
         if (file) {
             const visionModel = models.filter(m => visionModels[0].name.split(':')[0].includes(m.split(':')[0]))[0]
