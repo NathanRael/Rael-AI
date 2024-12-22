@@ -82,18 +82,18 @@ const ModelSwitcher = ({className}: { className?: string }) => {
         <Stack className={className}>
             {renderToastContainer()}
             <div className={'flex flex-col items-start justify-start gap-1'}>
-                <p className={'text-[12px] text-meta-fill-l-text-sec dark:text-meta-fill-d-text-sec'}>Select a model</p>
+                {/*<p className={'text-[12px] text-meta-fill-l-text-sec dark:text-meta-fill-d-text-sec'}>Select a model</p>*/}
                 <Select
                     variant={'fill'}
                     defaultValue={userPreferences!.model || 'llama3.2'}
-                    className={''}
+                    className={'w-fit'}
                     onChange={(e) => changeModel(e.target.value as string)}
                 >
-                    <SelectTrigger>
+                    <SelectTrigger className={'bg-transparent dark:bg-transparent w-fit'}>
                         <SelectLabel placeholder={"Select a model"}/>
                         <ChevronDownIcon/>
                     </SelectTrigger>
-                    <SelectGroupContainer>
+                    <SelectGroupContainer className={'left-1/2 -translate-x-1/2 w-[240px]'}>
                         <SelectGroup>
                             <SelectGroupTitle>{isFetchingModels ? 'Getting models' : 'Models'}</SelectGroupTitle>
                             {

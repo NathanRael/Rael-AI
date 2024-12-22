@@ -36,7 +36,7 @@ function App() {
                     </Route>
                     <Route path={'/test'} element={<Test/>}/>
                     <Route path={'chat/explore'} element={<ExploreChatPage/>}/>
-                    <Route path={'model/explore'} element={<ExploreModelPage/>}/>
+                    <Route path={'models/explore'} element={<ExploreModelPage/>}/>
 
                     <Route element={<OnboardingLayout/>}>
                         <Route path={'/onboarding/chooseModel'} element={<OnboardingPageChooseModel/>}/>

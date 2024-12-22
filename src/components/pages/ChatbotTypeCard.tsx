@@ -1,7 +1,5 @@
 ﻿import {ChatbotType} from "@/api/chatbotTypesApi.ts";
-import {CardSection, Card, CardDescription, CardTitle, Icon, cn, Badge} from "rael-ui";
-import {Bot} from "lucide-react";
-import {motion} from "framer-motion"
+import {cn} from "rael-ui";
 import {limitTextLen} from "@/utils/helpers.ts";
 
 type ChatbotTypeFeedProps = Omit<ChatbotType, 'context'> & {
@@ -16,56 +14,10 @@ type ChatbotTypeFeedProps = Omit<ChatbotType, 'context'> & {
 const ChatbotTypeCard = ({id, name, description, selected, onClick = () => {}, className}: ChatbotTypeFeedProps) => {
 
     return (
-        <motion.div
-            onClick={() => {
-                onClick(id)
-            }}
-            transition={{duration: 0.3}}
-        >
-            <Card
-                className={cn(
-                    'flex flex-col cursor-pointer overflow-hidden dark:border-none items-start justify-start gap-3 p-4  shadow-sm bg-meta-fill-l-bg h-full dark:bg-white/5 relative rounded-xl w-[240px] max-md:w-[340px]'
-                , className)}
-            >
-                <Icon
-                    size={'lg'}
-                    className={`${
-                        selected ? 'bg-secondary/80' : 'bg-secondary/40'
-                    } absolute -top-5 -right-5 -z-10`}
-                >
-                    <Bot size={32}/>
-                </Icon>
-                <CardSection rFor={'meta'}>
-                    <Badge
-                        size={'sm'}
-                        className={
-                            `bg-secondary ${selected ? 'opacity-1 ' : 'opacity-0 hover:opacity-0'} `
-                        }
-                    >
-                        Active
-                    </Badge>
-                    
-                    <CardTitle
-                        className={cn(
-                            `text-black dark:text-white  text-base`,
-                            ''
-                        )}
-                    >
-                        {name}
-                    </CardTitle>
-                </CardSection>
-                <CardDescription>
-                    {/*{showFullDesc*/}
-                    {/*    ? description*/}
-                    {/*    : description?.slice(0, MAX_DESC_LENGTH) +*/}
-                    {/*    (description?.length >= MAX_DESC_LENGTH ? ' ...' : '')}*/}
-                    {
-                        limitTextLen(description, 40)
-                    }
-                </CardDescription>
-            </Card>
-        </motion.div>
-
+        <div onClick={() => onClick(id)} className={cn("flex text-base cursor-pointer hover:bg-neutral-light-80 dark:hover:bg-neutral-dark-80 flex-col gap-1 border border-neutral-light-60 dark:border-neutral-dark-80 rounded-xl p-4", selected && "bg-neutral-light-80 dark:bg-neutral-dark-80", className)}>
+            <p className={'font-md text-black-100 dark:text-white-100'}>{name}</p>
+            <p className={' text-small text-black-80 dark:text-white/80'}>{limitTextLen(description)}</p>
+        </div>
     )
 }
 

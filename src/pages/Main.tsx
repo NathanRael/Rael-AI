@@ -55,49 +55,42 @@ const Main = () => {
     
 
     return (
-        <section className={'h-full space-y-10 pt-4 max-md:pt-16 pb-10 px-4 '}>
+        <>
             <UserProfile className={'absolute right-6 top-6'}/>
-            <Stack direction={'vertical'} className={'items-start w-fit mx-auto'} gap={32}>
-                <div className={'flex flex-col gap-8 items-start p-2 rounded-xl h-fit '}>
-                    <div className={'space-y-4'}>
-                        <h1 className={'text-lead text-black dark:text-white'}>Choose a model</h1>
-                        <ModelSwitcher/>
+            <ModelSwitcher className={'absolute left-1/2 top-6 -translate-x-1/2 z-40'}/>
+            <section className={'h-full space-y-10 pt-[128px] max-md:pt-16 pb-10 px-4 '}>
+                <Stack direction={'vertical'} align={'center'} gap={32}>
+                    <div className={'flex flex-col gap-8 items-start p-2 rounded-xl '}>
+                        <div className={'space-y-4'}>
+                            <h1 className={'text-lead text-black dark:text-white'}>Select a chat type</h1>
+                            <ChatbotTypeToggleList chatbotTypes={chatbotTypes!} loading={isFetchingChatbotTypes}
+                                                   error={chatbotTypeError as Error} onRetry={reFetchChatbotTypes}/>
+                        </div>
+                        <Button onClick={() => navigate('/chat/explore')} size={'sm'} variant={'ghost'} radius={'xl'}>
+                            <Slack size={16}/>
+                            Explore
+                            <ChevronRight/>
+                        </Button>
                     </div>
-                    <Button onClick={() => navigate('/model/explore')} size={'sm'} variant={'ghost'} radius={'xl'}>
-                        <Slack size={16}/>
-                        Explore
-                        <ChevronRight/>
-                    </Button>
-                </div>
-                <div className={'flex flex-col gap-8 items-start p-2 rounded-xl '}>
-                    <div className={'space-y-4'}>
-                        <h1 className={'text-lead text-black dark:text-white'}>Select a chat type</h1>
-                        <ChatbotTypeToggleList chatbotTypes={chatbotTypes!} loading={isFetchingChatbotTypes}
-                                               error={chatbotTypeError as Error} onRetry={reFetchChatbotTypes}/>
-                    </div>
-                    <Button onClick={() => navigate('/chat/explore')} size={'sm'} variant={'ghost'} radius={'xl'}>
-                        <Slack size={16}/>
-                        Explore
-                        <ChevronRight/>
-                    </Button>
-                </div>
 
-            </Stack>
-            <Stack direction={'vertical'} gap={64}>
-                <Stack className={'w-full'} direction={'vertical'} gap={8}>
-                    <h1 className={'text-[56px] text-center text-black  font-bold dark:text-white'}>Rael AI</h1>
-                    <p className={'text-xl text-center text-gray-800 dark:text-gray-400 '}>
-                        Hello
-                        <span className={'font-bold text-black dark:text-white px-2'}>{user.username},</span>
-                        Having some coding questions today ?
-                    </p>
                 </Stack>
-                <div className={cn(`${INPUT_WIDTH}`, 'max-md:w-[96%]')}>
-                    <ChatInput/>
-                </div>
-            </Stack>
-            <Copyright className={''}/>
-        </section>
+                <Stack direction={'vertical'} gap={64}>
+                    <Stack className={'w-full'} direction={'vertical'} gap={8}>
+                        <h1 className={'text-[56px] text-center text-black  font-bold dark:text-white'}>Rael AI</h1>
+                        <p className={'text-xl text-center text-gray-800 dark:text-gray-400 '}>
+                            Hello
+                            <span className={'font-bold text-black dark:text-white px-2'}>{user.username},</span>
+                            How can I help you ?
+                        </p>
+                    </Stack>
+                    <div className={cn(`${INPUT_WIDTH}`, 'max-md:w-[96%]')}>
+                        <ChatInput/>
+                    </div>
+                </Stack>
+                <Copyright className={''}/>
+            </section>
+        </>
+
     )
 }
 

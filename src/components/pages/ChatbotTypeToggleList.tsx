@@ -25,11 +25,11 @@ const ChatbotTypeToggleList = ({loading, error, chatbotTypes, onRetry}: ChatbotT
     
     
     return (
-        <Stack direction={'horizontal'} className={'items-start h-fit  max-xl:flex-wrap justify-start '}
+        <Stack direction={'horizontal'} className={'items-start h-fit  max-xl:flex-wrap justify-center  '}
                gap={24}>
             {
                 chatbotTypes?.slice(0, 3)?.map((chatbotType) => (
-                    <ChatbotTypeCard {...chatbotType}
+                    <ChatbotTypeCard className={'max-sm:w-full'} {...chatbotType}
                                      selected={selectedId === chatbotType.id}
                                      onClick={(id) => selectedId !== chatbotType.id &&handleSelect(id)} key={chatbotType.id}/>
                 ))

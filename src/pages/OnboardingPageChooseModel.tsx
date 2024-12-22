@@ -85,7 +85,7 @@ const PullModel = () => {
                                      loading={isFetchingOllamaModels}
                                      models={recommendedModel} onRetry={() => reFetchOllamaModels()}/>
                 </div>
-                <Button onClick={() => navigate('/model/explore')} size={'sm'} variant={'ghost'} radius={'xl'}>
+                <Button onClick={() => navigate('/models/explore')} size={'sm'} variant={'ghost'} radius={'xl'}>
                     <Slack size={16}/>
                     Explore other
                     <ChevronRight/>

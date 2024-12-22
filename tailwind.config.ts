@@ -120,10 +120,10 @@ export default {
                     }
                 },
                 fontSize: {
-                    'big-title' : '40px',
-                    title : '24px',
-                    subtitle : '20px',
-                    lead : '18px',
+                    'big-title' : ['40px', '60px'],
+                    title : ['24px', '36px'],
+                    subtitle : ['20px', '30px'],
+                    lead : ['18px', '27px'],
                     base : '16px',
                     small : '14px',
                     'small-2' : '12px',

@@ -48,7 +48,7 @@ const Sidebar = ({className}: { className?: string }) => {
                   variant={'ghost'}>
                 <SidebarIcon/>
             </Icon>
-            <ModelSwitcher/>
+            {/*<ModelSwitcher/>*/}
             <Button onClick={() => {
                 navigate('/')
                 setShowSidebar(false)
