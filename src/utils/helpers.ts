@@ -19,3 +19,9 @@ export const limitTextLen = (text : string, limit : number = 20 )  => {
 export const isModelExist = (modelName: string, models : string[]) => {
     return models.some(model => model.toLowerCase().includes(modelName))
 }
+
+export const formatName = (name : string) => {
+    const splitedName = name?.split(' ');
+
+    return splitedName?.length > 1 ? splitedName[0][0].toUpperCase() + splitedName[1][0].toUpperCase() : splitedName[0][0].toUpperCase();
+}
