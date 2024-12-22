@@ -22,14 +22,36 @@ export default {
                     }
                 },
                 colors: {
-                    // Base colors
-
-                    'primary': colors.primary,
-                    'secondary': colors.secondary,
-                    'danger': colors.danger,
-                    'black': colors.black,
-                    'white': colors.white,
                     'dark': colors.dark,
+                    primary : {
+                        DEFAULT : colors.primary, 
+                        100 : 'hsl(var(--color-primary-100))',
+                        80 : 'hsl(var(--color-primary-80))',
+                    },
+                    secondary: {
+                        DEFAULT : colors.secondary,
+                        100 : 'hsl(var(--color-secondary-100))',
+                    },
+                    white : {
+                        DEFAULT : colors.white,
+                        100 : 'hsl(var(--color-white-100))',
+                        80 : 'hsl(var(--color-white-80))',
+                    },
+                    black : {
+                        DEFAULT : colors.black,
+                        100 : 'hsl(var(--color-black-100))',
+                        80 : 'hsl(var(--color-black-80))',
+                    },
+                    'neutral-light' : {
+                        100 : 'hsl(var(--color-neutral-light-100))',
+                        80 : 'hsl(var(--color-neutral-light-80))',
+                        60 : 'hsl(var(--color-neutral-light-60))',
+                    },
+                    'neutral-dark' : {
+                        100 : 'hsl(var(--color-neutral-dark-100))',
+                        80 : 'hsl(var(--color-neutral-dark-80))',
+                        60 : 'hsl(var(--color-neutral-dark-60))',
+                    },
                     
                     // Component colors
 
@@ -68,7 +90,7 @@ export default {
                     meta: {
                         fill : {
                             d: {
-                                'bg': '#18181b',
+                                'bg': '#1e2228',
                                 // 'bg': '#18181b',
                                 'border': '#262626',
                                 'text' : colors.white,

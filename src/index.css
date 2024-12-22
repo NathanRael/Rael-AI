@@ -37,6 +37,31 @@ input[type="password"]::-ms-clear {
     src: url("./assets/fonts/SchibstedGrotesk-Bold.ttf") format("truetype");
 }
 
+@layer base {
+    :root {
+        --color-primary-100 : 252 78% 49%;
+        --color-primary-80 : 252 78% 60%;
+        
+        --color-secondary-100 : 272 78% 49%;
+        --color-secondary-80 : 272 78% 60%;
+        
+        --color-black-100 : 252 78% 4%;
+        --color-black-80 : 252 5% 39%;
+        
+        --color-whtite-100 : 252 78% 96%;
+        --color-whtite-80 : 252 78% 90%;
+        
+        --color-neutral-dark-100 : 215 22% 9%;
+        --color-neutral-dark-80 : 215 22% 16%;
+        --color-neutral-dark-60 : 215 22% 20%;
+        --color-neutral-dark-40 : 215 22% 30%;
+        
+        --color-neutral-light-100 : 0 0% 100%;
+        --color-neutral-light-80 : 0 0% 93%;
+        --color-neutral-light-60 : 0 0% 84%;
+    }
+}
+
 
 @layer components {
     .prose-code-style {
@@ -63,6 +88,10 @@ input[type="password"]::-ms-clear {
     
     .button-gradient {
         @apply bg-gradient-to-tr dark:from-primary dark:to-secondary from-primary to-secondary hover:from-50% transition-transform duration-300 ease-in-out;
+    }
+    
+    .line{
+        @apply w-full h-[1px] bg-neutral-light-60 dark:bg-neutral-dark-60
     }
 }
 
