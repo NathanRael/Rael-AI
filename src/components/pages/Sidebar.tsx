@@ -71,13 +71,13 @@ const Sidebar = ({className}: { className?: string }) => {
                     </Stack>
                     <Stack className={'w-full  '}>
                         <p className={'text-sm text-start w-full text-meta-fill-l-text-sec dark:text-meta-fill-d-text-sec'}>Histories</p>
-                        <ConversationList className={'overflow-y-auto overflow-x-hidden hide-scrollbar max-h-[260px]'}  conversations={conversations!} error={error as Error} loading={isLoading}/>
+                        <ConversationList className={'overflow-y-auto overflow-x-hidden hide-scrollbar  max-h-[320px]'}  conversations={conversations!} error={error as Error} loading={isLoading}/>
                     </Stack>
                 </div>
             </Stack>
-            <Stack direction={'horizontal'} className={'w-full items-end justify-center'}>
-                <ThemeSwitcher className={''}/>
-            </Stack>
+            {/*<Stack direction={'horizontal'} className={'w-full items-end justify-center'}>*/}
+            {/*    <ThemeSwitcher className={''}/>*/}
+            {/*</Stack>*/}
         </div>
     )
 }

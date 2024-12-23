@@ -55,3 +55,16 @@ export const fetchMe = async (token : string) => {
         headers: {Authorization: `Bearer ${token}`},
     });
 }
+
+export const updateUser = async (user : Partial<User>) => {
+    try {
+        const response = await api.put<User>(`api/users/${user.id}`, user);
+
+        if (response.status !== 200)
+            throw new Error(response.statusText);
+
+        return response.data;
+    } catch (error) {
+        console.error(`Error while updating user : ${error}`);
+    }
+}

@@ -35,11 +35,11 @@ const OnboardingPageChooseModel = () => {
             <div
                 className="basis-1/2   overflow-hidden p-2 rounded-2xl flex flex-col gap-2 justify-between relative">
                 <img src={MainPageImageDark} className={' border-black/10 dark:border-white/10 border-4  skew-x-2 object-cover rounded-xl overflow-hidden w-full object-top'}
-                     alt={'Main chatbot page'}/>
+                     alt={'MainPage chatbot page'}/>
                 <div className={'relative border-black/10 dark:border-white/10 border-4 overflow-hidden -skew-x-2 rounded-xl '}>
                     {darkMode && <div className={'absolute w-full h-full bg-black/60'}/>}
                     <img src={MainPageImageLight} className={'  object-cover rounded-xl overflow-hidden  w-full'}
-                         alt={'Main chatbot page'}/>
+                         alt={'MainPage chatbot page'}/>
                 </div>
                 {/*<img src={ChatPageImage} className={' object-contain rounded-xl overflow-hidden'} alt={'Chat page'}/>*/}
             </div>

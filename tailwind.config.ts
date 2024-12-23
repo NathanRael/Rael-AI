@@ -23,6 +23,7 @@ export default {
                 },
                 colors: {
                     'dark': colors.dark,
+                    'danger' : colors.danger,
                     primary : {
                         DEFAULT : colors.primary, 
                         100 : 'hsl(var(--color-primary-100))',

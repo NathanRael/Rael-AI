@@ -1,6 +1,6 @@
 import './index.css'
 import {Navigate, Outlet, Route, Routes} from "react-router-dom";
-import Main from "./pages/Main.tsx";
+import MainPage from "./pages/MainPage.tsx";
 import ChatPage from "@/pages/ChatPage.tsx";
 import AuthLayout from "@/layout/AuthLayout.tsx";
 import ChatLayout from "@/layout/ChatLayout.tsx";
@@ -11,39 +11,47 @@ import OnboardingPageChooseModel from "@/pages/OnboardingPageChooseModel.tsx";
 import {createPortal} from "react-dom";
 import ThemeSwitcher from "@/components/pages/ThemeSwitcher.tsx";
 import OnboardingPageSelectChatType from "@/pages/OnboardingPageSelectChatType.tsx";
-import Login from "@/pages/Login.tsx";
+import LoginPage from "@/pages/LoginPage.tsx";
 import OnboardingLayout from "@/layout/OnboardingLayout.tsx";
-import Register from "@/pages/Register.tsx";
+import RegisterPage from "@/pages/RegisterPage.tsx";
+import UserProfile from "@/components/pages/UserProfile.tsx";
+import ModelSwitcher from "@/components/pages/ModelSwitcher.tsx";
+import SettingPage from "@/pages/SettingPage.tsx";
 
 
 function App() {
     return (
         <Routes>
             <Route element={<DevLayout enable={true}/>}>
-                <Route element={<Login/>} path={'/login'}/>
-                <Route element={<Register/>} path={'/register'}/>
+                <Route element={<LoginPage/>} path={'/login'}/>
+                <Route element={<RegisterPage/>} path={'/register'}/>
                 <Route element={<AuthLayout/>}>
                     <Route element={
                         <>
-                            <Sidebar/>
                             <Outlet/>
+                            <Sidebar/>
+                            <ModelSwitcher className={'fixed left-1/2 top-6 -translate-x-1/2 z-40'}/>
+                            <UserProfile className={'fixed right-6 top-6'}/>
                         </>
                     }>
-                        <Route index path={"/"} element={<Main/>}/>
+                        <Route index path={"/"} element={<MainPage/>}/>
                         <Route element={<ChatLayout/>}>
                             <Route path={'/chat/:chatId'} element={<ChatPage/>}/>
                         </Route>
+                        <Route path="/settings" element={<SettingPage/>}/>
+                        
                     </Route>
                     <Route path={'/test'} element={<Test/>}/>
                     <Route path={'chat/explore'} element={<ExploreChatPage/>}/>
                     <Route path={'models/explore'} element={<ExploreModelPage/>}/>
+                    
 
                     <Route element={<OnboardingLayout/>}>
                         <Route path={'/onboarding/chooseModel'} element={<OnboardingPageChooseModel/>}/>
                         <Route path={'/onboarding/selectChatbotType'} element={<OnboardingPageSelectChatType/>}/>
                     </Route>
                 </Route>
-                
+
                 <Route path={'*'} element={<Navigate to={'/'}/>}/></Route>
         </Routes>
     )

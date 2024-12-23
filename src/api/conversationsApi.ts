@@ -35,8 +35,7 @@ export const newConversation = async ({title, user_id, chatbot_type_id}: Omit<Co
 
 
 export const deleteConversation = async (conversationId: string) => {
-    axios.delete(`${BASE_URL}/api/conversations/${conversationId}`).then((response) => {
-        console.log(response.data);
+    axios.delete(`${BASE_URL}/api/conversations/${conversationId}`).then(() => {
     }).catch((error) => {
         console.log(error);
     })

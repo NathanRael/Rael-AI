@@ -64,7 +64,7 @@ const AuthLayout = () => {
     useLayoutEffect(() => {
         if (isError) {
             navigate("/login", {replace: true});
-            return console.log('Login out')
+            return console.log('LoginPage out')
         }
 
         if (isSuccess && user && !isLoading)

@@ -12,12 +12,10 @@ import {fetchUserPreferences} from "@/api/userPreferencesApi.ts";
 import Copyright from "@/components/pages/Copyright.tsx";
 import useLocalSearchParams from "@/hooks/useLocalSearchParams.ts";
 import {useLocation, useNavigate} from "react-router-dom";
-import ModelSwitcher from "@/components/pages/ModelSwitcher.tsx";
 import {useUserStore} from "@/store/userStore.ts";
 import {useModelStore} from "@/store/modelStore.ts";
-import UserProfile from "@/components/pages/UserProfile.tsx";
 
-const Main = () => {
+const MainPage = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const user = useUserStore(state => state.user)
@@ -56,8 +54,6 @@ const Main = () => {
 
     return (
         <>
-            <UserProfile className={'absolute right-6 top-6'}/>
-            <ModelSwitcher className={'absolute left-1/2 top-6 -translate-x-1/2 z-40'}/>
             <section className={'h-full space-y-10 pt-[128px] max-md:pt-16 pb-10 px-4 '}>
                 <Stack direction={'vertical'} align={'center'} gap={32}>
                     <div className={'flex flex-col gap-8 items-start p-2 rounded-xl '}>
@@ -95,5 +91,5 @@ const Main = () => {
 }
 
 
-export default Main;
+export default MainPage;
 

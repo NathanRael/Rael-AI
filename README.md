@@ -5,7 +5,7 @@
 
 ### SubStep : Downloading interface (showing progress of the download)
 
-## Step 2 : Choosing 3 main chatbot types (will be displayed in the Main chat)
+## Step 2 : Choosing 3 main chatbot types (will be displayed in the MainPage chat)
 
 Done
 
