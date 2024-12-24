@@ -29,9 +29,10 @@ function App() {
                     <Route element={
                         <>
                             <Outlet/>
+                            <ModelSwitcher className={'fixed left-1/2 top-6 -translate-x-1/2 z-30'}/>
+                            <UserProfile className={'fixed right-6 top-6 z-30'}/>
                             <Sidebar/>
-                            <ModelSwitcher className={'fixed left-1/2 top-6 -translate-x-1/2 z-40'}/>
-                            <UserProfile className={'fixed right-6 top-6'}/>
+                            
                         </>
                     }>
                         <Route index path={"/"} element={<MainPage/>}/>

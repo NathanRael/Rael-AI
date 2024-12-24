@@ -1,4 +1,5 @@
 ﻿import {
+    cn,
     Select,
     SelectGroup,
     SelectGroupContainer,
@@ -72,7 +73,7 @@ const ModelSwitcher = ({className}: { className?: string }) => {
 
 
     if (isFetchingUserPreferences || isFetchingModels)
-        return <div className=" h-12 animate-pulse rounded-lg w-full bg-black/20 dark:bg-white/20"/>
+        return <div className={cn("h-8 animate-pulse rounded-lg w-[108px] bg-black/20 dark:bg-white/20", className)}/>
 
     if (modelsError)
         return <ErrorUI error={modelsError as Error} onRetry={() => {
