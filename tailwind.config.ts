@@ -52,73 +52,9 @@ export default {
                         100 : 'hsl(var(--color-neutral-dark-100))',
                         80 : 'hsl(var(--color-neutral-dark-80))',
                         60 : 'hsl(var(--color-neutral-dark-60))',
+                        40 : 'hsl(var(--color-neutral-dark-40))',
                     },
                     
-                    // Component colors
-
-                    input: {
-                        fill: {
-                            d: {
-                                'bg': '#1b1d22',
-                                // 'bg': '#27272a',
-                                'placeholder' : '#737373',
-                                'text' : colors.white,
-                                'border' : colors.black,
-                            },
-                            l: {
-                                'bg': '#e5e5e5',
-                                'placeholder' : '#737373',
-                                'text' : colors.black,
-                                'border' : colors.white,
-
-                            }
-                        },
-                        outline: {
-                            d: {
-                                'bg': colors.black,
-                                'border': '#a3a3a3',
-                                'placeholder' : '#a3a3a3',
-                                'text' : colors.white,
-                            },
-                            l: {
-                                'bg': colors.white,
-                                'border': '#a3a3a3',
-                                'placeholder' : '#737373',
-                                'text' : colors.black,
-                            }
-                        }
-                    },
-                    meta: {
-                        fill : {
-                            d: {
-                                'bg': '#1e2228',
-                                // 'bg': '#18181b',
-                                'border': '#262626',
-                                'text' : colors.white,
-                                'text-sec' : '#9ca3af',
-                            },
-                            l: {
-                                'bg': '#fff',
-                                'border': '#e4e4e7',
-                                'text' : colors.black,
-                                'text-sec' : '#4b5563',
-                            },
-                        },
-                        outline : {
-                            d: {
-                                'bg': colors.black,
-                                'border': '#a3a3a3',
-                                'text' : colors.white,
-                                'text-sec' : '#6b7280',
-                            },
-                            l: {
-                                'bg': colors.white,
-                                'border': '#a3a3a3',
-                                'text' : colors.black,
-                                'text-sec' : '#6b7280',
-                            },
-                        },
-                    }
                 },
                 fontSize: {
                     'big-title' : ['40px', '60px'],

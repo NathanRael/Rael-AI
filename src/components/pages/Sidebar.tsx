@@ -1,4 +1,4 @@
-﻿import {cn, Button, Stack, Icon} from "rael-ui"
+﻿import {Button, cn, Icon, Stack} from "rael-ui"
 import {Bot, Plus, SidebarIcon, SlackIcon} from "lucide-react";
 import {useRef, useState} from "react";
 import useOutsideClicked from "@/hooks/useOutsideClicked.ts";
@@ -7,8 +7,6 @@ import {useNavigate} from "react-router-dom";
 import useFetchConversations from "@/hooks/useFetchConversations.ts";
 import ConversationListFilters from "@/components/pages/ConversationListFilters.tsx";
 import {ConversationFilters} from "@/api/conversationsApi.ts";
-import ModelSwitcher from "@/components/pages/ModelSwitcher.tsx";
-import ThemeSwitcher from "@/components/pages/ThemeSwitcher.tsx";
 import {useQuery} from "@tanstack/react-query";
 import {ChatbotType, fetchChatbotTypes} from "@/api/chatbotTypesApi.ts";
 import {queryKeys} from "@/api/queryKeys.ts";
@@ -58,7 +56,7 @@ const Sidebar = ({className}: { className?: string }) => {
                     setSearch(filters.search)}/>
                 <div className={'w-full space-y-7 '}>
                     <Stack align={'start'} className={'w-full'}>
-                        <p className={'text-sm text-start w-full text-meta-fill-l-text-sec dark:text-meta-fill-d-text-sec'}>Chat
+                        <p className={'text-sm text-start w-full text-black-80 dark:text-white-80'}>Chat
                             Type</p>
                         {
                             chatbotTypeList && <ChatTypeList className={'max-h-[240px] overflow-y-auto hide-scrollbar'}
@@ -70,7 +68,7 @@ const Sidebar = ({className}: { className?: string }) => {
                         
                     </Stack>
                     <Stack className={'w-full  '}>
-                        <p className={'text-sm text-start w-full text-meta-fill-l-text-sec dark:text-meta-fill-d-text-sec'}>Histories</p>
+                        <p className={'text-sm text-start w-full text-black-80 dark:text-white-80'}>Histories</p>
                         <ConversationList className={'overflow-y-auto overflow-x-hidden hide-scrollbar  max-h-[320px]'}  conversations={conversations!} error={error as Error} loading={isLoading}/>
                     </Stack>
                 </div>
@@ -104,7 +102,7 @@ const ChatTypeList = ({loading, error, chatbotTypes, onRetry, className}: {
     return (
         <Stack className={cn('w-full', className)} gap={8} align={'start'}>
             {chatbotTypes.length === 0 &&
-                <p className={'text-meta-fill-l-text dark:text-meta-fill-d-text'}>No chat types found</p>}
+                <p className={'text-black-80 dark:text-white-80'}>No chat types found</p>}
             {
                 chatbotTypes.map(chat => (<ChatType onClick={() => handleSelect(chat.id)} selected={chat.id === selectedId} {...chat} key={chat.id}/>))
             }
@@ -119,7 +117,7 @@ const ChatType = ({name, selected, onClick}: Omit<ChatbotType, 'description'> & 
     return (
         <div
             onClick={onClick}
-            className={cn('flex cursor-pointer items-center justify-start gap-2 w-full bg-transparent rounded-xl p-1 hover:bg-black/20 dark:hover:bg-white/20', selected && 'bg-black/20 dark:bg-white/20')}>
+            className={cn('flex cursor-pointer items-center justify-start gap-2 w-full bg-transparent rounded-xl p-1 hover:bg-black/20 dark:hover:bg-neutral-dark-40', selected && 'bg-black/20 dark:bg-white/20')}>
             <Icon
                 size={'sm'}
                 className={`
@@ -129,7 +127,7 @@ const ChatType = ({name, selected, onClick}: Omit<ChatbotType, 'description'> & 
             >
                 <Bot size={20}/>
             </Icon>
-            <h1 className={'text-meta-fill-l-text dark:text-meta-fill-d-text'}>{name}</h1>
+            <h1 className={'text-black-100 dark:text-white-100'}>{name}</h1>
         </div>
     )
 }

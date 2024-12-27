@@ -3,23 +3,6 @@
 @tailwind utilities;
 
 
-input[type="password"]::-ms-reveal,
-input[type="password"]::-ms-clear {
-    display: none;
-}
-
-.hide-scrollbar::-webkit-scrollbar {
-    background: transparent;
-    width: 4px;
-}
-
-.hide-scrollbar::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    border: none;
-    background: #9ca3af;
-
-}
-
 @font-face {
     font-family: "SchibsetGrotesk";
     src: url("./assets/fonts/SchibstedGrotesk-Regular.ttf") format("truetype");
@@ -38,6 +21,25 @@ input[type="password"]::-ms-clear {
 }
 
 @layer base {
+    .rael-password-input::-ms-reveal,
+    .rael-password-input::-ms-clear {
+        display: none;
+    }
+
+    .rael-number-input::-webkit-inner-spin-button {
+        display: none;
+    }
+
+    .hide-scrollbar::-webkit-scrollbar {
+        background: transparent;
+        width: 8px;
+    }
+
+    .hide-scrollbar::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        border: none;
+        background: #9ca3af;
+    }
     :root {
         --color-primary-100 : 252 78% 49%;
         --color-primary-80 : 252 78% 60%;
@@ -62,7 +64,7 @@ input[type="password"]::-ms-clear {
     }
 }
 
-
+ 
 @layer components {
     .prose-code-style {
         @apply
@@ -73,7 +75,7 @@ input[type="password"]::-ms-clear {
     }
 
     .sidebar {
-        @apply z-40 flex flex-col justify-between items-start  gap-6 fixed top-0 p-6 left-0 h-screen w-[340px] bg-meta-fill-l-bg border-meta-fill-l-border dark:border-meta-fill-d-border shadow-md dark:bg-meta-fill-d-bg transition-transform duration-300 ease-in-out;
+        @apply z-40 flex flex-col justify-between items-start  gap-6 fixed top-0 p-6 left-0 h-screen w-[340px] bg-neutral-light-100 border-neutral-light-60 dark:border-neutral-dark-60 shadow-md dark:bg-neutral-dark-60 transition-transform duration-300 ease-in-out;
     }
     
     .onboarding-page {

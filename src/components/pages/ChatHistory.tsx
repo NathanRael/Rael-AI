@@ -50,10 +50,10 @@ const ChatHistory = ({name, id, active}: { name: string, id: string, active?: bo
 
     return (
         <Stack align={'start'} direction={'horizontal'}
-               className={cn(' w-full p-3  rounded-xl  hover:bg-black/10 dark:hover:bg-white/20 justify-between', active && 'bg-black/10 dark:bg-white/20')}>
+               className={cn(' w-full p-3  rounded-xl  hover:bg-neutral-light-60 dark:hover:bg-neutral-dark-40 justify-between', active && 'bg-neutral-light-60 dark:bg-neutral-dark-40')}>
             {renderToastContainer()}
             <p onClick={handleNavigateToConversation}
-               className={'text-md text-meta-fill-l-text-sec text-nowrap dark:text-meta-fill-d-text-sec cursor-pointer hover:underline'}>{limitTextLen(name, 25)}</p>
+               className={'text-md  text-nowrap text-black-100 dark:text-white-100 cursor-pointer hover:underline'}>{limitTextLen(name, 25)}</p>
             <Stack direction={'horizontal'} gap={8}>
                 {/*<Icon variant={'ghost'} size={'sm'}> <Pencil size={16}/></Icon>*/}
                 <Icon onClick={handleDelete} variant={'ghost'} size={'sm'}> <Trash2 size={16}/></Icon>

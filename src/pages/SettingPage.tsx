@@ -88,7 +88,7 @@ const SettingPage = () => {
                 </Icon>
                 <h1 className={'text-title text-black-100 dark:text-white-100 font-bold'}>Settings</h1>
             </div>
-            <Form className={'flex flex-col items-start justify-start gap-6'} form={form} onSubmit={handleSubmit}>
+            <Form className={'flex mx-auto flex-col items-start justify-start gap-6'} form={form} onSubmit={handleSubmit}>
                 <FormItem>
                     <FormLabel>Username</FormLabel>
                     <FormControl name={'username'} render={({...fields}) => (

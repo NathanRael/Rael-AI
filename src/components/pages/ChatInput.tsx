@@ -140,7 +140,7 @@ const ChatInput = () => {
                     e.target.style.height = 'auto'
                     e.target.style.height = `${e.target.scrollHeight >= 320 ? 320 : e.target.scrollHeight}px`
                 }}
-                className={`w-full shadow-md z-40   rounded-3xl text-lg    min-h-[32px]  resize-none items-end`}
+                className={`w-full shadow-sm z-40   rounded-3xl text-lg    min-h-[32px]  resize-none items-end`}
                 inputClassName={'hide-scrollbar overflow-y-auto'}
                 placeholder={'Your message ...'}
                 leftContent={<ChatFileInput disabled={visionModels.length === 0} deleteFileContent={file === null}
