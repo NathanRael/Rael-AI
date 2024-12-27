@@ -1,5 +1,4 @@
-﻿import {useMessageContext} from "@/context/MessageProvider.tsx";
-import useScroll from "@/hooks/useScroll.ts";
+﻿import useScroll from "@/hooks/useScroll.ts";
 import {useEffect, useRef} from "react";
 import useInView from "@/hooks/useInView.ts";
 import {INPUT_WIDTH} from "@/constants/style.ts";
@@ -14,10 +13,16 @@ import MessageFeed from "@/components/pages/MessageFeed.tsx";
 import {queryKeys} from "@/api/queryKeys.ts";
 import {fetchChatbotType} from "@/api/chatbotTypesApi.ts";
 import ChatbotTypeCard from "@/components/pages/ChatbotTypeCard.tsx";
+import {useMessageStore} from "@/store/messageStore.ts";
 
 const ChatPage = () => {
     const {chatId} = useParams();
-    const {submitting, optimisticMessage, streamedMessage, fileId} = useMessageContext();
+    const submitting = useMessageStore(state => state.submitting);
+    const optimisticMessage = useMessageStore(state => state.optimisticMessage);
+    const streamedMessage = useMessageStore(state => state.streamedMessage);
+    const fileId = useMessageStore(state => state.fileId);
+
+
     const {scrollToBottom} = useScroll();
     const ref = useRef<HTMLDivElement>(null);
     const {inView: arrowDownInView, containerRef} = useInView({});

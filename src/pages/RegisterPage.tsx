@@ -116,7 +116,7 @@ const RegisterPage = () => {
                             <FormLabel>Password</FormLabel>
                             <FormControl name={'password'} render={(fields) => (
                                 <PasswordInput placeholder={'Enter you password'} block radius={'xl'}
-                                               className={'dark:bg-input-fill-d-bg'} {...fields}/>
+                                               {...fields}/>
                             )} type={'input'}/>
                             <FormMessage name={'password'}/>
                         </FormItem>
@@ -124,7 +124,7 @@ const RegisterPage = () => {
                             <FormLabel>Confirm</FormLabel>
                             <FormControl name={'confirm'} render={(fields) => (
                                 <PasswordInput placeholder={'Confirm you password'} block radius={'xl'}
-                                               className={'dark:bg-input-fill-d-bg'} {...fields}/>
+                                                {...fields}/>
                             )} type={'input'}/>
                             <FormMessage name={'confirm'}/>
                         </FormItem>

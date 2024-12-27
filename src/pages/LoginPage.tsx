@@ -84,7 +84,7 @@ const LoginPage = () => {
                         <FormItem>
                             <FormLabel>Password</FormLabel>
                             <FormControl name={'password'} render={(fields) => (
-                                <PasswordInput placeholder={'Enter you password'} block radius={'xl'} className={'dark:bg-input-fill-d-bg'} {...fields}/>
+                                <PasswordInput placeholder={'Enter you password'} block radius={'xl'}  {...fields}/>
                             )} type={'input'}/>
                             <FormMessage name={'password'}/>
                         </FormItem>
