@@ -11,55 +11,42 @@
     useToast
 } from "rael-ui"
 import {ChevronDownIcon} from "lucide-react";
-import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
+import {useQuery, useQueryClient} from "@tanstack/react-query";
 import {fetchModels, Model} from "@/api/modelsApi.ts";
 import {queryKeys} from "@/api/queryKeys.ts";
-import {fetchUserPreferences, updateUserPreferences} from "@/api/userPreferencesApi.ts";
+import {fetchUserPreferences} from "@/api/userPreferencesApi.ts";
 import ErrorUI from "@/components/ui/ErrorUI.tsx";
 import {useUserStore} from "@/store/userStore.ts";
 import {useEffect} from "react";
 import {useModelStore} from "@/store/modelStore.ts";
+import {useModelHandler} from "@/hooks/useModelHandler.ts";
 
 const ModelSwitcher = ({className}: { className?: string }) => {
     const {renderToastContainer} = useToast();
-    const updateSelectedModel = useModelStore(state => state.updateSelectedModel)
     const user = useUserStore(state => state.user)
     const queryClient = useQueryClient()
     const updateModels = useModelStore(state => state.updateModels)
     const updateFormatedModel = useModelStore(state => state.updateFormatedModels)
-
+    
+    const {changeModel} = useModelHandler({queryClient, user});
+    
     const {data: models, error: modelsError, isLoading: isFetchingModels, isSuccess} = useQuery({
         queryFn: () => fetchModels(),
         queryKey: [queryKeys.modelList]
     })
 
-    const {data: visionModels, error: visionModelsError, isSuccess: isVisionModelFetched} = useQuery({
+    const {data: visionModels, isSuccess: isVisionModelFetched} = useQuery({
         queryFn: () => fetchModels(true),
         queryKey: [queryKeys.formatedModelList]
     })
 
 
-    const {data: userPreferences, isLoading: isFetchingUserPreferences, error: userPreferencesError} = useQuery({
+    const {data: userPreferences, isLoading: isFetchingUserPreferences} = useQuery({
         enabled: !!user.id,
         queryFn: () => fetchUserPreferences(user.id),
         queryKey: [queryKeys.userPreferences],
     })
-
-    const {mutateAsync: updateUserPreferencesMutation} = useMutation({
-        mutationFn: updateUserPreferences,
-        onSuccess: () => {
-            queryClient.invalidateQueries([queryKeys.userPreferences])
-        }
-    })
-
-
-    const changeModel = async (model: string) => {
-        updateSelectedModel(model);
-        await updateUserPreferencesMutation({
-            model,
-            user_id: user.id,
-        })
-    }
+    
 
     useEffect(() => {
         if (!isSuccess || !models) return
@@ -79,14 +66,15 @@ const ModelSwitcher = ({className}: { className?: string }) => {
         return <ErrorUI error={modelsError as Error} onRetry={() => {
         }}/>
 
+
+
     return (
         <Stack className={className}>
             {renderToastContainer()}
             <div className={'flex flex-col items-start justify-start gap-1'}>
-                {/*<p className={'text-[12px] text-meta-fill-l-text-sec dark:text-meta-fill-d-text-sec'}>Select a model</p>*/}
                 <Select
                     variant={'fill'}
-                    defaultValue={userPreferences!.model || 'llama3.2'}
+                    defaultValue={userPreferences?.model}
                     className={'w-fit'}
                     onChange={(e) => changeModel(e.target.value as string)}
                 >

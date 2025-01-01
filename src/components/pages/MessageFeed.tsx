@@ -1,4 +1,4 @@
-﻿import {Stack, Icon, useToast} from "rael-ui"
+﻿import {Icon, Stack} from "rael-ui"
 import {copyToClipboard} from "@/utils/helpers.ts";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -7,16 +7,14 @@ import {Prism as SyntaxHighlighter} from "react-syntax-highlighter";
 import {dracula} from "react-syntax-highlighter/dist/esm/styles/prism";
 import useWindowSize from "@/hooks/useWindowSize.ts";
 import {Message} from "@/api/MessagesApi.ts";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {downloadFile} from "@/api/fileApi.ts";
 import {useQuery} from "@tanstack/react-query";
 import {queryKeys} from "@/api/queryKeys.ts";
 import ErrorUI from "@/components/ui/ErrorUI.tsx";
-import LoaderUI from "@/components/ui/LoaderUI.tsx";
 
 
 const MessageFeed = ({content, sender, file_id}: Omit<Message, 'id'>) => {
-    const {toast, renderToastContainer} = useToast();
     const {data: image, isLoading: isFetchingImage, error: imageFetchError, refetch: reFetchImage} = useQuery({
         enabled: !!file_id,
         queryFn: () => downloadFile(file_id),
@@ -27,17 +25,11 @@ const MessageFeed = ({content, sender, file_id}: Omit<Message, 'id'>) => {
     const handleCopyToClipboard = async (text: string) => {
         const cleanedText = text.trim();
         await copyToClipboard(cleanedText, () => {
-            // toast({
-            //     title: 'Copied!',
-            //     message: 'Text copied',
-            //     position: 'bottom-left',
-            //     duration: 2000,
-            // })
+
         })
     }
     return (
         <Stack className={'w-full'} direction={'vertical'} align={'start'}>
-            {renderToastContainer()}
             {file_id && <UserImageView image={image!} error={imageFetchError as Error} loading={isFetchingImage}
                             reFetch={() => reFetchImage()}/>}
             <div

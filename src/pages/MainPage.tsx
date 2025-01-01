@@ -13,13 +13,11 @@ import Copyright from "@/components/pages/Copyright.tsx";
 import useLocalSearchParams from "@/hooks/useLocalSearchParams.ts";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useUserStore} from "@/store/userStore.ts";
-import {useModelStore} from "@/store/modelStore.ts";
 
 const MainPage = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const user = useUserStore(state => state.user)
-    const updateSelectedModel = useModelStore(state => state.updateSelectedModel)
     
     
     const {
@@ -41,14 +39,12 @@ const MainPage = () => {
 
     const {updateSearchParam} = useLocalSearchParams();
 
-    useEffect(() => {
-        if (!userPreferences || !isUserPrefFetched) return 
-        updateSelectedModel(userPreferences.model)
-    }, [isUserPrefFetched])
+
         
     useEffect(() => {
-        if (!isFetchingUserPreferences && !userPreferencesError && userPreferences)
+        if (!isFetchingUserPreferences && !userPreferencesError && userPreferences) {
             updateSearchParam("chatType", userPreferences.chatbot_type_id)
+        }
     }, [userPreferences, isFetchingUserPreferences, location.pathname])
     
 

@@ -32,10 +32,7 @@ const RegisterPage = () => {
     const navigate = useNavigate();
     const {mutateAsync: CreateUserMutation} = useMutation({
         mutationFn: createUser,
-        onSuccess: data => {
-            
-            navigate('/login')
-        }
+        onSuccess: () => navigate('/login')
     })
     const validations: ValidationRules<FormType>[] = [
         {
