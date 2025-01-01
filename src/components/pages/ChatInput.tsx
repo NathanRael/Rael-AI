@@ -1,5 +1,4 @@
-﻿import {useMessageContext} from "@/context/MessageProvider.tsx";
-import useScroll from "@/hooks/useScroll.ts";
+﻿import useScroll from "@/hooks/useScroll.ts";
 import useSmartTextarea from "@/hooks/useSmartTextarea.ts";
 import {ArrowUp} from "lucide-react";
 import {Icon, Textarea} from "rael-ui";
@@ -18,8 +17,6 @@ import {useMessageStore} from "@/store/messageStore.ts";
 import {queryKeys} from "@/api/queryKeys.ts";
 
 
-
-
 const ChatInput = () => {
     const [message, setMessage] = useState('');
     
@@ -31,11 +28,11 @@ const ChatInput = () => {
     const user = useUserStore((state) => state.user);
     
     const submitting = useMessageStore(state => state.submitting)
-    const submitMessage = useMessageStore(state => state.handleSubmitMessage)
+    const submitMessage = useMessageStore(state => state.handleSubmitMessage);
     
     
     const {scrollToBottom} = useScroll();
-    const {models, updateSelectedModel, visionModels, selectedModel} = useModelHandler()
+    const {models, changeModel, visionModels, selectedModel} = useModelHandler({queryClient, user})
     const {resetImageContent, uploadedImage, handleFileUpload, setFile, file} = useFileHandler()
     const {getFromStorage, setToStorage} = useStorageHandler()
     const {createNewConversation, newConversationCreated, isConversationLoading, conversations} = useConversationHandler({queryClient})
@@ -53,11 +50,12 @@ const ChatInput = () => {
     const canSubmit = useMemo(() => !submitting && message.trim() !== '', [submitting, message]);
     const chatbotTypeIdInParams = useMemo(() => searchParams.get('chatType'), [searchParams]);
 
-    const handleSubmitMessageAdapter = async (message : string, conversationId : string, chatbotTypeId : string, fileId : string) => {
+    const handleSubmitMessageAdapter = async (message : string, conversationId : string, chatbotTypeId : string, fileId : string, model?: string | null) => {
+        const newModel = model || selectedModel;
         await submitMessage({
             inputValue : message,
             fileId,
-            model : selectedModel,
+            model : newModel,
             conversationId,
             chatbotTypeId,
             onSuccess :async () => {
@@ -73,12 +71,11 @@ const ChatInput = () => {
     const handleSubmit = async () => {
         try {
             let uploadedFileId = '';
+            let visionModel = null;
 
             if (file) {
-                const visionModel = models.find((m) =>
-                    visionModels[0].name.split(':')[0].includes(m.split(':')[0])
-                );
-                updateSelectedModel(visionModel!);
+                visionModel = models.find((m) => visionModels[0].name.split(':')[0].includes(m.split(':')[0]))
+                await changeModel(visionModel!);
                 const uploadedFile = await handleFileUpload(file);
                 uploadedFileId = uploadedFile?.id || '';
             }
@@ -87,7 +84,7 @@ const ChatInput = () => {
             if (chatId && !isConversationLoading) {
                 const chatbotTypeId = conversations!.find((conv) => conv.id === chatId)!.chatbot_type_id;
                 resetImageContent();
-                await handleSubmitMessageAdapter(message, chatId, chatbotTypeId, uploadedFileId);
+                await handleSubmitMessageAdapter(message, chatId, chatbotTypeId, uploadedFileId, visionModel);
                 return;
             }
 

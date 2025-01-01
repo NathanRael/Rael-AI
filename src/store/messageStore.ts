@@ -72,10 +72,6 @@ export const useMessageStore = create<MessageStore>((set, get) => ({
                     get().setOptimisticMessage('');
                     
                     onSuccess()
-                    // await queryClient.invalidateQueries([queryKeys.chat]);
-                    // await queryClient.invalidateQueries([queryKeys.conversationList]);
-
-
                 }
             })
 
@@ -84,7 +80,6 @@ export const useMessageStore = create<MessageStore>((set, get) => ({
         } finally {
             get().setSubmitting(false)
             onFinally()
-            // scrollToBottom(document.body.scrollHeight)
         }
     },
 }));
