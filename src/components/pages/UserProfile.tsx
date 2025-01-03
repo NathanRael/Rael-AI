@@ -6,7 +6,7 @@ import {useQuery} from "@tanstack/react-query";
 import {fetchActiveUser} from "@/api/usersApi.ts";
 import {queryKeys} from "@/api/queryKeys.ts";
 import {LogOut, Settings, Slack} from "lucide-react";
-import {forwardRef, PropsWithChildren, Ref, RefObject, useRef, useState} from "react";
+import {forwardRef, PropsWithChildren, useRef, useState} from "react";
 import useOutsideClicked from "@/hooks/useOutsideClicked.ts";
 import ThemeSwitcher from "@/components/pages/ThemeSwitcher.tsx";
 

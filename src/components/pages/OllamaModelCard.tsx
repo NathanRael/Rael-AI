@@ -1,4 +1,4 @@
-﻿import {Badge, Button, Dropdown, DropdownContent, DropdownItem, DropdownTrigger, Icon} from "rael-ui";
+﻿import {Badge, Button, Dropdown, DropdownContent, DropdownItem, DropdownTrigger} from "rael-ui";
 import {OllamaModel} from "@/api/ollamaModelsApi.ts";
 import {Check, CheckCircle, ChevronDown, Download, LoaderCircle, StopCircle} from "lucide-react";
 import useDownloadOllamaModels from "@/hooks/useDownloadOllamaModels.ts";

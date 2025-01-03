@@ -9,7 +9,7 @@ import {queryKeys} from "@/api/queryKeys.ts";
 const ChatHistory = ({name, id, active}: { name: string, id: string, active?: boolean }) => {
     const {chatId} = useParams();
     const navigate = useNavigate();
-    const {toast, renderToastContainer} = useToast()
+    const {renderToastContainer} = useToast()
     const queryClient = useQueryClient();
     const {mutateAsync: deleteConversationMutation, isLoading: isDeletingConversation} = useMutation({
         mutationFn: deleteConversation,
@@ -28,7 +28,7 @@ const ChatHistory = ({name, id, active}: { name: string, id: string, active?: bo
             return {previousConversation}
         },
         
-        onError: (error, id, context) => {
+        onError: (_,__ , context) => {
             queryClient.setQueryData([queryKeys.conversationList], context?.previousConversation);
         }
     })

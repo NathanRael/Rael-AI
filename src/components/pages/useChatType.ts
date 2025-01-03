@@ -15,7 +15,7 @@ const useChatType = () => {
 
     const {mutate : updateUserPreferencesMutation} = useMutation({
         mutationFn : updateUserPreferences,
-        onSuccess : data => {
+        onSuccess : () => {
             queryClient.invalidateQueries([queryKeys.userPreferences])
         }
     })

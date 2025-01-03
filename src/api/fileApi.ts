@@ -14,9 +14,6 @@ export const uploadFile = async (file : File) => {
         headers : {
             "Content-Type": "multipart/form-data",
         },
-        onUploadProgress : (progress) => {
-            // TODO : Handle file upload progress
-        }
     })
     
     if (response.status !== 200)

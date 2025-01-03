@@ -16,7 +16,7 @@ const ChatbotTyeListFilter = ({className, onChange} : ChatbotTypeProps) => {
     }, [debouncedSearch]);
     
     return (
-        <TextInput value={search} onChange={(e) => setSearch(e.target.value)} leftContent={<Search/>} placeholder={'Search for chatbot'} radius={'xl'} block size={'lg'} className={cn('text-lead', className)}/>
+        <TextInput value={search} onChange={(e) => setSearch(e.target.value)} leftContent={<Search/>} placeholder={'Search for chatbot'} radius={'xl'} block className={cn('text-lead', className)}/>
     )
 }
 

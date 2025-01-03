@@ -18,6 +18,9 @@ import {useNavigate} from "react-router-dom";
 import {useMutation} from "@tanstack/react-query";
 import {createUser} from "@/api/usersApi.ts";
 import {emailMessage, emailPattern, usernameMessage, usernamePattern} from "@/constants/validations.ts";
+import SimpleErrorUI from "@/components/ui/SimpleErrorUI.tsx";
+import {useState} from "react";
+import {BackendErrorResponse} from "@/api/baseApi.ts";
 
 
 export type FormType = {
@@ -30,9 +33,13 @@ export type FormType = {
 
 const RegisterPage = () => {
     const navigate = useNavigate();
+    const [error, setError] = useState('');
     const {mutateAsync: CreateUserMutation} = useMutation({
         mutationFn: createUser,
-        onSuccess: () => navigate('/login')
+        onSuccess: () => navigate('/login'),
+        onError : (err) => {
+            setError((err as BackendErrorResponse).response.data.detail);
+        }
     })
     const validations: ValidationRules<FormType>[] = [
         {
@@ -92,6 +99,11 @@ const RegisterPage = () => {
                     <span>Discover the power of local AIs</span>
                 </h1>
             </Stack>
+            {
+                error && (
+                    <SimpleErrorUI error={error}/>
+                )
+            }
             <Form onSubmit={handleSubmit} form={form}>
                 <Card className={'dark:bg-white/5 dark:border-none rounded-xl w-[380px]'}>
                     <CardSection>

@@ -1,6 +1,6 @@
 ﻿import axios from "axios";
 import {BASE_URL} from "@/constants";
-import {Ref, RefObject, useRef} from "react";
+import {RefObject} from "react";
 
 export interface OllamaModel {
     name: string;

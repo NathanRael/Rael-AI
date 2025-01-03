@@ -29,7 +29,7 @@ const AuthLayout = () => {
 
     useLayoutEffect(() => {
         const authInterceptor = api.interceptors.request.use((config) => {
-            config.headers.Authorization = !config._retry && token ? `Bearer ${token}` : config.headers.Authorization;
+            config.headers.Authorization = !(config as any)._retry && token ? `Bearer ${token}` : config.headers.Authorization;
             return config;
         })
 

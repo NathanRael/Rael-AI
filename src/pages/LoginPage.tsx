@@ -1,11 +1,14 @@
 ﻿import {
     Button,
     Card,
-    CardSection, Checkbox, CheckboxLabel,
+    CardSection,
+    Checkbox,
+    CheckboxLabel,
     Form,
     FormControl,
     FormItem,
-    FormLabel, FormMessage,
+    FormLabel,
+    FormMessage,
     PasswordInput,
     Stack,
     TextInput,
@@ -17,6 +20,9 @@ import {useMutation} from "@tanstack/react-query";
 import {loginUser} from "@/api/authApi.ts";
 import {useAuthStore} from "@/store/authStore.ts";
 import {useNavigate} from "react-router-dom";
+import {useEffect, useState} from "react";
+import {BackendErrorResponse} from "@/api/baseApi.ts";
+import SimpleErrorUI from "@/components/ui/SimpleErrorUI.tsx";
 
 export type FormType = {
     email: string;
@@ -24,13 +30,18 @@ export type FormType = {
 }
 
 const LoginPage = () => {
-    const updateToken = useAuthStore(state => state.updateToken)
+    const updateToken = useAuthStore(state => state.updateToken);
+    const [error, setError] = useState('');
     const navigate = useNavigate();
     const {mutateAsync : LoginMutationAsync} = useMutation({
         mutationFn : loginUser,
         onSuccess : data => {
             updateToken(data.access_token)
             navigate('/')   
+        },
+        onError : error => {
+            setError((error as BackendErrorResponse).response.data.detail);
+            // setTimeout(() => setError(''), 2000)
         }
     })
     const validations: ValidationRules<FormType>[] = [
@@ -54,6 +65,12 @@ const LoginPage = () => {
     
     const formData = form.formData
 
+
+    useEffect(() => {
+        setError('')
+    }, [formData]);
+    
+
     const handleSubmit = async () => {
         await LoginMutationAsync({
             password : formData.password,
@@ -71,10 +88,15 @@ const LoginPage = () => {
                     <span>Discover the power of local AIs</span>
                 </h1>
             </Stack>
+            {
+                error && (
+                   <SimpleErrorUI error={error}/>
+                )
+            }
             <Form onSubmit={handleSubmit} form={form}>
                 <Card className={'dark:bg-white/5 dark:border-none rounded-xl w-[380px]'}>
                     <CardSection>
-                        <FormItem>
+                    <FormItem>
                             <FormLabel>Email</FormLabel>
                             <FormControl name={'email'} render={(fields) => (
                                 <TextInput block radius={'xl'} placeholder={'Ex : rael@gmail.com'} {...fields}/>

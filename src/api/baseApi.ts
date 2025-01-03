@@ -1,5 +1,7 @@
 ﻿export interface BackendErrorResponse {
     response : {
-        detail : string;
+       data : {
+           detail : string;
+       }
     }
 }

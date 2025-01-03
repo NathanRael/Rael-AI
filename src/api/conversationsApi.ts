@@ -10,7 +10,7 @@ export interface Conversation {
 
 export interface ConversationFilters {
     search?: string
-    userId: string
+    userId?: string
 }
 
 export const fetchConversations = async (options?: ConversationFilters) => {

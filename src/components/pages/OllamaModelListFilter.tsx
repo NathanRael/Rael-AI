@@ -11,7 +11,7 @@ const OllamaModelListFilter = ({onChange}: { onChange: (search: string) => void 
         onChange(debouncedSearch);
     }, [debouncedSearch]);
     return (
-        <TextInput onChange={(e) => setSearch(e.target.value)} leftContent={<Search/>} size={'lg'}
+        <TextInput onChange={(e) => setSearch(e.target.value)} leftContent={<Search/>}
                    className={'w-[50%] max-md:w-full mx-auto rounded-xl text-lead'}
                    placeholder={'Search models'}/>
     );

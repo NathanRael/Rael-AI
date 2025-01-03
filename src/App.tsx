@@ -1,5 +1,5 @@
 import './index.css'
-import {Navigate, Outlet, Route, Routes} from "react-router-dom";
+import {Navigate, Outlet, Route, Routes, useNavigate} from "react-router-dom";
 import MainPage from "./pages/MainPage.tsx";
 import ChatPage from "@/pages/ChatPage.tsx";
 import AuthLayout from "@/layout/AuthLayout.tsx";
@@ -17,12 +17,15 @@ import RegisterPage from "@/pages/RegisterPage.tsx";
 import UserProfile from "@/components/pages/UserProfile.tsx";
 import ModelSwitcher from "@/components/pages/ModelSwitcher.tsx";
 import SettingPage from "@/pages/SettingPage.tsx";
+import {Button} from "rael-ui";
+import {useEffect} from "react";
 
 
 function App() {
+    
     return (
         <Routes>
-            <Route element={<DevLayout enable={true}/>}>
+            <Route element={<DevLayout enable={false}/>}>
                 <Route element={<LoginPage/>} path={'/login'}/>
                 <Route element={<RegisterPage/>} path={'/register'}/>
                 <Route element={<AuthLayout/>}>
@@ -32,7 +35,7 @@ function App() {
                             <ModelSwitcher className={'fixed left-1/2 top-6 -translate-x-1/2 z-30'}/>
                             <UserProfile className={'fixed right-6 top-6 z-30'}/>
                             <Sidebar/>
-                            
+    
                         </>
                     }>
                         <Route index path={"/"} element={<MainPage/>}/>
@@ -40,19 +43,19 @@ function App() {
                             <Route path={'/chat/:chatId'} element={<ChatPage/>}/>
                         </Route>
                         <Route path="/settings" element={<SettingPage/>}/>
-                        
+    
                     </Route>
                     <Route path={'/test'} element={<Test/>}/>
                     <Route path={'chat/explore'} element={<ExploreChatPage/>}/>
                     <Route path={'models/explore'} element={<ExploreModelPage/>}/>
-                    
-
+    
+    
                     <Route element={<OnboardingLayout/>}>
                         <Route path={'/onboarding/chooseModel'} element={<OnboardingPageChooseModel/>}/>
                         <Route path={'/onboarding/selectChatbotType'} element={<OnboardingPageSelectChatType/>}/>
                     </Route>
                 </Route>
-
+    
                 <Route path={'*'} element={<Navigate to={'/'}/>}/></Route>
         </Routes>
     )
@@ -73,9 +76,16 @@ const DevLayout = ({enable}: { enable: boolean }) => {
 }
 
 const Test = () => {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        navigate("/")
+    }, []);
     return (
-        <div className={'p-10'}>
-        </div>
+        <Routes>
+            <Button>Test</Button>
+            <Route path={"/"} index element={<MainPage/>}/>
+        </Routes>
     )
 }
 

@@ -31,7 +31,7 @@ const MainPage = () => {
         queryKey: [queryKeys.chatbotTypeList]
     })
 
-    const {data: userPreferences, isLoading: isFetchingUserPreferences, error: userPreferencesError, isSuccess : isUserPrefFetched} = useQuery({
+    const {data: userPreferences, isLoading: isFetchingUserPreferences, error: userPreferencesError} = useQuery({
         enabled : !!user.id,
         queryFn: () => fetchUserPreferences(user.id),
         queryKey: [queryKeys.userPreferences],
