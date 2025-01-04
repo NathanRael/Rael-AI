@@ -48,7 +48,10 @@ const ChatInput = () => {
     });
     
     const canSubmit = useMemo(() => !submitting && message.trim() !== '', [submitting, message]);
-    const chatbotTypeIdInParams = useMemo(() => searchParams.get('chatType'), [searchParams]);
+    const chatbotTypeIdInParams = useMemo(() => {
+        const params = searchParams?.get('chatType');
+        return params === 'null' ? '' : params
+    }, [searchParams]);
 
     const handleSubmitMessageAdapter = async (message : string, conversationId : string, chatbotTypeId : string, fileId : string, model?: string | null) => {
         const newModel = model || selectedModel;
@@ -118,6 +121,7 @@ const ChatInput = () => {
         const uploadedFileId = getFromStorage('fileId');
 
         navigate(`/chat/${newConversationId}`);
+
         handleSubmitMessageAdapter(userInput, newConversationId, chatbotTypeIdInParams!, uploadedFileId);
         
     }, [newConversationCreated, conversations, isConversationLoading]);

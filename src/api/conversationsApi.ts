@@ -23,11 +23,15 @@ export const fetchConversations = async (options?: ConversationFilters) => {
 }
 
 export const newConversation = async ({title, user_id, chatbot_type_id}: Omit<Conversation, 'id'>) => {
-    const response = await axios.post<Conversation>(`${BASE_URL}/api/conversations`, {
+    let body : Partial<Omit<Conversation, 'id'>> = {
         title,
         user_id,
-        chatbot_type_id
-    })
+    }
+    
+    if (chatbot_type_id !== '')
+        body = {...body, chatbot_type_id}
+    
+    const response = await axios.post<Conversation>(`${BASE_URL}/api/conversations`, body)
 
     return response.data
 }

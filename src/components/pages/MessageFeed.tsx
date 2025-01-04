@@ -153,7 +153,6 @@ const BotMessage = ({
     };
 
 
-    console.log(code)
 
     return (
         <div className="prose prose-style relative">

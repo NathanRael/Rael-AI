@@ -19,6 +19,25 @@ export interface Message {
 }
 
 
+interface CreateMessage {
+    content: string,
+    model: string,
+    conversation_id: string,
+    sender?: 'user' | 'bot',
+    chatbot_type_id: string 
+}
+
+
+interface NewStreamedMessage {
+    content: string,
+    model: string,
+    conversation_id: string,
+    sender?: 'user' | 'bot',
+    chatbot_type_id?: string,
+    file_id?: string,
+}
+
+
 export const fetchMessages = async (conversationId: string) => {
     return axios.get<Message[]>(`${BASE_URL}/api/messages/${conversationId}`).then((response) => {
         return response.data;
@@ -27,20 +46,18 @@ export const fetchMessages = async (conversationId: string) => {
 }
 
 
-export const createMessage = async ({content, model, conversation_id, sender = 'user', chatbot_type_id}: {
-    content: string,
-    model: string,
-    conversation_id: string,
-    sender?: 'user' | 'bot',
-    chatbot_type_id: string
-}) => {
-    const response = await axios.post(`${BASE_URL}/api/messages/create`, {
+export const createMessage = async ({content, model, conversation_id, sender = 'user', chatbot_type_id}: CreateMessage) => {
+    let body : Partial<CreateMessage> = {
         content,
         model,
         conversation_id,
         sender,
-        chatbot_type_id
-    })
+    }
+    
+    if ( chatbot_type_id !== '')
+        body.chatbot_type_id = chatbot_type_id
+    
+    const response = await axios.post(`${BASE_URL}/api/messages/create`, body)
     if (response.status !== 200)
         throw new Error(response.statusText)
 
@@ -55,28 +72,23 @@ export const newStreamedMessage = async ({
                                              file_id,
                                              onFinish,
                                              onChange
-                                         }: {
-    content: string,
-    model: string,
-    conversation_id: string,
-    sender?: 'user' | 'bot',
-    chatbot_type_id: string,
-    file_id?: string,
-} & {
+                                         }:  NewStreamedMessage & {
     onChange: (chunk: string) => void,
     onFinish: (fullMessage: string) => void
 }) => {
-    let body: any = {
+    let body: Partial<NewStreamedMessage> = {
         content,
         model,
-        conversation_id,
         sender,
-        chatbot_type_id,
+        conversation_id,
     }
 
     if (file_id !== '')
-        body = {...body, file_id}
-
+        body.file_id = file_id
+    
+    if (chatbot_type_id !== '')
+        body.chatbot_type_id = chatbot_type_id
+    
     const response = await fetch(`${BASE_URL}/api/messages/streamed`, {
         method: 'POST',
         headers: {

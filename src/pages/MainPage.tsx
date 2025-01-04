@@ -43,7 +43,7 @@ const MainPage = () => {
         
     useEffect(() => {
         if (!isFetchingUserPreferences && !userPreferencesError && userPreferences) {
-            updateSearchParam("chatType", userPreferences.chatbot_type_id)
+            updateSearchParam("chatType", userPreferences?.chatbot_type_id)
         }
     }, [userPreferences, isFetchingUserPreferences, location.pathname])
     
