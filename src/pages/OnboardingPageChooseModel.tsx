@@ -29,8 +29,7 @@ const OnboardingPageChooseModel = () => {
         <section className="onboarding-page flex gap-6 h-screen w-full">
             <div className={"basis-1/2 flex flex-col gap-10"}>
                 <PullModel/>
-                <Stepper disabled={{prevButton: true, nextButton : !hasDownloadedModel || isLoading}} onNext={() => navigate('/onboarding/selectChatbotType')} onPrevious={() => {
-                }} className={''}/>
+                <Stepper disabled={{prevButton: false, nextButton : !hasDownloadedModel || isLoading}}   onNext={() => navigate('/onboarding/selectChatbotType')} onPrevious={() =>  navigate('/onboarding/downloadTool')} className={''}/>
             </div>
             <div
                 className="basis-1/2   overflow-hidden p-2 rounded-2xl flex flex-col gap-2 justify-between relative">
@@ -80,7 +79,7 @@ const PullModel = () => {
             </div>
             <div className={'flex flex-col gap-8 items-start rounded-xl '}>
                 <div className={'space-y-4'}>
-                    <h1 className={'text-lead text-black dark:text-white'}>Recommended model</h1>
+                    {/*<h1 className={'text-lead text-black dark:text-white'}>Recommended model</h1>*/}
                     <OllamaModelList className={'grid-cols-1'} error={ollamaModelError as Error}
                                      loading={isFetchingOllamaModels}
                                      models={recommendedModel} onRetry={() => reFetchOllamaModels()}/>

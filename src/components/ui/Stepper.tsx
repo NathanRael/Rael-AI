@@ -12,6 +12,7 @@ type StepperProps = {
     end?: boolean
 }
 const Stepper = ({onNext, onPrevious, className, disabled, end}: StepperProps) => {
+    
     return (
         <div className={cn("flex items-center justify-between w-full", className)}>
             <Button disabled={disabled?.prevButton} onClick={onPrevious} variant={'ghost'}><ChevronLeft size={20}/> Previous</Button>

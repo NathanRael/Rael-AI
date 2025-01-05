@@ -19,6 +19,7 @@ import ModelSwitcher from "@/components/pages/ModelSwitcher.tsx";
 import SettingPage from "@/pages/SettingPage.tsx";
 import {Button} from "rael-ui";
 import {useEffect} from "react";
+import OnboardingDownloadTools from "@/pages/OnboardingDownloadTools.tsx";
 
 
 function App() {
@@ -51,6 +52,7 @@ function App() {
     
     
                     <Route element={<OnboardingLayout/>}>
+                        <Route path={'/onboarding/downloadTool'} element={<OnboardingDownloadTools/>}/>
                         <Route path={'/onboarding/chooseModel'} element={<OnboardingPageChooseModel/>}/>
                         <Route path={'/onboarding/selectChatbotType'} element={<OnboardingPageSelectChatType/>}/>
                     </Route>
