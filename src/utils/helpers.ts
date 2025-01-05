@@ -25,3 +25,12 @@ export const formatName = (name : string) => {
 
     return splitedName?.length > 1 ? splitedName[0][0].toUpperCase() + splitedName[1][0].toUpperCase() : splitedName[0][0].toUpperCase();
 }
+
+export const requireEnv = ({name, errorMessage} : {name : string | undefined, errorMessage?: string}) => {
+    const envVar = name;
+    
+    if (!envVar)
+        throw new Error(errorMessage || `Environment variable ${name} not found`);
+    
+    return envVar
+}
