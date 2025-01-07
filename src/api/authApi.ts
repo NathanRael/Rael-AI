@@ -12,7 +12,7 @@ export const loginUser = async ({email, password} : Pick<User, 'email' | 'passwo
     const response = await axios.post<Token>(`${BASE_URL}/api/login`, {email, password})
     
     if (response.status !== 200)
-        throw new Error(response.statusText)
+        throw new Error("Error while login")
     return response.data
 }
 

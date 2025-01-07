@@ -40,7 +40,8 @@ const LoginPage = () => {
             navigate('/')   
         },
         onError : error => {
-            setError((error as BackendErrorResponse).response.data.detail);
+            // console.log("Error", (error as BackendErrorResponse).response.data.detail)
+            setError((error as BackendErrorResponse).response?.data?.detail);
             // setTimeout(() => setError(''), 2000)
         }
     })

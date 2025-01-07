@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "ral-ai-desktop",
+  "productName": "Rael-ai",
   "version": "0.1.0",
-  "identifier": "com.ral-ai-desktop.app",
+  "identifier": "com.rael-ai.app",
   "build": {
     "beforeDevCommand": "npm run dev",
     "devUrl": "http://localhost:1420",
@@ -12,13 +12,13 @@
   "app": {
     "windows": [
       {
-        "title": "ral-ai-desktop",
+        "title": "Rael-ai",
         "width": 800,
         "height": 600
       }
     ],
     "security": {
-      "csp": null
+        "csp": "default-src 'self'; connect-src 'self' http://localhost:8000"
     }
   },
   "bundle": {
