@@ -18,7 +18,7 @@
       }
     ],
     "security": {
-        "csp": "default-src 'self'; connect-src 'self' http://localhost:8000"
+        "csp": "default-src 'self' http://localhost:8000 ws://localhost:8000; img-src 'self' *;"
     }
   },
   "bundle": {

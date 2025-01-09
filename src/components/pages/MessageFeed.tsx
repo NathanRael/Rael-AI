@@ -162,7 +162,7 @@ const BotMessage = ({
                     <>
                         {
                             code.content && (
-                                <div className={'absolute top-20 w-full'}>
+                                <div className={'absolute top-[136px] w-full'}>
                                     <div
                                         className={'flex items-center gap-2 text-white text-base py-1 px-4  rounded-xl rounded-b-none w-fit'}>
                                         <Code2 size={16}/>

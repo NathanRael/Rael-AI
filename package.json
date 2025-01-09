@@ -8,44 +8,41 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "tauri": "tauri dev",
-    "tauri:build" : "tauri build"
+    "tauri:build": "tauri build"
   },
   "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "@tauri-apps/api": "^2",
-    "@tauri-apps/plugin-opener": "^2",
-
-
     "@tailwindcss/typography": "^0.5.15",
     "@tanstack/react-query": "^4.36.1",
     "@tanstack/react-query-devtools": "^4.36.1",
+    "@tauri-apps/api": "^2",
+    "@tauri-apps/plugin-http": "^2.2.0",
+    "@tauri-apps/plugin-opener": "^2",
     "axios": "^1.7.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "copy-to-clipboard": "^3.3.3",
     "lucide-react": "^0.441.0",
+    "markdown-it": "^14.1.0",
+    "prism-themes": "^1.9.0",
+    "prismjs": "^1.29.0",
     "rael-ui": "^0.6.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-markdown": "^9.0.1",
     "react-router-dom": "^6.26.2",
     "remark-gfm": "^4.0.0",
     "tailwind-merge": "^2.5.2",
-    "zustand": "^5.0.2",
-    "markdown-it": "^14.1.0",
-    "prism-themes": "^1.9.0",
-    "prismjs": "^1.29.0"
+    "zustand": "^5.0.2"
   },
   "devDependencies": {
+    "@eslint/js": "^9.9.0",
+    "@tauri-apps/cli": "^2",
+    "@types/markdown-it": "^14.1.2",
+    "@types/prismjs": "^1.26.5",
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.1",
-    "@vitejs/plugin-react": "^4.3.4",
-    "typescript": "~5.6.2",
-    "vite": "^6.0.3",
-    "@tauri-apps/cli": "^2",
-
-
-    "@eslint/js": "^9.9.0",
     "@types/react-syntax-highlighter": "^15.5.13",
+    "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.9.0",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
@@ -53,11 +50,11 @@
     "globals": "^15.9.0",
     "postcss": "^8.4.45",
     "tailwindcss": "^3.4.11",
+    "typescript": "~5.6.2",
     "typescript-eslint": "^8.0.1",
+    "vite": "^6.0.3",
     "vite-plugin-dts": "^4.3.0",
     "vite-tsconfig-paths": "^5.1.0",
-    "vitest": "^2.1.0",
-    "@types/markdown-it": "^14.1.2",
-    "@types/prismjs": "^1.26.5"
+    "vitest": "^2.1.0"
   }
 }

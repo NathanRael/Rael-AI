@@ -1,5 +1,6 @@
 ﻿import axios, {AxiosResponse} from "axios";
 import {BASE_URL} from "@/constants";
+import {fetch} from "@tauri-apps/plugin-http";
 
 export interface ChatbotType {
     id: string;
@@ -16,8 +17,7 @@ interface FetchChatbotTypeOptions {
 
 export const fetchChatbotTypes = async ({search}: { search?: string }) => {
     const response = await axios.get<ChatbotType[]>(`${BASE_URL}/api/chatbotTypes`);
-
-
+    
     if (search)
         return response.data.filter(chatbotType => chatbotType.name.toLowerCase().includes(search.toLowerCase()) || chatbotType.description.toLowerCase().includes(search.toLowerCase()));
 
