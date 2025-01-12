@@ -14,17 +14,17 @@ import "prismjs/components/prism-javascript";
 import "prismjs/components/prism-python";
 import "prism-themes/themes/prism-dracula.css";
 
-let code = {
+const code = [{
     content: '',
     language: '',
-}
+}]
 
 const md: markdownIt = markdownIt({
     highlight: (str, lang) => {
-        code = {
-            content: str,
+        code.push({
+            content: md.utils.escapeHtml(str),
             language: lang
-        }
+        })
         if (lang && Prism.languages[lang]) {
             return `<pre class="language-${lang}" style="padding-top: 80px"><code class="language-${lang}">${Prism.highlight(
                 str,
@@ -158,20 +158,22 @@ const BotMessage = ({
         <div className="prose prose-style relative">
             <CopyIcon className={'absolute -bottom-6 py-1 -left-2 '} onClick={() => handleCopy(content)}/>
             {
-                parsedContent && (
+                parsedContent && code.length > 0 && (
                     <>
                         {
-                            code.content && (
-                                <div className={'absolute top-[136px] w-full'}>
-                                    <div
-                                        className={'flex items-center gap-2 text-white text-base py-1 px-4  rounded-xl rounded-b-none w-fit'}>
-                                        <Code2 size={16}/>
-                                        <span>{code.language}</span>
-                                    </div>
-                                    <CopyIcon forCode className={'absolute top-1 right-2'}
-                                              onClick={() => handleCopy(code.content)}/>
-                                </div>
-                            )
+                            code?.map((c) => (
+                               c.content && (
+                                   <div className={'absolute top-[136px] w-full'}>
+                                       <div
+                                           className={'flex items-center gap-2 text-white text-base py-1 px-4  rounded-xl rounded-b-none w-fit'}>
+                                           <Code2 size={16}/>
+                                           <span>{c.language}</span>
+                                       </div>
+                                       <CopyIcon forCode className={'absolute top-1 right-2'}
+                                                 onClick={() => handleCopy(c.content)}/>
+                                   </div>
+                               ) 
+                            ))
                         }
                         <article
                             style={{width: generateWidth()}}

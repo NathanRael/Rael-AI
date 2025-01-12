@@ -33,4 +33,4 @@ export const downloadFile = async (file_id : string) => {
     const blob = await response.data
     
     return URL.createObjectURL(blob);
-}
+} 
