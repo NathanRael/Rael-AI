@@ -20,6 +20,7 @@ import SettingPage from "@/pages/SettingPage.tsx";
 import {Button} from "rael-ui";
 import {useEffect} from "react";
 import OnboardingDownloadTools from "@/pages/OnboardingDownloadTools.tsx";
+import MarkdownTest from './pages/MarkdownTest.tsx';
 
 
 function App() {
@@ -78,16 +79,8 @@ const DevLayout = ({enable}: { enable: boolean }) => {
 }
 
 const Test = () => {
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        navigate("/")
-    }, []);
     return (
-        <Routes>
-            <Button>Test</Button>
-            <Route path={"/"} index element={<MainPage/>}/>
-        </Routes>
+        <MarkdownTest/>
     )
 }
 
