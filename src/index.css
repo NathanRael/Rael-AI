@@ -3,66 +3,66 @@
 @tailwind utilities;
 
 
-@font-face {
-    font-family: "SchibsetGrotesk";
-    src: url("./assets/fonts/SchibstedGrotesk-Regular.ttf") format("truetype");
-}
-@font-face {
-    font-family: "SchibsetGroteskMd";
-    src: url("./assets/fonts/SchibstedGrotesk-Medium.ttf") format("truetype");
-}
-@font-face {
-    font-family: "SchibsetGroteskSemiBold";
-    src: url("./assets/fonts/SchibstedGrotesk-SemiBold.ttf") format("truetype");
-}
-@font-face {
-    font-family: "SchibsetGroteskBold";
-    src: url("./assets/fonts/SchibstedGrotesk-Bold.ttf") format("truetype");
-}
-
-@layer base {
-    .rael-password-input::-ms-reveal,
-    .rael-password-input::-ms-clear {
-        display: none;
+    @font-face {
+        font-family: "SchibsetGrotesk";
+        src: url("./assets/fonts/SchibstedGrotesk-Regular.ttf") format("truetype");
+    }
+    @font-face {
+        font-family: "SchibsetGroteskMd";
+        src: url("./assets/fonts/SchibstedGrotesk-Medium.ttf") format("truetype");
+    }
+    @font-face {
+        font-family: "SchibsetGroteskSemiBold";
+        src: url("./assets/fonts/SchibstedGrotesk-SemiBold.ttf") format("truetype");
+    }
+    @font-face {
+        font-family: "SchibsetGroteskBold";
+        src: url("./assets/fonts/SchibstedGrotesk-Bold.ttf") format("truetype");
     }
 
-    .rael-number-input::-webkit-inner-spin-button {
-        display: none;
-    }
+    @layer base {
+        .rael-password-input::-ms-reveal,
+        .rael-password-input::-ms-clear {
+            display: none;
+        }
 
-    .hide-scrollbar::-webkit-scrollbar {
-        background: transparent;
-        width: 8px;
-    }
+        .rael-number-input::-webkit-inner-spin-button {
+            display: none;
+        }
 
-    .hide-scrollbar::-webkit-scrollbar-thumb {
-        border-radius: 10px;
-        border: none;
-        background: #9ca3af;
-    }
-    :root {
-        --color-primary-100 : 252 78% 49%;
-        --color-primary-80 : 252 78% 60%;
-        
-        --color-secondary-100 : 272 78% 49%;
-        --color-secondary-80 : 272 78% 60%;
-        
-        --color-black-100 : 252 78% 4%;
-        --color-black-80 : 252 5% 39%;
+        .hide-scrollbar::-webkit-scrollbar {
+            background: transparent;
+            width: 8px;
+        }
 
-        --color-white-100 : 252 78% 96%;
-        --color-white-80 : 252 78% 90%;
-        
-        --color-neutral-dark-100 : 215 22% 9%;
-        --color-neutral-dark-80 : 215 22% 16%;
-        --color-neutral-dark-60 : 215 22% 20%;
-        --color-neutral-dark-40 : 215 22% 30%;
-        
-        --color-neutral-light-100 : 0 0% 100%;
-        --color-neutral-light-80 : 0 0% 93%;
-        --color-neutral-light-60 : 0 0% 84%;
+        .hide-scrollbar::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            border: none;
+            background: #9ca3af;
+        }
+        :root {
+            --color-primary-100 : 252 78% 49%;
+            --color-primary-80 : 252 78% 60%;
+            
+            --color-secondary-100 : 272 78% 49%;
+            --color-secondary-80 : 272 78% 60%;
+            
+            --color-black-100 : 252 78% 4%;
+            --color-black-80 : 252 5% 39%;
+
+            --color-white-100 : 252 78% 96%;
+            --color-white-80 : 252 78% 90%;
+            
+            --color-neutral-dark-100 : 215 22% 9%;
+            --color-neutral-dark-80 : 215 22% 16%;
+            --color-neutral-dark-60 : 215 22% 20%;
+            --color-neutral-dark-40 : 215 22% 30%;
+            
+            --color-neutral-light-100 : 0 0% 100%;
+            --color-neutral-light-80 : 0 0% 93%;
+            --color-neutral-light-60 : 0 0% 84%;
+        }
     }
-}
 
  
 @layer components {
@@ -80,6 +80,11 @@
     
     .onboarding-page {
         @apply p-10
+    }
+    
+    
+    .setting-page-section {
+        @apply flex flex-col items-start justify-start space-y-10
     }
 }
 

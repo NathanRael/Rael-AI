@@ -109,7 +109,8 @@ const BotMessage = ({content, handleCopy}: { content: string, handleCopy: (text:
             <CopyIcon className={'absolute -bottom-6 py-1 -left-2 '} onClick={() => handleCopy(content)}/>
             <ReactMarkdown className={'text-wrap w-full'} children={content} remarkPlugins={[remarkGfm]}
                            components={{
-                               code(props) {
+                               code(props : any) {
+                                   // eslint-disable-next-line @typescript-eslint/no-unused-vars
                                    const {children, className, node, ...rest} = props
                                    const match = /language-(\w+)/.exec(className || '');
                                    const codeContent = String(children).replace(/\n$/, '');

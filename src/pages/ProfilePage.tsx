@@ -8,14 +8,12 @@
     TextInput,
     useForm,
     ValidationRules,
-    Icon,
 } from "rael-ui";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {queryKeys} from "@/api/queryKeys.ts";
 import {fetchActiveUser, updateUser} from "@/api/usersApi.ts";
 import {useEffect} from "react";
 import {emailMessage, emailPattern, usernameMessage, usernamePattern} from "@/constants/validations.ts";
-import {ChevronLeft} from "lucide-react";
 import {useNavigate} from "react-router-dom";
 
 type FormType = {
@@ -24,7 +22,7 @@ type FormType = {
 }
 
 
-const SettingPage = () => {
+const ProfilePage = () => {
     const {data: user, isLoading} = useQuery({
         queryFn: () => fetchActiveUser(),
         queryKey: [queryKeys.users]
@@ -81,14 +79,10 @@ const SettingPage = () => {
     }, [user, isLoading])
 
     return (
-        <div className={'p-6 pt-20 space-y-10'}>
-            <div className={'flex items-start justify-start flex-col gap-2'}>
-                <Icon onClick={() => navigate(-1)} size={'sm'} variant={'ghost'}>
-                    <ChevronLeft size={32} />
-                </Icon>
-                <h1 className={'text-title text-black-100 dark:text-white-100 font-bold'}>Settings</h1>
-            </div>
-            <Form className={'flex mx-auto flex-col items-start justify-start gap-6'} form={form} onSubmit={handleSubmit}>
+        <div className={'setting-page-section'}>
+            <h1 className={'text-title text-black-100 dark:text-white-100 font-bold'}>Profile</h1>
+            <Form className={'flex mx-auto flex-col items-start justify-start gap-6'} form={form}
+                  onSubmit={handleSubmit}>
                 <FormItem>
                     <FormLabel>Username</FormLabel>
                     <FormControl name={'username'} render={({...fields}) => (
@@ -103,10 +97,11 @@ const SettingPage = () => {
                     )} type={'input'}/>
                     <FormMessage name={'email'}/>
                 </FormItem>
-                <Button disabled={submitDisabled} type={'submit'} radius={'xl'}>{submitting ? 'Updating...' : 'Update Profile'}</Button>
+                <Button disabled={submitDisabled} type={'submit'}
+                        radius={'xl'}>{submitting ? 'Updating...' : 'Update Profile'}</Button>
             </Form>
         </div>
     );
 };
 
-export default SettingPage;
+export default ProfilePage;

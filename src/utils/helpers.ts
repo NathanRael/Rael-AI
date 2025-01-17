@@ -34,3 +34,11 @@ export const requireEnv = ({name, errorMessage} : {name : string | undefined, er
     
     return envVar
 }
+
+
+export const getSettingName = (pathname : string) : string | null => {
+    const pathnameRegex : RegExp = /([a-z0-9]+)\/([a-z0-9]+)/i;
+    const match = pathname.match(pathnameRegex)
+    
+    return match ? match[2] : null;
+}

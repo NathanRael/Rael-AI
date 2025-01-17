@@ -1,5 +1,5 @@
 import './index.css'
-import {Navigate, Outlet, Route, Routes, useNavigate} from "react-router-dom";
+import {Navigate, Outlet, Route, Routes} from "react-router-dom";
 import MainPage from "./pages/MainPage.tsx";
 import ChatPage from "@/pages/ChatPage.tsx";
 import AuthLayout from "@/layout/AuthLayout.tsx";
@@ -16,11 +16,11 @@ import OnboardingLayout from "@/layout/OnboardingLayout.tsx";
 import RegisterPage from "@/pages/RegisterPage.tsx";
 import UserProfile from "@/components/pages/UserProfile.tsx";
 import ModelSwitcher from "@/components/pages/ModelSwitcher.tsx";
-import SettingPage from "@/pages/SettingPage.tsx";
-import {Button} from "rael-ui";
-import {useEffect} from "react";
+import ProfilePage from "@/pages/ProfilePage.tsx";
 import OnboardingDownloadTools from "@/pages/OnboardingDownloadTools.tsx";
 import MarkdownTest from './pages/MarkdownTest.tsx';
+import SettingLayout from "@/layout/SettingLayout.tsx";
+import ConnectionSettingPage from "@/pages/ConnectionSettingPage.tsx";
 
 
 function App() {
@@ -44,7 +44,10 @@ function App() {
                         <Route element={<ChatLayout/>}>
                             <Route path={'/chat/:chatId'} element={<ChatPage/>}/>
                         </Route>
-                        <Route path="/settings" element={<SettingPage/>}/>
+                        <Route element={<SettingLayout/>}>
+                                <Route path="/settings/profile" element={<ProfilePage/>}/>
+                            <Route path="/settings/connection" element={<ConnectionSettingPage/>}/>
+                        </Route>
     
                     </Route>
                     <Route path={'/test'} element={<Test/>}/>

@@ -53,7 +53,7 @@ const UserProfile = ({className}: { className?: string }) => {
                     <ProfileItemContainer ref={popupRef}>
                         <ProfileItem icon={<Settings size={20}/>} text={"Settings"} onClick={() => {
                             setShowPopup(false)
-                            navigate('/settings')
+                            navigate('/settings/profile')
                         }}/>
                         <ProfileItem icon={<Slack size={20}/>} text={"Explore models"}
                                      onClick={() => navigate('/models/explore')}/>
