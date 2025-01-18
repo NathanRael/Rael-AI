@@ -1,5 +1,5 @@
-﻿import axios, {AxiosResponse} from "axios";
-import {BASE_URL} from "@/constants";
+﻿import {AxiosResponse} from "axios";
+import {apiClient} from "@/utils/api";
 
 export interface ChatbotType {
     id: string;
@@ -15,7 +15,7 @@ interface FetchChatbotTypeOptions {
 
 
 export const fetchChatbotTypes = async ({search}: { search?: string }) => {
-    const response = await axios.get<ChatbotType[]>(`${BASE_URL}/api/chatbotTypes`);
+    const response = await apiClient.get<ChatbotType[]>(`/api/chatbotTypes`);
     
     
     if (search)
@@ -26,7 +26,7 @@ export const fetchChatbotTypes = async ({search}: { search?: string }) => {
 }
 
 export const fetchMainChatbotTypes = async (userId :string) => {
-    const response = await axios.get<ChatbotType[]>(`${BASE_URL}/api/chatbotTypes/mainChatbotTypes/${userId}`);
+    const response = await apiClient.get<ChatbotType[]>(`/api/chatbotTypes/mainChatbotTypes/${userId}`);
     
     if (response.status !== 200)
         throw new Error(response.statusText);
@@ -39,9 +39,9 @@ export const fetchChatbotType = async (options: FetchChatbotTypeOptions) => {
     let response: AxiosResponse<ChatbotType> = {} as AxiosResponse<ChatbotType>;
 
     if (options.id)
-        response = await axios.get<ChatbotType>(`${BASE_URL}/api/chatbotTypes/${options.id}`)
+        response = await apiClient.get<ChatbotType>(`/api/chatbotTypes/${options.id}`)
     else if (options.conversationId)
-        response = await axios.get(`${BASE_URL}/api/chatbotTypes/conversations/${options.conversationId}`)
+        response = await apiClient.get(`/api/chatbotTypes/conversations/${options.conversationId}`)
 
     return response.data
 }

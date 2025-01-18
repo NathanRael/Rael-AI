@@ -1,5 +1,4 @@
-﻿import axios from "axios";
-import {BASE_URL} from "@/constants";
+﻿import {apiClient} from "@/utils/api.ts";
 
 
 export interface Model {
@@ -8,7 +7,7 @@ export interface Model {
 }
 
 export const fetchModels = async (formated: boolean = false, model_type?:'vision' | 'embedding' | 'tool') => {
-    const response = await axios.get(`${BASE_URL}/api/models/?formated=${formated}`);
+    const response = await apiClient.get(`/api/models/?formated=${formated}`);
 
     
     if (model_type)

@@ -1,6 +1,6 @@
-﻿import axios from "axios";
-import {BASE_URL} from "@/constants";
+﻿import {BASE_URL} from "@/constants";
 import {RefObject} from "react";
+import {apiClient} from "@/utils/api.ts";
 
 export interface OllamaModel {
     name: string;
@@ -23,7 +23,7 @@ interface Options {
 }
 
 export const fetchOllamaModels = async (options?: Options) => {
-    const response = await axios.get<OllamaModel[]>(`${BASE_URL}/api/ollamaModels/?formated=true`, {})
+    const response = await apiClient.get<OllamaModel[]>(`/api/ollamaModels/?formated=true`, {})
 
     if (response.status !== 200)
         throw new Error(response.statusText);

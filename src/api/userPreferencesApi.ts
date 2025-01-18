@@ -1,5 +1,4 @@
-﻿import {BASE_URL} from "@/constants";
-import axios from "axios";
+﻿import {apiClient} from "@/utils/api";
 
 
 export interface UserPreference {
@@ -13,13 +12,13 @@ export interface UserPreference {
 }
 
 export const fetchUserPreferences = async (userId : string) => {
-    const response = await axios.get<UserPreference>(`${BASE_URL}/api/userPreferences/${userId}`);
+    const response = await apiClient.get<UserPreference>(`/api/userPreferences/${userId}`);
     return response.data;
 }
 
 
 export const updateUserPreferences = async (options : Partial<Omit<UserPreference, 'id'>>) => {
-    const response = await axios.patch(`${BASE_URL}/api/userPreferences/${options.user_id}`, {
+    const response = await apiClient.patch(`/api/userPreferences/${options.user_id}`, {
         theme : options.theme,
         chatbot_type_id : options.chatbot_type_id,
         model : options.model,

@@ -1,7 +1,6 @@
-﻿import axios from "axios";
-import {BASE_URL} from "@/constants";
-import {User} from "@/api/usersApi.ts";
-axios.defaults.withCredentials = true;
+﻿import {User} from "@/api/usersApi.ts";
+import {apiClient} from "@/utils/api";
+
 export interface Token {
     access_token: string;
     token_type: string;
@@ -9,7 +8,7 @@ export interface Token {
 
 
 export const loginUser = async ({email, password} : Pick<User, 'email' | 'password'>) => {
-    const response = await axios.post<Token>(`${BASE_URL}/api/login`, {email, password})
+    const response = await apiClient.post<Token>(`/api/login`, {email, password})
     
     if (response.status !== 200)
         throw new Error("Error while login")
@@ -17,14 +16,14 @@ export const loginUser = async ({email, password} : Pick<User, 'email' | 'passwo
 }
 
 export const logout = async () => {
-    return await axios.post(`${BASE_URL}/api/logout`, {})
+    return await apiClient.post(`/api/logout`, {})
 }
 
 
 
 
 export const fetchNewToken = async (token: string) => {
-    const response = await axios.get<Token>(`${BASE_URL}/api/newToken`, {
+    const response = await apiClient.get<Token>(`/api/newToken`, {
         headers : {Authorization: `Bearer ${token}`}
     })
     
@@ -35,7 +34,7 @@ export const fetchNewToken = async (token: string) => {
 }
 
 export const refreshToken = async () => {
-    const response = await axios.get<Token>(`${BASE_URL}/api/refreshToken`)
+    const response = await apiClient.get<Token>(`/api/refreshToken`)
 
     if (response.status !== 200)
         throw new Error(response.statusText)

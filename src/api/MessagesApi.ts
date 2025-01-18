@@ -1,5 +1,4 @@
-﻿import axios from "axios";
-import {BASE_URL} from "@/constants";
+﻿import {apiClient} from "@/utils/api.ts";
 
 
 /*
@@ -39,7 +38,7 @@ interface NewStreamedMessage {
 
 
 export const fetchMessages = async (conversationId: string) => {
-    return axios.get<Message[]>(`${BASE_URL}/api/messages/${conversationId}`).then((response) => {
+    return apiClient.get<Message[]>(`/api/messages/${conversationId}`).then((response) => {
         return response.data;
     })
 
@@ -57,7 +56,7 @@ export const createMessage = async ({content, model, conversation_id, sender = '
     if ( chatbot_type_id !== '')
         body.chatbot_type_id = chatbot_type_id
     
-    const response = await axios.post(`${BASE_URL}/api/messages/create`, body)
+    const response = await apiClient.post(`/api/messages/create`, body)
     if (response.status !== 200)
         throw new Error(response.statusText)
 
@@ -89,7 +88,7 @@ export const newStreamedMessage = async ({
     if (chatbot_type_id !== '')
         body.chatbot_type_id = chatbot_type_id
     
-    const response = await fetch(`${BASE_URL}/api/messages/streamed`, {
+    const response = await fetch(`/api/messages/streamed`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -131,7 +130,7 @@ export const newStreamedMessage = async ({
 //     sender?: 'user' | 'bot',
 //     chatbot_type_id: string
 // }) => {
-//     const response = await axios.post(`${BASE_URL}/api/messages`, {
+//     const response = await apiClient.post(`/api/messages`, {
 //         content,
 //         model,
 //         conversation_id,

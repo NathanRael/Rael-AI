@@ -1,5 +1,4 @@
-﻿import axios from "axios";
-import {BASE_URL} from "@/constants";
+﻿import {apiClient} from "@/utils/api";
 
 export interface UploadedFile {
     id : string;
@@ -10,7 +9,7 @@ export interface UploadedFile {
 export const uploadFile = async (file : File) => {
     const formData = new FormData();
     formData.append('file', file)
-    const response = await axios.post<UploadedFile>(`${BASE_URL}/api/files/upload`, formData, {
+    const response = await apiClient.post<UploadedFile>(`/api/files/upload`, formData, {
         headers : {
             "Content-Type": "multipart/form-data",
         },
@@ -23,7 +22,7 @@ export const uploadFile = async (file : File) => {
 }
 
 export const downloadFile = async (file_id : string) => {
-    const response = await axios.get(`${BASE_URL}/api/files/${file_id}`, {
+    const response = await apiClient.get(`/api/files/${file_id}`, {
         responseType : 'blob'
     });
     

@@ -1,5 +1,4 @@
-import axios from "axios";
-import {BASE_URL} from "@/constants";
+import {apiClient} from "@/utils/api.ts";
 
 export interface Conversation {
     id: string;
@@ -14,7 +13,7 @@ export interface ConversationFilters {
 }
 
 export const fetchConversations = async (options?: ConversationFilters) => {
-    const response = await axios.get<Conversation[]>(`${BASE_URL}/api/conversations/${options?.userId}`)
+    const response = await apiClient.get<Conversation[]>(`/api/conversations/${options?.userId}`)
     const conversationList = response.data
     if (options?.search)
         return conversationList.filter(conversation => conversation.title.toLowerCase().includes(options.search!.toLowerCase()));
@@ -31,7 +30,7 @@ export const newConversation = async ({title, user_id, chatbot_type_id}: Omit<Co
     if (chatbot_type_id !== '')
         body = {...body, chatbot_type_id}
     
-    const response = await axios.post<Conversation>(`${BASE_URL}/api/conversations`, body)
+    const response = await apiClient.post<Conversation>(`/api/conversations`, body)
 
     return response.data
 }
@@ -39,7 +38,7 @@ export const newConversation = async ({title, user_id, chatbot_type_id}: Omit<Co
 
 
 export const deleteConversation = async (conversationId: string) => {
-    axios.delete(`${BASE_URL}/api/conversations/${conversationId}`).then(() => {
+    apiClient.delete(`/api/conversations/${conversationId}`).then(() => {
     }).catch((error) => {
         console.log(error);
     })
