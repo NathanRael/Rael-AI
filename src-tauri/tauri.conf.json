@@ -19,8 +19,8 @@
     ],
     "security": {
         "csp": {
-          "default-src" :  "'self' http://localhost:8000 ws://localhost:8000",
-          "img-src" : "'self' tauri://localhost http://localhost:8000 blob: data:",
+          "default-src" :  "'self' https://* http://localhost:8000  ws://localhost:8000",
+          "img-src" : "'self' tauri://* https://* http://localhost:* http://localhost:8000  blob: data:",
           "script-src" : "'self' 'unsafe-inline'"
         }
     }

@@ -4,14 +4,10 @@ import {useQuery} from "@tanstack/react-query";
 import {fetchActiveUser} from "@/api/usersApi.ts";
 import {queryKeys} from "@/api/queryKeys.ts";
 import {useUserStore} from "@/store/userStore.ts";
-import {useAuthStore} from "@/store/authStore.ts";
-import {api} from "@/utils/api.ts";
-import {refreshToken} from "@/api/authApi.ts";
 import {fetchUserPreferences} from "@/api/userPreferencesApi.ts";
+import {useRequestInterceptor} from "@/hooks/useRequestInterceptor.ts";
 
 const AuthLayout = () => {
-    const token = useAuthStore(state => state.token)
-    const updateToken = useAuthStore(state => state.updateToken)
     const navigate = useNavigate();
     const updateUser = useUserStore(state => state.updateUser)
 
@@ -26,40 +22,8 @@ const AuthLayout = () => {
         queryKey: [queryKeys.userPreferences],
     })
     
-
-    useLayoutEffect(() => {
-        const authInterceptor = api.interceptors.request.use((config) => {
-            config.headers.Authorization = !(config as any)._retry && token ? `Bearer ${token}` : config.headers.Authorization;
-            return config;
-        })
-
-        return () => api.interceptors.request.eject(authInterceptor)
-    }, [token]);
-
-    useLayoutEffect(() => {
-        const refreshInterceptor = api.interceptors.response.use(
-            (response) => response,
-            async (error) => {
-                const originalRequest = error.config;
-                if (error.response?.status === 401) {
-                    try {
-                        const {access_token: accessToken} = await refreshToken();
-                        updateToken(accessToken)
-
-                        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-                        originalRequest._retry = true;
-
-                        return api(originalRequest);
-                    } catch (e) {
-                        updateToken(null)
-                    }
-                }
-                return Promise.reject(error);
-            }
-        );
-
-        return () => api.interceptors.request.eject(refreshInterceptor)
-    }, []);
+    useRequestInterceptor()
+    
 
     useLayoutEffect(() => {
         if (isError) {

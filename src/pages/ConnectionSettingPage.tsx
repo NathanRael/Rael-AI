@@ -4,42 +4,59 @@
     FormControl,
     FormItem,
     FormLabel,
-    FormMessage,
+    FormMessage, Icon,
     TextInput,
     useForm,
     ValidationRules
 } from "rael-ui";
-import {emailMessage, emailPattern} from "@/constants/validations.ts";
+import {useConnection} from "@/hooks/useConnection.ts";
+import {ChevronLeft} from "lucide-react";
+import {useNavigate} from "react-router-dom";
 
 
 type FormType = {
     remoteConnection: string;
 }
-const ConnectionSettingPage = () => {
-    
+const ConnectionSettingPage = ({withBackBtn}: { withBackBtn: boolean }) => {
+    const navigate = useNavigate();
+    const {serverUrl, updateServerUrl} = useConnection()
     const validations: ValidationRules<FormType>[] = [
         {
             name: 'remoteConnection',
             required: true,
-            pattern: emailPattern,
-            message: emailMessage
+            pattern: /http:\/\/[a-z0-9._-]+/i,
+            message: "Invalid server url",
         }
     ]
 
     const form = useForm<FormType>({
         defaultValue: {
-            remoteConnection: ""
+            remoteConnection: serverUrl,
         },
         validations
     })
+
+
+    const handleSubmit = async () => {
+        updateServerUrl(form.formData.remoteConnection);
+    }
+
     return (
         <div className={'setting-page-section'}>
             <div className={'w-full'}>
-                <h1 className={'text-title text-black-100 dark:text-white-100 font-bold'}>Connection</h1>
-                <p className={'text-base text-black-100 dark:text-white-100/80'}>Setup a remote connection (the server you want to access) </p>
+                <div className={'flex flex-row items-center justify-start gap-2'}>
+                    {
+                        withBackBtn && <Icon onClick={() => navigate(-1)} size={'sm'} variant={'ghost'}>
+                            <ChevronLeft size={24}/>
+                        </Icon>
+                    }
+                    <h1 className={'text-title text-black-100 dark:text-white-100 font-bold'}>Connection</h1>
+                </div>
+                <p className={'text-base text-black-100 dark:text-white-100/80'}>Setup a remote connection (the server
+                    you want to access) </p>
             </div>
             <Form className={'flex flex-col items-start justify-start gap-6'} form={form}
-                  onSubmit={() => {}}>
+                  onSubmit={handleSubmit}>
                 <FormItem>
                     <FormLabel>Server </FormLabel>
                     <FormControl name={'remoteConnection'} render={({...fields}) => (

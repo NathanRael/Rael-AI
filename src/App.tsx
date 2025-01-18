@@ -29,6 +29,7 @@ function App() {
         <Routes>
             <Route element={<DevLayout enable={false}/>}>
                 <Route element={<LoginPage/>} path={'/login'}/>
+                <Route element={<section className={'p-10'}><ConnectionSettingPage withBackBtn/></section>} path={'/serverSetting'}/>
                 <Route element={<RegisterPage/>} path={'/register'}/>
                 <Route element={<AuthLayout/>}>
                     <Route element={
@@ -45,7 +46,7 @@ function App() {
                             <Route path={'/chat/:chatId'} element={<ChatPage/>}/>
                         </Route>
                         <Route element={<SettingLayout/>}>
-                                <Route path="/settings/profile" element={<ProfilePage/>}/>
+                            <Route path="/settings/profile" element={<ProfilePage/>}/>
                             <Route path="/settings/connection" element={<ConnectionSettingPage/>}/>
                         </Route>
     

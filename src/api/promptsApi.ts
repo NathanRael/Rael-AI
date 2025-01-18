@@ -1,9 +1,8 @@
-﻿import axios from "axios";
-import {BASE_URL} from "@/constants";
+﻿import {apiClient} from "@/utils/api.ts";
 
 export const generateMessage = async ({ prompt, model }: { prompt: string; model?: string }) => {
     try {
-        const response = await axios.post<string>(`${BASE_URL}/api/prompts`, {
+        const response = await apiClient.post<string>(`/api/prompts`, {
             prompt,
             model,
         });

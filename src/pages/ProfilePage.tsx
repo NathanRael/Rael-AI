@@ -14,7 +14,6 @@ import {queryKeys} from "@/api/queryKeys.ts";
 import {fetchActiveUser, updateUser} from "@/api/usersApi.ts";
 import {useEffect} from "react";
 import {emailMessage, emailPattern, usernameMessage, usernamePattern} from "@/constants/validations.ts";
-import {useNavigate} from "react-router-dom";
 
 type FormType = {
     username: string;
@@ -27,7 +26,6 @@ const ProfilePage = () => {
         queryFn: () => fetchActiveUser(),
         queryKey: [queryKeys.users]
     })
-    const navigate = useNavigate();
 
     const queryClient = useQueryClient();
 
@@ -81,7 +79,7 @@ const ProfilePage = () => {
     return (
         <div className={'setting-page-section'}>
             <h1 className={'text-title text-black-100 dark:text-white-100 font-bold'}>Profile</h1>
-            <Form className={'flex mx-auto flex-col items-start justify-start gap-6'} form={form}
+            <Form className={'flex flex-col items-start justify-start gap-6'} form={form}
                   onSubmit={handleSubmit}>
                 <FormItem>
                     <FormLabel>Username</FormLabel>
