@@ -20,7 +20,6 @@ import ProfilePage from "@/pages/ProfilePage.tsx";
 import OnboardingDownloadTools from "@/pages/OnboardingDownloadTools.tsx";
 import MarkdownTest from './pages/MarkdownTest.tsx';
 import SettingLayout from "@/layout/SettingLayout.tsx";
-import ConnectionSettingPage from "@/pages/ConnectionSettingPage.tsx";
 
 
 function App() {
@@ -29,7 +28,7 @@ function App() {
         <Routes>
             <Route element={<DevLayout enable={false}/>}>
                 <Route element={<LoginPage/>} path={'/login'}/>
-                <Route element={<section className={'p-10'}><ConnectionSettingPage withBackBtn/></section>} path={'/serverSetting'}/>
+                {/*<Route element={<section className={'p-10'}><ConnectionSettingPage withBackBtn/></section>} path={'/serverSetting'}/>*/}
                 <Route element={<RegisterPage/>} path={'/register'}/>
                 <Route element={<AuthLayout/>}>
                     <Route element={
@@ -47,7 +46,7 @@ function App() {
                         </Route>
                         <Route element={<SettingLayout/>}>
                             <Route path="/settings/profile" element={<ProfilePage/>}/>
-                            <Route path="/settings/connection" element={<ConnectionSettingPage/>}/>
+                            {/*<Route path="/settings/connection" element={<ConnectionSettingPage/>}/>*/}
                         </Route>
     
                     </Route>

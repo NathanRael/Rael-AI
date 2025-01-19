@@ -1,4 +1,5 @@
 ﻿import {apiClient} from "@/utils/api.ts";
+import {BASE_URL} from "@/constants";
 
 
 /*
@@ -88,7 +89,7 @@ export const newStreamedMessage = async ({
     if (chatbot_type_id !== '')
         body.chatbot_type_id = chatbot_type_id
     
-    const response = await fetch(`/api/messages/streamed`, {
+    const response = await fetch(`${BASE_URL}/api/messages/streamed`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

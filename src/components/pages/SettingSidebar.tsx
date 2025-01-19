@@ -10,7 +10,7 @@ const SettingSidebar = () => {
     return (
         <div className={"flex flex-col items-start justify-start gap-2"}>
             <SettingSidebarItem selected={settingName === 'profile'} name={'Profile'} onClick={() => navigate("/settings/profile")}/>
-            <SettingSidebarItem selected={settingName === 'connection'} name={'Connection'} onClick={() => navigate("/settings/connection")}/>
+            {/*<SettingSidebarItem selected={settingName === 'connection'} name={'Connection'} onClick={() => navigate("/settings/connection")}/>*/}
         </div>
     )
 }

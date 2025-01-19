@@ -13,8 +13,7 @@ export const useRequestInterceptor = () => {
     const {serverUrl, updateServerUrl} =  useConnection()
     
     const updateBaseUrl = (config : InternalAxiosRequestConfig<any>) => {
-        config.baseURL = serverUrl;
-        
+       /* config.baseURL = serverUrl;*/
         return config;
     }
     

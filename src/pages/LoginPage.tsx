@@ -8,14 +8,14 @@
     FormControl,
     FormItem,
     FormLabel,
-    FormMessage, Icon,
+    FormMessage,
     PasswordInput,
     Stack,
     TextInput,
     useForm,
     ValidationRules
 } from "rael-ui";
-import {Bot, Settings} from "lucide-react";
+import {Bot} from "lucide-react";
 import {useMutation} from "@tanstack/react-query";
 import {loginUser} from "@/api/authApi.ts";
 import {useAuthStore} from "@/store/authStore.ts";
@@ -23,7 +23,6 @@ import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {BackendErrorResponse} from "@/api/baseApi.ts";
 import SimpleErrorUI from "@/components/ui/SimpleErrorUI.tsx";
-import {createPortal} from "react-dom";
 
 export type FormType = {
     email: string;
@@ -81,11 +80,11 @@ const LoginPage = () => {
     }
     return (
         <Stack className={'p-10 absolute top-20 left-1/2 -translate-x-1/2 space-y-6'}>
-            {
+            {/*{
                 createPortal(<Icon onClick={() => navigate('/serverSetting')} variant={'ghost'} className={'absolute top-10 right-10'}>
                     <Settings/>
                 </Icon>, document.body)
-            }
+            }*/}
             <Stack gap={0}>
                 <h1 className={'text-big-title font-md text-black dark:text-white flex gap-2 items-center'}>
                     <Bot size={40}/>
