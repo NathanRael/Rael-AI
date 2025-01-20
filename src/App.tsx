@@ -33,10 +33,12 @@ function App() {
                 <Route element={<AuthLayout/>}>
                     <Route element={
                         <>
-                            <Outlet/>
+                            
                             <ModelSwitcher className={'fixed left-1/2 top-6 -translate-x-1/2 z-30'}/>
                             <UserProfile className={'fixed right-6 top-6 z-30'}/>
                             <Sidebar/>
+                            <Outlet/>
+                            
     
                         </>
                     }>
@@ -50,7 +52,6 @@ function App() {
                         </Route>
     
                     </Route>
-                    <Route path={'/test'} element={<Test/>}/>
                     <Route path={'chat/explore'} element={<ExploreChatPage/>}/>
                     <Route path={'models/explore'} element={<ExploreModelPage/>}/>
     
@@ -80,13 +81,6 @@ const DevLayout = ({enable}: { enable: boolean }) => {
 
     )
 }
-
-const Test = () => {
-    return (
-        <MarkdownTest/>
-    )
-}
-
 
 export default App
 
