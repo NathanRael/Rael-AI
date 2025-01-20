@@ -6,9 +6,7 @@
   "scripts": {
     "dev": "vite --host",
     "build": " vite build",
-    "preview": "vite preview",
-    "tauri": "tauri dev",
-    "tauri:build": "tauri build"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.15",
@@ -34,8 +32,6 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
-    "@tauri-apps/cli": "^2",
-    "@types/node": "^22.10.7",
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.1",
     "@types/react-syntax-highlighter": "^15.5.13",
@@ -53,5 +49,6 @@
     "vite-plugin-dts": "^4.3.0",
     "vite-tsconfig-paths": "^5.1.0",
     "vitest": "^2.1.0"
+   
   }
 }
