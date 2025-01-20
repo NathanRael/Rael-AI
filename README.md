@@ -1,7 +1,26 @@
-# Tauri + React + Typescript
+# Rael-AI
 
-This template should help get you started developing with Tauri, React and Typescript in Vite.
+A web and desktop application designed to simplify the use of Ollama models, offering a stunning user interface.
 
-## Recommended IDE Setup
+## Features
 
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+- [x] Available in both desktop and web versions.
+- [x] Separate server and client architecture.
+- [x] One server can be used across multiple clients (works seamlessly in the web version).
+- [x] Install Ollama models directly from the application.
+- [x] Image description support for the `vision` model.
+
+## Installation
+
+1. Download Ollama [here](https://ollama.com/download).
+2. Download the application:
+    - Choose the **web** or **desktop** version based on your use case.
+
+## Note
+
+If you need to share a single server across multiple devices, the **web version** is the most suitable option.
+
+## Author
+
+- **Full Name**: Natanael RALAIVOAVY
+- **Email**: [ralaivoavy.natnael@gmail.com](mailto:ralaivoavy.natnael@gmail.com)
