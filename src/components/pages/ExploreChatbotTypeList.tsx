@@ -1,11 +1,9 @@
-﻿import {CardSection, Card, CardDescription, CardTitle, Icon, cn, Badge, Stack, Button} from "rael-ui"
+﻿import {cn, Icon} from "rael-ui"
 import {ChatbotType} from "@/api/chatbotTypesApi.ts";
 import LoaderUI from "@/components/ui/LoaderUI.tsx";
 import ErrorUI from "@/components/ui/ErrorUI.tsx";
 import useChatType from "@/components/pages/useChatType.ts";
-import {Bot, Sparkles} from "lucide-react";
-import ChatbotTypeCard from "@/components/pages/ChatbotTypeCard.tsx";
-import {limitTextLen} from "@/utils/helpers.ts";
+import {Sparkles} from "lucide-react";
 
 type ExploreChatbotTypeProps = {
     loading: boolean;
@@ -61,11 +59,11 @@ const ChatbotCard = ({
     return (
         <div onClick={() => onClick(id)}
              className={cn("flex  text-base relative cursor-pointer hover:bg-neutral-light-80 dark:hover:bg-neutral-dark-80 flex-row gap-4 border border-neutral-light-60 dark:border-neutral-dark-80 rounded-xl p-6", selected && "bg-neutral-light-80 dark:bg-neutral-dark-80", className)}>
-            <Icon variant={'secondary'} className={'max-md:hidden'}>
+            <Icon variant={'secondary'} className={'max-md:hidden h-11'}>
                 <Sparkles size={20}/>
             </Icon>
             <div>
-                <p className={'font-md text-black-100 dark:text-white-100'}>{name}</p>pa
+                <p className={'font-md text-black-100 dark:text-white-100'}>{name}</p>
                 <p className={' text-small text-black-80 dark:text-white/80'}>{description}</p>
             </div>
         </div>
