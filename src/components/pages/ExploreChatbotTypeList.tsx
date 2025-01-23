@@ -3,7 +3,9 @@ import {ChatbotType} from "@/api/chatbotTypesApi.ts";
 import LoaderUI from "@/components/ui/LoaderUI.tsx";
 import ErrorUI from "@/components/ui/ErrorUI.tsx";
 import useChatType from "@/components/pages/useChatType.ts";
-import {Bot} from "lucide-react";
+import {Bot, Sparkles} from "lucide-react";
+import ChatbotTypeCard from "@/components/pages/ChatbotTypeCard.tsx";
+import {limitTextLen} from "@/utils/helpers.ts";
 
 type ExploreChatbotTypeProps = {
     loading: boolean;
@@ -53,63 +55,20 @@ type ChatbotCardProps = Omit<ChatbotType, 'context'> & {
 
 const ChatbotCard = ({
                          id, name, description, selected, onClick = () => {
-    }, className, suggested_models
+    }, className
                      }: ChatbotCardProps) => {
 
     return (
-        <Card
-            className={cn(
-                'flex flex-col overflow-hidden dark:border-none items-start justify-start gap-6 p-4  shadow-sm bg-meta-fill-l-bg h-fit dark:bg-white/5 relative rounded-xl w-[480px] max-md:w-full'
-                , className)}
-        >
-            <Icon
-                size={'lg'}
-                className={`${
-                    selected ? 'bg-secondary/80' : 'bg-secondary/40'
-                } absolute -top-5 -right-5 `}
-            >
-                <Bot size={32}/>
+        <div onClick={() => onClick(id)}
+             className={cn("flex  text-base relative cursor-pointer hover:bg-neutral-light-80 dark:hover:bg-neutral-dark-80 flex-row gap-4 border border-neutral-light-60 dark:border-neutral-dark-80 rounded-xl p-6", selected && "bg-neutral-light-80 dark:bg-neutral-dark-80", className)}>
+            <Icon variant={'secondary'} className={'max-md:hidden'}>
+                <Sparkles size={20}/>
             </Icon>
-            <CardSection className={'gap-2'}>
-                <CardSection rFor={'meta'}>
-
-                    <Badge
-                        size={'sm'}
-                        className={
-                            `bg-secondary ${selected ? 'opacity-1 ' : 'opacity-0 hover:opacity-0'} `
-                        }
-                    >
-                        Active
-                    </Badge>
-
-                    <CardTitle
-                        className={cn(
-                            `text-black dark:text-white font-bold  text-lead`,
-                            ''
-                        )}
-                    >
-                        {name}
-                    </CardTitle>
-                    <CardDescription className={''}>
-                        {description}
-                    </CardDescription>
-                </CardSection>
-                
-            </CardSection>
-            <Stack gap={8} align={'start'}>
-                <p className={'text-black/80 dark:text-white text-small'}>Best with</p>
-                <div className={'flex items-center justify-center gap-2'}>
-                    {
-                        suggested_models.split(',')?.map(suggestedModel => (
-                            <Badge key={suggestedModel} size={'sm'} className={'bg-primary/70 dark:bg-primary/50'}>{suggestedModel}</Badge>
-
-                        ))
-                    }
-                </div>
-            </Stack>
-            <Button size={'sm'} onClick={() => onClick(id)}
-                    className={'button-gradient'}>{selected ? 'Selected' : 'Select chatbot type'}</Button>
-        </Card>
+            <div>
+                <p className={'font-md text-black-100 dark:text-white-100'}>{name}</p>pa
+                <p className={' text-small text-black-80 dark:text-white/80'}>{description}</p>
+            </div>
+        </div>
 
     )
 }
