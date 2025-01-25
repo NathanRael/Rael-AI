@@ -57,7 +57,7 @@ function App() {
     
     
                     <Route element={<OnboardingLayout/>}>
-                        <Route path={'/onboarding/downloadTool'} element={<OnboardingDownloadTools/>}/>
+                        {/*<Route path={'/onboarding/downloadTool'} element={<OnboardingDownloadTools/>}/>*/}
                         <Route path={'/onboarding/chooseModel'} element={<OnboardingPageChooseModel/>}/>
                         <Route path={'/onboarding/selectChatbotType'} element={<OnboardingPageSelectChatType/>}/>
                     </Route>

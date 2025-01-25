@@ -39,7 +39,7 @@ const AuthLayout = () => {
 
     useEffect(() => {
         if (isFetchingUserPrefs || !userPrefs) return
-        if (!userPrefs.has_onboarded && isSuccessUserPrefs) navigate("/onboarding/downloadTool")
+        if (!userPrefs.has_onboarded && isSuccessUserPrefs) navigate("/onboarding/chooseModel")
     }, [isFetchingUserPrefs, isSuccessUserPrefs, userPrefs])
 
 

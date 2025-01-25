@@ -20,8 +20,6 @@ const OnboardingLayout = () => {
     
     if (error)
         return <ErrorUI error={error as Error} onRetry={() => {}}/>
-
-
     
     
     return (
