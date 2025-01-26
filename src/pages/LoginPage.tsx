@@ -23,6 +23,9 @@ import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {BackendErrorResponse} from "@/api/baseApi.ts";
 import SimpleErrorUI from "@/components/ui/SimpleErrorUI.tsx";
+import {fetchUserPreferences} from "@/api/userPreferencesApi.ts";
+import {fetchActiveUser} from "@/api/usersApi.ts";
+import {hasToOnboard} from "@/utils/helpers.ts";
 
 export type FormType = {
     email: string;
@@ -35,21 +38,21 @@ const LoginPage = () => {
     const navigate = useNavigate();
     const {mutateAsync: LoginMutationAsync} = useMutation({
         mutationFn: loginUser,
-        onSuccess: data => {
+        onSuccess: async data => {
             updateToken(data.access_token)
-            navigate('/')
+            const user = await fetchActiveUser();
+            const userPref = await fetchUserPreferences(user!.id);
+
+            navigate(hasToOnboard(userPref) ? '/' : '/onboarding/chooseModel');
         },
         onError: error => {
-            // console.log("Error", (error as BackendErrorResponse).response.data.detail)
             setError((error as BackendErrorResponse).response?.data?.detail);
-            // setTimeout(() => setError(''), 2000)
         }
     })
     const validations: ValidationRules<FormType>[] = [
         {
             name: "email",
             required: true,
-            // pattern : /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
         },
         {
             name: 'password',
