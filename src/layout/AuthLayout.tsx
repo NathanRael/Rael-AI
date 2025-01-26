@@ -10,29 +10,33 @@ import {hasToOnboard} from "@/utils/helpers.ts";
 import {useFetchUserPref} from "@/hooks/useFetchUserPref.ts";
 import LoaderUI from "@/components/ui/LoaderUI.tsx";
 import {createPortal} from "react-dom";
+import {logout} from "@/api/authApi.ts";
 
 const AuthLayout = () => {
     const navigate = useNavigate();
     const updateUser = useUserStore(state => state.updateUser)
     const {setHasOnboarded} = useUserPrefStore()
-
-    const {data: user, error: userError, isError, isSuccess, isLoading: isFetchingUser} = useQuery({
+    
+    const { data: user, error: userError, isError, isSuccess, isLoading: isFetchingUser } = useQuery({
         queryFn: fetchActiveUser,
         queryKey: [queryKeys.activeUser],
-
-    })
+    });
     
     const {data: userPrefs, isLoading: isFetchingUserPrefs, isSuccess: isSuccessUserPrefs} = useFetchUserPref(user)
     const needsOnboarding = useMemo(() => hasToOnboard(userPrefs), [userPrefs]);
 
     useRequestInterceptor()
-
-
+    
     useLayoutEffect(() => {
-        if (isError) navigate("/login", {replace: true});
-        
-        if (isSuccess && user) updateUser(user);
-
+        if (isError) {
+            (async () => {
+                await logout();
+                navigate("/login", { replace: true });
+            })();
+        }
+        if (isSuccess && user) {
+            updateUser(user);
+        }
     }, [isError, isSuccess, user, navigate, userError, updateUser]);
 
     useEffect(() => {
@@ -53,6 +57,8 @@ const AuthLayout = () => {
     if (isFetchingUser || isFetchingUserPrefs ) {
         return createPortal(<LoaderUI className={'absolute top-1/2 left-1/2 '}/>, document.body);
     }
+    
+    
 
     return (
         <section>
