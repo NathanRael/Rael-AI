@@ -13,7 +13,7 @@ const ErrorUI = ({error, onRetry, className} : ErrorUIProps) => {
                 <Info/>
                 <p className={'text-danger text-sm'}>Error : {error?.message}</p>
             </Stack>
-            <Button variant={'secondary'} size={'sm'} radius={'2xl'} onClick={() => onRetry()} block>Retry</Button>
+            <Button className={'px-6'} variant={'secondary'} size={'sm'} radius={'2xl'} onClick={() => onRetry()} >Retry</Button>
         </Stack>
     )
 }

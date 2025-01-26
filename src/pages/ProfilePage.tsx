@@ -29,10 +29,10 @@ const ProfilePage = () => {
 
     const queryClient = useQueryClient();
 
-    const {mutateAsync: updateUserMutation, isLoading : submitting} = useMutation({
+    const {mutateAsync: updateUserMutation, isPending : submitting} = useMutation({
         mutationFn: updateUser,
         onSuccess: () => {
-            queryClient.invalidateQueries([queryKeys.users])
+            queryClient.invalidateQueries({ queryKey : queryKeys.users})
         }
     })
 

@@ -11,10 +11,10 @@ const ChatHistory = ({name, id, active}: { name: string, id: string, active?: bo
     const navigate = useNavigate();
     const {renderToastContainer} = useToast()
     const queryClient = useQueryClient();
-    const {mutateAsync: deleteConversationMutation, isLoading: isDeletingConversation} = useMutation({
+    const {mutateAsync: deleteConversationMutation, isPending: isDeletingConversation} = useMutation({
         mutationFn: deleteConversation,
-        onSuccess: () => {
-            queryClient.invalidateQueries([queryKeys.conversationList])
+        onSuccess: async () => {
+           await  queryClient.invalidateQueries({ queryKey :queryKeys.conversationList})
         },
         onMutate: async (id: string) => {
             await queryClient.cancelQueries({queryKey: [queryKeys.conversationList]})

@@ -12,7 +12,7 @@ export const useModelHandler = ({queryClient, user} : {queryClient : QueryClient
     const {mutateAsync: updateUserPreferencesMutation} = useMutation({
         mutationFn: updateUserPreferences,
         onSuccess: async () => {
-            await queryClient.invalidateQueries([queryKeys.userPreferences])
+            await queryClient.invalidateQueries({ queryKey :queryKeys.userPreferences})
         }
     })
 

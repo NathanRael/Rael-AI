@@ -30,7 +30,7 @@ const ModelSwitcher = ({className}: { className?: string }) => {
     
     const {changeModel} = useModelHandler({queryClient, user});
     
-    const {data: models, error: modelsError, isLoading: isFetchingModels, isSuccess} = useQuery({
+    const {data: models, error: modelsError, isLoading: isFetchingModels, isSuccess, refetch : reFetchModels} = useQuery({
         queryFn: () => fetchModels(),
         queryKey: [queryKeys.modelList]
     })
@@ -63,8 +63,7 @@ const ModelSwitcher = ({className}: { className?: string }) => {
         return <div className={cn("h-8 animate-pulse rounded-lg w-[108px] bg-black/20 dark:bg-white/20", className)}/>
 
     if (modelsError)
-        return <ErrorUI error={modelsError as Error} onRetry={() => {
-        }}/>
+        return <ErrorUI error={modelsError as Error} onRetry={() => reFetchModels()}/>
 
 
 

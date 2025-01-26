@@ -29,7 +29,7 @@ const OnboardingPageSelectChatType = () => {
     const {mutateAsync : updateUserPreferencesMutation} = useMutation({
         mutationFn : updateUserPreferences,
         onSuccess : () => {
-            queryClient.invalidateQueries([queryKeys.userPreferences])
+            queryClient.invalidateQueries({ queryKey : queryKeys.userPreferences})
             navigate('/')
         }
     })
