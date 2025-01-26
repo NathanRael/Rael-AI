@@ -2,8 +2,8 @@
 import {ChevronLeft, ChevronRight} from "lucide-react";
 
 type StepperProps = {
-    onNext: () => void;
-    onPrevious: () => void;
+    onNext?: () => void;
+    onPrevious?: () => void;
     className?: string;
     disabled?: {
         nextButton?: boolean;

@@ -47,7 +47,7 @@ const ChatInput = () => {
         value: message,
     });
     
-    const canSubmit = useMemo(() => !submitting && message.trim() !== '', [submitting, message]);
+    const canSubmit = useMemo(() => !submitting && message.trim() !== '' && selectedModel, [submitting, message, selectedModel]);
     const chatbotTypeIdInParams = useMemo(() => {
         const params = searchParams?.get('chatType');
         return params === 'null' ? '' : params

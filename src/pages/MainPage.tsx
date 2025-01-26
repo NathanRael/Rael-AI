@@ -8,17 +8,19 @@ import {useEffect} from "react";
 import {ChevronRight, Slack} from "lucide-react";
 import ChatbotTypeToggleList from "@/components/pages/ChatbotTypeToggleList.tsx";
 import {fetchMainChatbotTypes} from "@/api/chatbotTypesApi.ts";
-import {fetchUserPreferences} from "@/api/userPreferencesApi.ts";
 import Copyright from "@/components/pages/Copyright.tsx";
 import useLocalSearchParams from "@/hooks/useLocalSearchParams.ts";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useUserStore} from "@/store/userStore.ts";
+import {hasToOnboard} from "@/utils/helpers.ts";
+import {useFetchUserPref} from "@/hooks/useFetchUserPref.ts";
 
 const MainPage = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const user = useUserStore(state => state.user)
     
+    const {data: userPreferences, isLoading: isFetchingUserPreferences, error: userPreferencesError} = useFetchUserPref(user);
     
     const {
         data: chatbotTypes,
@@ -26,20 +28,14 @@ const MainPage = () => {
         error: chatbotTypeError,
         refetch: reFetchChatbotTypes
     } = useQuery({
-        enabled : !!user.id,
+        enabled : !!user.id && !hasToOnboard(userPreferences!),
         queryFn: () => fetchMainChatbotTypes(user.id),
         queryKey: [queryKeys.chatbotTypeList]
     })
 
-    const {data: userPreferences, isLoading: isFetchingUserPreferences, error: userPreferencesError} = useQuery({
-        enabled : !!user.id,
-        queryFn: () => fetchUserPreferences(user.id),
-        queryKey: [queryKeys.userPreferences],
-    })
 
     const {updateSearchParam} = useLocalSearchParams();
-
-
+    
         
     useEffect(() => {
         if (!isFetchingUserPreferences && !userPreferencesError && userPreferences) {
@@ -53,16 +49,24 @@ const MainPage = () => {
             <section className={'h-full space-y-10 pt-[128px] max-md:pt-16 pb-10 px-4 '}>
                 <Stack direction={'vertical'} align={'center'} gap={32}>
                     <div className={'flex flex-col gap-8 items-start p-2 rounded-xl '}>
-                        <div className={'space-y-4'}>
-                            <h1 className={'text-lead text-black dark:text-white'}>Select a chat type</h1>
-                            <ChatbotTypeToggleList chatbotTypes={chatbotTypes!} loading={isFetchingChatbotTypes}
-                                                   error={chatbotTypeError as Error} onRetry={reFetchChatbotTypes}/>
-                        </div>
-                        <Button onClick={() => navigate('/chat/explore')} size={'sm'} variant={'ghost'} radius={'xl'}>
-                            <Slack size={16}/>
-                            Explore
-                            <ChevronRight/>
-                        </Button>
+                        {chatbotTypes?.length === 0 && <p className={'text-black-100 dark:text-white-100'}>No chatbot type found</p>}
+                        {
+                            chatbotTypes && chatbotTypes.length > 0 && (
+                                <>
+                                    <div className={'space-y-4'}>
+                                        <h1 className={'text-lead text-black dark:text-white'}>Select a chat type</h1>
+                                        <ChatbotTypeToggleList chatbotTypes={chatbotTypes!} loading={isFetchingChatbotTypes}
+                                                               error={chatbotTypeError as Error} onRetry={reFetchChatbotTypes}/>
+                                    </div>
+                                    <Button onClick={() => navigate('/chat/explore')} size={'sm'} variant={'ghost'}
+                                            radius={'xl'}>
+                                        <Slack size={16}/>
+                                        Explore
+                                        <ChevronRight/>
+                                    </Button>
+                                </>
+                            )
+                        }
                     </div>
 
                 </Stack>

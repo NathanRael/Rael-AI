@@ -6,15 +6,9 @@ import {queryKeys} from "@/api/queryKeys.ts";
 import {User} from "@/api/usersApi.ts";
 
 export const useModelHandler = ({queryClient, user} : {queryClient : QueryClient, user : User}) => {
-    const models = useModelStore((state) => state.models);
-    const formatedModels = useModelStore((state) => state.formatedModels);
-    const updateSelectedModel = useModelStore((state) => state.updateSelectedModel);
-    // const selectedModel = useModelStore(state => state.selectedModel);
-    const selectedModel = useModelStore((state) => state.selectedModel);
+    const {models, formatedModels, updateSelectedModel, selectedModel} = useModelStore();
+    const nonEmbeddingModels = useMemo(() => formatedModels.filter((model) => model.capability.toLowerCase() !== 'tools'), [formatedModels]);
     
-    
-
-
     const {mutateAsync: updateUserPreferencesMutation} = useMutation({
         mutationFn: updateUserPreferences,
         onSuccess: async () => {
@@ -34,6 +28,6 @@ export const useModelHandler = ({queryClient, user} : {queryClient : QueryClient
 
     
     return {
-        changeModel, formatedModels, models, selectedModel, visionModels
+        changeModel, formatedModels, models, selectedModel, visionModels, nonEmbeddingModels
     }
 }

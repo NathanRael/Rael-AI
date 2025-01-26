@@ -29,7 +29,9 @@ const OnboardingPageChooseModel = () => {
         <section className="onboarding-page flex gap-6 h-screen w-full">
             <div className={"basis-1/2 flex flex-col gap-10"}>
                 <PullModel/>
-                <Stepper disabled={{prevButton: false, nextButton : !hasDownloadedModel || isLoading}}   onNext={() => navigate('/onboarding/selectChatbotType')} onPrevious={() =>  navigate('/onboarding/downloadTool')} className={''}/>
+                <Stepper disabled={{prevButton: false, nextButton : !hasDownloadedModel || isLoading}}   onNext={() => {
+                    navigate('/onboarding/selectChatbotType')
+                }}  className={''}/>
             </div>
             <div
                 className="basis-1/2   overflow-hidden p-2 rounded-2xl flex flex-col gap-2 justify-between relative">
@@ -74,8 +76,7 @@ const PullModel = () => {
         <div className=" flex flex-col gap-10 ">
             <div className={'max-w-[540px]'}>
                 <h1 className={'text-black dark:text-white text-big-title font-bold'}>Download a model</h1>
-                <p className={'text-lead text-black/80 dark:text-white/80'}>Select a model to download, the selected
-                    model will be used by default in you chat.</p>
+                <p className={'text-lead text-black/80 dark:text-white/80'}>Select a model to download, make sur that you download models that can be used for chat purpose</p>
             </div>
             <div className={'flex flex-col gap-8 items-start rounded-xl '}>
                 <div className={'space-y-4'}>

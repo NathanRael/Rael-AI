@@ -22,7 +22,7 @@ export const fetchActiveUser = async () => {
         return response.data;
     }catch (e){
         console.error(`Error while fetching active user : ${(e as BackendErrorResponse).response.data.detail}`);
-    }
+    }   
     
 }
 

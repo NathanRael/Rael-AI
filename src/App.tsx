@@ -17,8 +17,6 @@ import RegisterPage from "@/pages/RegisterPage.tsx";
 import UserProfile from "@/components/pages/UserProfile.tsx";
 import ModelSwitcher from "@/components/pages/ModelSwitcher.tsx";
 import ProfilePage from "@/pages/ProfilePage.tsx";
-import OnboardingDownloadTools from "@/pages/OnboardingDownloadTools.tsx";
-import MarkdownTest from './pages/MarkdownTest.tsx';
 import SettingLayout from "@/layout/SettingLayout.tsx";
 
 
@@ -63,7 +61,8 @@ function App() {
                     </Route>
                 </Route>
     
-                <Route path={'*'} element={<Navigate to={'/'}/>}/></Route>
+                <Route path={'*'} element={<Navigate to={'/'}/>}/>
+            </Route>
         </Routes>
     )
 }

@@ -112,7 +112,7 @@ const BotMessage = ({content, handleCopy}: { content: string, handleCopy: (text:
                                code(props : any) {
                                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
                                    const {children, className, node, ...rest} = props
-                                   const match = /language-(\w+)/.exec(className || '');
+                                   const match = /language-(\w+)/.exec(className || '')
                                    const codeContent = String(children).replace(/\n$/, '');
                                    return match ? (
                                        <div className={'relative'}>
@@ -144,7 +144,7 @@ const BotMessage = ({content, handleCopy}: { content: string, handleCopy: (text:
 
                                    ) : (
                                        <code {...rest} className={className}>
-                                           {children}
+                                           {codeContent}
                                        </code>
 
                                    )

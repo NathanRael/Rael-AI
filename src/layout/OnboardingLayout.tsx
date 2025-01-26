@@ -1,29 +1,35 @@
-﻿import {Navigate, Outlet} from "react-router-dom";
-import {useQuery} from "@tanstack/react-query";
-import {fetchUserPreferences} from "@/api/userPreferencesApi.ts";
+﻿import {Outlet, useNavigate} from "react-router-dom";
 import {useUserStore} from "@/store/userStore.ts";
-import ErrorUI from "@/components/ui/ErrorUI.tsx";
-import {queryKeys} from "@/api/queryKeys.ts";
+import {useEffect, useMemo} from "react";
+import {useFetchUserPref} from "@/hooks/useFetchUserPref.ts";
+import {hasToOnboard} from "@/utils/helpers.ts";
+import {createPortal} from "react-dom";
+import LoaderUI from "@/components/ui/LoaderUI.tsx";
 
 const OnboardingLayout = () => {
     const user = useUserStore(state => state.user);
+    const navigate = useNavigate();
 
-    const {data : userPreference, isLoading, error} = useQuery({
-        enabled: !!user.id,
-        queryFn : () => fetchUserPreferences(user.id),
-        queryKey : [queryKeys.userPreferences]
-    })
+    const {data: userPreference, isLoading, isSuccess} = useFetchUserPref(user);
+    const needsOnboarding = useMemo(() => hasToOnboard(userPreference), [userPreference]);
+
+
+    useEffect(() => {
+        if (isLoading || !userPreference) return
+
+        if (!needsOnboarding)
+            navigate("/");
+
+    }, [isLoading, userPreference, isSuccess, needsOnboarding]);
     
     
-    if (isLoading || !userPreference)
-        return 
-    
-    if (error)
-        return <ErrorUI error={error as Error} onRetry={() => {}}/>
+    if (isLoading) {
+        return createPortal(<LoaderUI className={'absolute top-1/2 left-1/2 '}/>, document.body);
+    }
     
     
     return (
-        userPreference.has_onboarded ? <Navigate to={'/'}/> : <Outlet/>
+        <Outlet/>
     );
 };
 

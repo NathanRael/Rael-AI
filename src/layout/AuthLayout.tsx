@@ -1,47 +1,58 @@
 ﻿import {Outlet, useNavigate} from "react-router-dom";
-import {useEffect, useLayoutEffect} from "react";
+import {useEffect, useLayoutEffect, useMemo} from "react";
 import {useQuery} from "@tanstack/react-query";
 import {fetchActiveUser} from "@/api/usersApi.ts";
 import {queryKeys} from "@/api/queryKeys.ts";
 import {useUserStore} from "@/store/userStore.ts";
-import {fetchUserPreferences} from "@/api/userPreferencesApi.ts";
 import {useRequestInterceptor} from "@/hooks/useRequestInterceptor.ts";
+import {useUserPrefStore} from "@/store/userPrefStore.ts";
+import {hasToOnboard} from "@/utils/helpers.ts";
+import {useFetchUserPref} from "@/hooks/useFetchUserPref.ts";
+import LoaderUI from "@/components/ui/LoaderUI.tsx";
+import {createPortal} from "react-dom";
 
 const AuthLayout = () => {
     const navigate = useNavigate();
     const updateUser = useUserStore(state => state.updateUser)
+    const {setHasOnboarded} = useUserPrefStore()
 
-    const {data: user, isError, isSuccess, isLoading} = useQuery({
+    const {data: user, error: userError, isError, isSuccess, isLoading: isFetchingUser} = useQuery({
         queryFn: fetchActiveUser,
         queryKey: [queryKeys.activeUser],
-    })
 
-    const {data: userPrefs, isLoading: isFetchingUserPrefs, isSuccess: isSuccessUserPrefs} = useQuery({
-        enabled: !!user?.id,
-        queryFn: () => fetchUserPreferences(user!.id),
-        queryKey: [queryKeys.userPreferences],
     })
     
+    const {data: userPrefs, isLoading: isFetchingUserPrefs, isSuccess: isSuccessUserPrefs} = useFetchUserPref(user)
+    const needsOnboarding = useMemo(() => hasToOnboard(userPrefs), [userPrefs]);
+
     useRequestInterceptor()
-    
+
 
     useLayoutEffect(() => {
-        if (isError) {
-            navigate("/login", {replace: true});
-            return console.log('LoginPage out')
-        }
+        if (isError) navigate("/login", {replace: true});
+        
+        if (isSuccess && user) updateUser(user);
 
-        if (isSuccess && user && !isLoading)
-            updateUser(user)
-
-
-    }, [user, isError, navigate, isSuccess, isLoading])
+    }, [isError, isSuccess, user, navigate, userError, updateUser]);
 
     useEffect(() => {
-        if (isFetchingUserPrefs || !userPrefs) return
-        if (!userPrefs.has_onboarded && isSuccessUserPrefs) navigate("/onboarding/chooseModel")
-    }, [isFetchingUserPrefs, isSuccessUserPrefs, userPrefs])
+        if (isFetchingUserPrefs || !userPrefs) return;
 
+        setHasOnboarded(!needsOnboarding);
+        if (needsOnboarding) navigate("/onboarding/chooseModel");
+        
+    }, [
+        isFetchingUserPrefs,
+        isSuccessUserPrefs,
+        userPrefs,
+        needsOnboarding,
+        setHasOnboarded,
+    ]);
+
+
+    if (isFetchingUser || isFetchingUserPrefs ) {
+        return createPortal(<LoaderUI className={'absolute top-1/2 left-1/2 '}/>, document.body);
+    }
 
     return (
         <section>

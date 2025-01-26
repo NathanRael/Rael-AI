@@ -44,7 +44,7 @@ const OnboardingPageSelectChatType = () => {
     
     return (
         <section className="onboarding-page flex gap-6 h-screen w-full">
-            <div className={"basis-1/2 flex flex-col gap-10 justify-between pb-[128px]"}>
+            <div className={"basis-1/2 flex flex-col gap-10 just²ify-between pb-[128px]"}>
                 <SelectChatbotType/>
                 <Stepper disabled={{
                     nextButton : selectedChatbotType.length < 3
