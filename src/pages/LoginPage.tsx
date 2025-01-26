@@ -21,11 +21,12 @@ import {loginUser} from "@/api/authApi.ts";
 import {useAuthStore} from "@/store/authStore.ts";
 import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {BackendErrorResponse} from "@/api/baseApi.ts";
 import SimpleErrorUI from "@/components/ui/SimpleErrorUI.tsx";
+import {BackendErrorResponse} from "@/api/baseApi.ts";
+import { hasToOnboard } from "@/utils/helpers";
 import {fetchUserPreferences} from "@/api/userPreferencesApi.ts";
-import {fetchActiveUser} from "@/api/usersApi.ts";
-import {hasToOnboard} from "@/utils/helpers.ts";
+import { fetchActiveUser } from "@/api/usersApi";
+import {useRequestInterceptor} from "@/hooks/useRequestInterceptor.ts";
 
 export type FormType = {
     email: string;
@@ -42,13 +43,16 @@ const LoginPage = () => {
             updateToken(data.access_token)
             const user = await fetchActiveUser();
             const userPref = await fetchUserPreferences(user!.id);
-
+            
             navigate(hasToOnboard(userPref) ? '/' : '/onboarding/chooseModel');
         },
         onError: error => {
-            setError((error as BackendErrorResponse).response?.data?.detail);
+            setError((error as unknown as BackendErrorResponse).response?.data?.detail);
         }
     })
+    
+    useRequestInterceptor()
+    
     const validations: ValidationRules<FormType>[] = [
         {
             name: "email",
@@ -108,7 +112,7 @@ const LoginPage = () => {
                         <FormItem>
                             <FormLabel>Email</FormLabel>
                             <FormControl name={'email'} render={(fields) => (
-                                <TextInput block radius={'xl'} placeholder={'Ex : rael@gmail.com'} {...fields}/>
+                                <TextInput block radius={'xl'} placeholder={'email@exapmle.com'} {...fields}/>
                             )} type={'input'}/>
                             <FormMessage name={'email'}/>
                         </FormItem>
