@@ -47,7 +47,7 @@ const ChatInput = () => {
         value: message,
     });
     
-    const canSubmit = useMemo(() => !submitting && message.trim() !== '' && selectedModel, [submitting, message, selectedModel]);
+    const canSubmit = useMemo(() => !submitting && message.trim() !== '' && selectedModel !== "", [submitting, message, selectedModel]);
     const chatbotTypeIdInParams = useMemo(() => {
         const params = searchParams?.get('chatType');
         return params === 'null' ? '' : params
@@ -62,8 +62,8 @@ const ChatInput = () => {
             conversationId,
             chatbotTypeId,
             onSuccess :async () => {
-                await queryClient.invalidateQueries([queryKeys.chat]);
-                await queryClient.invalidateQueries([queryKeys.conversationList]);
+                await queryClient.invalidateQueries({ queryKey :queryKeys.chat});
+                await queryClient.invalidateQueries({queryKey :queryKeys.conversationList});
             },
             onValidInput : () => setMessage(''),
             onFinally : () => scrollToBottom(document.body.scrollHeight),
