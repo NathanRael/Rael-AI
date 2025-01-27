@@ -23,10 +23,6 @@ import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import SimpleErrorUI from "@/components/ui/SimpleErrorUI.tsx";
 import {BackendErrorResponse} from "@/api/baseApi.ts";
-import { hasToOnboard } from "@/utils/helpers";
-import {fetchUserPreferences} from "@/api/userPreferencesApi.ts";
-import { fetchActiveUser } from "@/api/usersApi";
-import {useRequestInterceptor} from "@/hooks/useRequestInterceptor.ts";
 
 export type FormType = {
     email: string;
@@ -41,17 +37,17 @@ const LoginPage = () => {
         mutationFn: loginUser,
         onSuccess: async data => {
             updateToken(data.access_token)
-            const user = await fetchActiveUser();
-            const userPref = await fetchUserPreferences(user!.id);
+            /*const user = await fetchActiveUser();
+            const userPref = await fetchUserPreferences(user!.id);*/
             
-            navigate(hasToOnboard(userPref) ? '/' : '/onboarding/chooseModel');
+            navigate("/");
+            // navigate(hasToOnboard(userPref) ? '/' : '/onboarding/chooseModel');
         },
         onError: error => {
             setError((error as unknown as BackendErrorResponse).response?.data?.detail);
         }
     })
     
-    useRequestInterceptor()
     
     const validations: ValidationRules<FormType>[] = [
         {
