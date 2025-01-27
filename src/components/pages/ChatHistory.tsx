@@ -14,7 +14,7 @@ const ChatHistory = ({name, id, active}: { name: string, id: string, active?: bo
     const {mutateAsync: deleteConversationMutation, isPending: isDeletingConversation} = useMutation({
         mutationFn: deleteConversation,
         onSuccess: async () => {
-           await  queryClient.invalidateQueries({ queryKey :queryKeys.conversationList})
+           await  queryClient.invalidateQueries({ queryKey :[queryKeys.conversationList]})
         },
         onMutate: async (id: string) => {
             await queryClient.cancelQueries({queryKey: [queryKeys.conversationList]})

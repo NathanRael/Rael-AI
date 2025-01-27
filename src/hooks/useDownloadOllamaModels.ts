@@ -14,7 +14,6 @@ const useDownloadOllamaModels = () => {
 
     const downloadModel = async (modelName: string) => {
         setDownloading(true)
-        // console.log(modelName)
         handleDownloaded(modelName, false)
         try {
             downloadAbortController.current = new AbortController();

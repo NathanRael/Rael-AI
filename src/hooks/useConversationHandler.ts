@@ -11,7 +11,7 @@ export const useConversationHandler = ({queryClient} : {queryClient : QueryClien
     const {mutateAsync: newConversationMutation} = useMutation({
         mutationFn: newConversation,
         onSuccess: async () => {
-            await queryClient.invalidateQueries([queryKeys.conversationList]);
+            await queryClient.invalidateQueries({queryKey :[ queryKeys.conversationList]});
             setNewConversationCreated(true)
         },
     });

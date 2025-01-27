@@ -8,6 +8,6 @@ export const useFetchUserPref = (user : User | undefined) => {
         enabled: !!user?.id,
         queryFn: () => fetchUserPreferences(user!.id),
         queryKey: [queryKeys.userPreferences],
-        cacheTime : 0,
+        // gcTime : 0,
     })
 }

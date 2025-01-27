@@ -22,7 +22,7 @@ const OllamaModelCard = ({name, description, link, sizes, capability}: OllamaMod
         const modelJustDownloaded = downloadedModels.some((model) => model[modelName])
 
         if (modelJustDownloaded)
-            queryClient.invalidateQueries({queryKey : queryKeys.modelList})
+            queryClient.invalidateQueries({queryKey : [queryKeys.modelList]})
 
         return (data as Model[]).some(item => item.name.toLowerCase() === modelName.trim().toLowerCase()) || modelJustDownloaded;
     }
