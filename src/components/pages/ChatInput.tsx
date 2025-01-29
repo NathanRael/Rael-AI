@@ -19,23 +19,28 @@ import {queryKeys} from "@/api/queryKeys.ts";
 
 const ChatInput = () => {
     const [message, setMessage] = useState('');
-    
+
     const {chatId} = useParams();
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const queryClient = useQueryClient();
-    
+
     const user = useUserStore((state) => state.user);
-    
+
     const submitting = useMessageStore(state => state.submitting)
     const submitMessage = useMessageStore(state => state.handleSubmitMessage);
-    
-    
+
+
     const {scrollToBottom} = useScroll();
     const {models, changeModel, visionModels, selectedModel} = useModelHandler({queryClient, user})
     const {resetImageContent, uploadedImage, handleFileUpload, setFile, file} = useFileHandler()
     const {getFromStorage, setToStorage} = useStorageHandler()
-    const {createNewConversation, newConversationCreated, isConversationLoading, conversations} = useConversationHandler({queryClient})
+    const {
+        createNewConversation,
+        newConversationCreated,
+        isConversationLoading,
+        conversations
+    } = useConversationHandler({queryClient})
     const {handleKeyPress} = useSmartTextarea({
         onEnter: () => {
             if (canSubmit) {
@@ -46,31 +51,31 @@ const ChatInput = () => {
         },
         value: message,
     });
-    
+
     const canSubmit = useMemo(() => !submitting && message.trim() !== '' && selectedModel !== "", [submitting, message, selectedModel]);
     const chatbotTypeIdInParams = useMemo(() => {
         const params = searchParams?.get('chatType');
         return params === 'null' ? '' : params
     }, [searchParams]);
 
-    const handleSubmitMessageAdapter = async (message : string, conversationId : string, chatbotTypeId : string, fileId : string, model?: string | null) => {
+    const handleSubmitMessageAdapter = async (message: string, conversationId: string, chatbotTypeId: string, fileId: string, model?: string | null) => {
         const newModel = model || selectedModel;
         await submitMessage({
-            inputValue : message,
+            inputValue: message,
             fileId,
-            model : newModel,
+            model: newModel,
             conversationId,
             chatbotTypeId,
-            onSuccess :async () => {
-                await queryClient.invalidateQueries({ queryKey :queryKeys.chat});
-                await queryClient.invalidateQueries({queryKey :queryKeys.conversationList});
+            onSuccess: async () => {
+                await queryClient.invalidateQueries({queryKey: [queryKeys.chat]});
+                await queryClient.invalidateQueries({queryKey: [queryKeys.conversationList]});
             },
-            onValidInput : () => setMessage(''),
-            onFinally : () => scrollToBottom(document.body.scrollHeight),
+            onValidInput: () => setMessage(''),
+            onFinally: () => scrollToBottom(document.body.scrollHeight),
         })
     }
-    
-    
+
+
     const handleSubmit = async () => {
         try {
             let uploadedFileId = '';
@@ -82,7 +87,7 @@ const ChatInput = () => {
                 const uploadedFile = await handleFileUpload(file);
                 uploadedFileId = uploadedFile?.id || '';
             }
-            
+
 
             if (chatId && !isConversationLoading) {
                 const chatbotTypeId = conversations!.find((conv) => conv.id === chatId)!.chatbot_type_id;
@@ -97,7 +102,7 @@ const ChatInput = () => {
             resetImageContent();
 
             const generatedTitle = await generateMessage({
-                prompt: `Give me a suitable title for this message: '${message}'. Don't be verbose. Just the title.`,
+                prompt: `Give a suitable title for this message :  '${message}'. You are not allowed to write anything other than the title and don't add quotes to it `,
             });
 
             await createNewConversation({
@@ -105,13 +110,12 @@ const ChatInput = () => {
                 title: generatedTitle,
                 chatbotTypeId: chatbotTypeIdInParams || '',
             });
-            
+
         } catch (error) {
             console.error(error);
         }
     };
 
-    
 
     useEffect(() => {
         if (!conversations || conversations.length === 0 || !newConversationCreated) return;
@@ -123,7 +127,7 @@ const ChatInput = () => {
         navigate(`/chat/${newConversationId}`);
 
         handleSubmitMessageAdapter(userInput, newConversationId, chatbotTypeIdInParams!, uploadedFileId);
-        
+
     }, [newConversationCreated, conversations, isConversationLoading]);
 
 
@@ -133,7 +137,7 @@ const ChatInput = () => {
                 <ImageInputPreview className={'absolute -top-[132px]'} image={uploadedImage} onClose={() => {
                     resetImageContent()
                 }}/>}
-            
+
             <Textarea
                 size={'lg'}
                 value={message}

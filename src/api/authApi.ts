@@ -7,7 +7,7 @@ export interface Token {
 }
 
 
-export const loginUser = async ({email, password} : Pick<User, 'email' | 'password'>) => {
+export const loginUser = async ({email, password}: Pick<User, 'email' | 'password'>) => {
     const response = await apiClient.post<Token>(`/api/login`, {email, password})
     return response.data
 }

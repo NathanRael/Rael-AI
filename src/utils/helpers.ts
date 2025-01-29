@@ -46,7 +46,7 @@ export const getSettingName = (pathname: string): string | null => {
 }
 
 
-export const hasToOnboard = (userPreferences: UserPreference): boolean => {
+export const hasToOnboard = (userPreferences: UserPreference | undefined): boolean => {
     // return !userPreferences?.has_onboarded 
-    return !userPreferences?.has_onboarded || userPreferences?.main_chatbot_types.length === 0
+    return !userPreferences?.has_onboarded || userPreferences?.main_chatbot_types?.length === 0
 }

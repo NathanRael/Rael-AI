@@ -54,7 +54,7 @@ const MainPage = () => {
                             chatbotTypes && chatbotTypes.length > 0 && (
                                 <>
                                     <div className={'space-y-4'}>
-                                        <h1 className={'text-lead text-black dark:text-white'}>Select a chat type</h1>
+                                        <h1 className={'text-lead text-black dark:text-white'}>Select an AI Agent</h1>
                                         <ChatbotTypeToggleList chatbotTypes={chatbotTypes!} loading={isFetchingChatbotTypes}
                                                                error={chatbotTypeError as Error} onRetry={reFetchChatbotTypes}/>
                                     </div>

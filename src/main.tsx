@@ -9,10 +9,10 @@ import "./index.css"
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
-            networkMode: 'always'
+            networkMode: 'always',
         },
         mutations: {
-            networkMode: 'always'
+            networkMode: 'always',
         }
     }
 })

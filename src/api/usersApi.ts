@@ -11,8 +11,13 @@ export interface User {
 }
 
 export const fetchActiveUser = async () => {
-    const response = await api.get<User>(`api/me`);
-    return response.data;
+    try {
+        const response = await api.get<User>(`api/me`);
+        return response.data;
+    } catch (error) {
+        console.log("Active use err", error)
+        throw new Error(`${error}`);
+    }
 }
 
 export const createUser = async ({email, password, username}: Omit<User, 'id'>) => {

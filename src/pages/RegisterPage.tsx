@@ -38,7 +38,7 @@ const RegisterPage = () => {
         mutationFn: createUser,
         onSuccess: () => navigate('/login'),
         onError : (err) => {
-            setError((err as BackendErrorResponse).response.data.detail);
+            setError((err as unknown as BackendErrorResponse).response.data.detail);
         }
     })
     const validations: ValidationRules<FormType>[] = [

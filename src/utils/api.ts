@@ -1,17 +1,19 @@
-﻿import axios, {AxiosInstance} from "axios";
+﻿import axios from "axios";
 import {BASE_URL} from "@/constants";
 
 const api = axios.create({
     baseURL: BASE_URL,
     withCredentials: true,
+    validateStatus: (status) => status >= 200 && status < 300,
 })
 
 const apiClient = axios.create({
     baseURL: BASE_URL,
     withCredentials: true,
+    validateStatus: (status) => status >= 200 && status < 300,
 })
 
-const handleAxiosError = (error: unknown) => {
+/*const handleAxiosError = (error: unknown) => {
     if (axios.isAxiosError(error)) {
         const backendError = error.response?.data?.detail || "An unknown error occurred";
         console.log("Global Axios Error Interceptor:", backendError);
@@ -39,6 +41,6 @@ const attachResponseInterceptor = (axiosInstance: AxiosInstance) => {
 };
 
 attachResponseInterceptor(apiClient);
-attachResponseInterceptor(api);
+attachResponseInterceptor(api);*/
 
 export {api, apiClient};
