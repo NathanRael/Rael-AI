@@ -25,7 +25,7 @@ const Sidebar = ({className}: { className?: string }) => {
         data: chatbotTypeList,
         isLoading: isFetchingChatbotType,
         error: chatbotTypeError,
-        refetch: reFetchChatTypeList
+        refetch: reFetchAgent
     } = useQuery({
         queryFn: () => fetchChatbotTypes({search}),
         queryKey: [queryKeys.chatbotTypeList, {search}]
@@ -56,14 +56,13 @@ const Sidebar = ({className}: { className?: string }) => {
                     setSearch(filters.search)}/>
                 <div className={'w-full space-y-7 '}>
                     <Stack align={'start'} className={'w-full'}>
-                        <p className={'text-sm text-start w-full text-black-80 dark:text-white-80'}>Chat
-                            Type</p>
+                        <p className={'text-sm text-start w-full text-black-80 dark:text-white-80'}>AI Agents</p>
                         {
-                            chatbotTypeList && <ChatTypeList className={'max-h-[240px] overflow-y-auto hide-scrollbar'}
+                            chatbotTypeList && <Agent className={'max-h-[240px] overflow-y-auto hide-scrollbar'}
                                                              chatbotTypes={chatbotTypeList?.slice(0, 3)}
                                                              loading={isFetchingChatbotType}
                                                              error={chatbotTypeError as Error}
-                                                             onRetry={() => reFetchChatTypeList()}/>
+                                                             onRetry={() => reFetchAgent()}/>
                         }
                         
                     </Stack>
@@ -83,7 +82,7 @@ const Sidebar = ({className}: { className?: string }) => {
 export default Sidebar
 
 
-const ChatTypeList = ({loading, error, chatbotTypes, onRetry, className}: {
+const Agent = ({loading, error, chatbotTypes, onRetry, className}: {
     loading: boolean,
     error: Error,
     chatbotTypes: ChatbotType[],
@@ -102,13 +101,13 @@ const ChatTypeList = ({loading, error, chatbotTypes, onRetry, className}: {
     return (
         <Stack className={cn('w-full', className)} gap={8} align={'start'}>
             {chatbotTypes.length === 0 &&
-                <p className={'text-black-80 dark:text-white-80'}>No chat types found</p>}
+                <p className={'text-black-80 dark:text-white-80'}>No AI agent found</p>}
             {
                 chatbotTypes.map(chat => (<ChatType onClick={() => handleSelect(chat.id)} selected={chat.id === selectedId} {...chat} key={chat.id}/>))
             }
             <Button onClick={() => navigate('/chat/explore')} className={'mt-2'} size={'sm'} variant={'ghost'} >
                 <SlackIcon size={16}/>
-                Explore chat types
+                Explore AI agent
             </Button>
         </Stack>
     )

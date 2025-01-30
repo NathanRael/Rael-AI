@@ -5,7 +5,7 @@ import {useNavigate} from "react-router-dom";
 import {useQuery} from "@tanstack/react-query";
 import {fetchChatbotTypes} from "@/api/chatbotTypesApi.ts";
 import {queryKeys} from "@/api/queryKeys.ts";
-import ExploreChatbotTypeList from "@/components/pages/ExploreChatbotTypeList.tsx";
+import ExploreAgentList from "@/components/pages/ExploreAgentList.tsx";
 import {useState} from "react";
 
 const ExploreChatPage = () => {
@@ -22,14 +22,14 @@ const ExploreChatPage = () => {
             </Icon>
             <div className={'mx-auto w-fit text-center'}>
                 <h1 className={'text-[32px] text-black dark:text-white font-bold'}>
-                    <span>Chatbot types</span>
+                    <span>AI Agent</span>
                 </h1>
-                <p className={'text-black/80 dark:text-white/80 text-lead'}>Find chatbot that match your need </p>
+                <p className={'text-black/80 dark:text-white/80 text-lead'}>Find AI agent that match your need </p>
             </div>
             <div className={'flex-centered'}>
                 <ChatbotTyeListFilter onChange={setSearch} className={'w-[50%] max-md:w-[90%]'}/>
             </div>
-            <ExploreChatbotTypeList loading={isFetchingChatbotType} error={chatbotTypeError as Error} chatbotTypes={chatBotTypes!} onRetry={() => {}}/>
+            <ExploreAgentList loading={isFetchingChatbotType} error={chatbotTypeError as Error} chatbotTypes={chatBotTypes!} onRetry={() => {}}/>
         </section>
     )
 }

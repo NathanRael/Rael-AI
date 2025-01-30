@@ -60,6 +60,7 @@ const ChatInput = () => {
 
     const handleSubmitMessageAdapter = async (message: string, conversationId: string, chatbotTypeId: string, fileId: string, model?: string | null) => {
         const newModel = model || selectedModel;
+        
         await submitMessage({
             inputValue: message,
             fileId,

@@ -12,7 +12,7 @@ type ExploreChatbotTypeProps = {
     onRetry: () => void;
     className? : string;
 }
-const ExploreChatbotTypeList = ({loading, error, chatbotTypes, onRetry, className}: ExploreChatbotTypeProps) => {
+const ExploreAgentList = ({loading, error, chatbotTypes, onRetry, className}: ExploreChatbotTypeProps) => {
     const {selectedId, handleSelect} = useChatType();
 
 
@@ -42,7 +42,7 @@ const ExploreChatbotTypeList = ({loading, error, chatbotTypes, onRetry, classNam
     )
 }
 
-export default ExploreChatbotTypeList
+export default ExploreAgentList
 
 type ChatbotCardProps = Omit<ChatbotType, 'context'> & {
     description: string;

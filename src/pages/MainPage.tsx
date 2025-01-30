@@ -6,7 +6,7 @@ import {useQuery} from "@tanstack/react-query";
 import {queryKeys} from "@/api/queryKeys.ts";
 import {useEffect} from "react";
 import {ChevronRight, Slack} from "lucide-react";
-import ChatbotTypeToggleList from "@/components/pages/ChatbotTypeToggleList.tsx";
+import AgentToggleList from "@/components/pages/AgentToggleList.tsx";
 import {fetchMainChatbotTypes} from "@/api/chatbotTypesApi.ts";
 import Copyright from "@/components/pages/Copyright.tsx";
 import useLocalSearchParams from "@/hooks/useLocalSearchParams.ts";
@@ -49,14 +49,14 @@ const MainPage = () => {
             <section className={'h-full space-y-10 pt-[128px] max-md:pt-16 pb-10 px-4 '}>
                 <Stack direction={'vertical'} align={'center'} gap={32}>
                     <div className={'flex flex-col gap-8 items-start p-2 rounded-xl '}>
-                        {chatbotTypes?.length === 0 && <p className={'text-black-100 dark:text-white-100'}>No chatbot type found</p>}
+                        {chatbotTypes?.length === 0 && <p className={'text-black-100 dark:text-white-100'}>No AI agent found</p>}
                         {
                             chatbotTypes && chatbotTypes.length > 0 && (
                                 <>
                                     <div className={'space-y-4'}>
                                         <h1 className={'text-lead text-black dark:text-white'}>Select an AI Agent</h1>
-                                        <ChatbotTypeToggleList chatbotTypes={chatbotTypes!} loading={isFetchingChatbotTypes}
-                                                               error={chatbotTypeError as Error} onRetry={reFetchChatbotTypes}/>
+                                        <AgentToggleList chatbotTypes={chatbotTypes!} loading={isFetchingChatbotTypes}
+                                                         error={chatbotTypeError as Error} onRetry={reFetchChatbotTypes}/>
                                     </div>
                                     <Button onClick={() => navigate('/chat/explore')} size={'sm'} variant={'ghost'}
                                             radius={'xl'}>

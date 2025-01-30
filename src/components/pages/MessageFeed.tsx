@@ -113,6 +113,10 @@ const BotMessage = ({content, handleCopy}: { content: string, handleCopy: (text:
                                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
                                    const {children, className, node, ...rest} = props
                                    const match = /language-(\w+)/.exec(className || '')
+                                   // const chainOfThought = /<think>(.)+/;
+
+                                   console.log(content)
+                                   // console.log(chainOfThought.test(content))
                                    const codeContent = String(children).replace(/\n$/, '');
                                    return match ? (
                                        <div className={'relative'}>

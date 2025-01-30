@@ -11,7 +11,7 @@ type ChatbotTypeListProps = {
     chatbotTypes: Omit<ChatbotType, 'context'>[];
     onRetry: () => void;
 }
-const ChatbotTypeToggleList = ({loading, error, chatbotTypes, onRetry}: ChatbotTypeListProps) => {
+const AgentToggleList = ({loading, error, chatbotTypes, onRetry}: ChatbotTypeListProps) => {
     const {selectedId, handleSelect} = useChatType();
     
 
@@ -36,4 +36,4 @@ const ChatbotTypeToggleList = ({loading, error, chatbotTypes, onRetry}: ChatbotT
     )
 }
 
-export default ChatbotTypeToggleList
+export default AgentToggleList
