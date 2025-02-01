@@ -2,7 +2,7 @@
 import {copyToClipboard} from "@/utils/helpers.ts";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import {ChevronDown, ChevronUp, Code2, Copy} from "lucide-react";
+import {ChevronDown, ChevronUp, Code2, Copy, Loader2} from "lucide-react";
 import {Prism as SyntaxHighlighter} from "react-syntax-highlighter";
 import {dracula} from "react-syntax-highlighter/dist/esm/styles/prism";
 import useWindowSize from "@/hooks/useWindowSize.ts";
@@ -12,6 +12,7 @@ import {downloadFile} from "@/api/fileApi.ts";
 import {useQuery} from "@tanstack/react-query";
 import {queryKeys} from "@/api/queryKeys.ts";
 import ErrorUI from "@/components/ui/ErrorUI.tsx";
+import {useMessageStore} from "@/store/messageStore.ts";
 
 
 const MessageFeed = ({content, sender, file_id}: Omit<Message, 'id'>) => {
@@ -186,6 +187,7 @@ const CopyIcon = ({
 
 const ChainOfThoughtMessage = ({message}: { message: string }) => {
     const [isCollapsed, setIsCollapsed] = useState(false);
+    const {submitting} = useMessageStore()
 
     if (!message)
         return
@@ -195,6 +197,7 @@ const ChainOfThoughtMessage = ({message}: { message: string }) => {
             <div
                 onClick={() => setIsCollapsed(!isCollapsed)}
                 className={'flex items-center cursor-pointer justify-center gap-2 bg-neutral-light-80 dark:bg-neutral-dark-80 px-3 py-2 rounded-xl'}>
+                {submitting && <Loader2 className={'animate-spin'} size={20}/>}
                 <span>Chain of thought</span>
                 {isCollapsed ? <ChevronUp size={20}/> : <ChevronDown size={20}/>}
             </div>

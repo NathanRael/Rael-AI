@@ -72,9 +72,6 @@ const Sidebar = ({className}: { className?: string }) => {
                     </Stack>
                 </div>
             </Stack>
-            {/*<Stack direction={'horizontal'} className={'w-full items-end justify-center'}>*/}
-            {/*    <ThemeSwitcher className={''}/>*/}
-            {/*</Stack>*/}
         </div>
     )
 }
