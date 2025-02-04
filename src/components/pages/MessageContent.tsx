@@ -6,7 +6,7 @@ import {ChevronDown, ChevronUp, Code2, Copy, Loader2} from "lucide-react";
 import {Prism as SyntaxHighlighter} from "react-syntax-highlighter";
 import {dracula} from "react-syntax-highlighter/dist/esm/styles/prism";
 import useWindowSize from "@/hooks/useWindowSize.ts";
-import {Message} from "@/api/MessagesApi.ts";
+import {Message, StreamedMessage} from "@/api/MessagesApi.ts";
 import {useState} from "react";
 import {downloadFile} from "@/api/fileApi.ts";
 import {useQuery} from "@tanstack/react-query";
@@ -15,7 +15,10 @@ import ErrorUI from "@/components/ui/ErrorUI.tsx";
 import {useMessageStore} from "@/store/messageStore.ts";
 
 
-const MessageFeed = ({content, sender, file_id}: Omit<Message, 'id'>) => {
+const MessageContent = ({content, sender, file_id, streamed = false, streamedMessage}: Omit<Message, 'id'> & {
+    streamed?: boolean,
+    streamedMessage?: StreamedMessage
+}) => {
     const {data: image, isLoading: isFetchingImage, error: imageFetchError, refetch: reFetchImage} = useQuery({
         enabled: !!file_id,
         queryFn: () => downloadFile(file_id),
@@ -43,7 +46,8 @@ const MessageFeed = ({content, sender, file_id}: Omit<Message, 'id'>) => {
                 }
                 {
                     sender === 'bot' &&
-                    <BotMessage content={content} handleCopy={handleCopyToClipboard}/>
+                    <BotMessage streamed={streamed} streamedMessage={streamedMessage!} content={content}
+                                handleCopy={handleCopyToClipboard}/>
                 }
 
 
@@ -91,15 +95,28 @@ const UserImageView = ({image, loading, error, reFetch}: {
     )
 }
 
-const BotMessage = ({content, handleCopy}: { content: string, handleCopy: (text: string) => Promise<void> }) => {
+const BotMessage = (props: {
+    streamed: boolean,
+    content: string,
+    streamedMessage: StreamedMessage,
+    handleCopy: (text: string) => Promise<void>
+}) => {
+    const {content, handleCopy, streamed, streamedMessage} = props;
+    
+    
     const {width} = useWindowSize();
-    const messageRegex = /^<think>(.*?)<\/think>(.*)$/s;
+    const messageRegex = /^(<think>.*?<\/think>)*(.*)$/s;
     const match = messageRegex.exec(content);
+    
+    let chainOfThought = match ? match[1] : '';
+    let finalMessage = match ? match[2] : '';
 
-    const chainOfThought = match ? match[1].trim() : '';
-    const finalResponse = match ? match[2].trim() : '';
-
-
+    
+    if (streamed) {
+        chainOfThought = streamedMessage?.chainOfThought;
+        finalMessage = streamedMessage?.finalResponse;
+    }
+    
     const generateWidth = () => {
         if (width >= 668)
             return 'auto'
@@ -115,8 +132,8 @@ const BotMessage = ({content, handleCopy}: { content: string, handleCopy: (text:
     return (
         <div className={'prose prose-style relative'}>
             <CopyIcon className={'absolute -bottom-6 py-1 -left-2 '} onClick={() => handleCopy(content)}/>
-            <ChainOfThoughtMessage message={chainOfThought}/>
-            <ReactMarkdown className={'text-wrap w-full'} children={finalResponse} remarkPlugins={[remarkGfm]}
+            <ChainOfThoughtMessage streamed={streamed} message={chainOfThought}/>
+            <ReactMarkdown className={'text-wrap w-full'} children={finalMessage} remarkPlugins={[remarkGfm]}
                            components={{
                                code(props: any) {
                                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -185,7 +202,7 @@ const CopyIcon = ({
 }
 
 
-const ChainOfThoughtMessage = ({message}: { message: string }) => {
+const ChainOfThoughtMessage = ({message, streamed}: { message: string, streamed : boolean }) => {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const {submitting} = useMessageStore()
 
@@ -197,7 +214,7 @@ const ChainOfThoughtMessage = ({message}: { message: string }) => {
             <div
                 onClick={() => setIsCollapsed(!isCollapsed)}
                 className={'flex items-center cursor-pointer justify-center gap-2 bg-neutral-light-80 dark:bg-neutral-dark-80 px-3 py-2 rounded-xl'}>
-                {submitting && <Loader2 className={'animate-spin'} size={20}/>}
+                {submitting && streamed && <Loader2 className={'animate-spin'} size={20}/>}
                 <span>Chain of thought</span>
                 {isCollapsed ? <ChevronUp size={20}/> : <ChevronDown size={20}/>}
             </div>
@@ -211,4 +228,4 @@ const ChainOfThoughtMessage = ({message}: { message: string }) => {
     )
 }
 
-export default MessageFeed
+export default MessageContent

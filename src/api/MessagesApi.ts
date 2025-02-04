@@ -1,15 +1,14 @@
 ﻿import {apiClient} from "@/utils/api.ts";
 import {BASE_URL} from "@/constants";
+import {RefObject} from "react";
 
 
-/*
-interface FetchedMessage {
-    id: number;
-    content : string;
-    "conversation_id": number;
-    sender: string;
+
+export type StreamedMessage = {
+    chainOfThought : string;
+    finalResponse : string
 }
-*/
+
 
 export interface Message {
     id: string;
@@ -47,7 +46,7 @@ export const fetchMessages = async (conversationId: string) => {
 
 
 export const createMessage = async ({content, model, conversation_id, sender = 'user', chatbot_type_id}: CreateMessage) => {
-    let body : Partial<CreateMessage> = {
+    const body : Partial<CreateMessage> = {
         content,
         model,
         conversation_id,
@@ -71,12 +70,14 @@ export const newStreamedMessage = async ({
                                              chatbot_type_id,
                                              file_id,
                                              onFinish,
+                                                abortController,
                                              onChange
                                          }:  NewStreamedMessage & {
-    onChange: (chunk: string) => void,
-    onFinish: (fullMessage: string) => void
+    onChange: ({chainOfThought, finalResponse} : {chainOfThought : string, finalResponse : string}) => void,
+    onFinish: (fullMessage: string) => void,
+    abortController : RefObject<AbortController>,
 }) => {
-    let body: Partial<NewStreamedMessage> = {
+    const body: Partial<NewStreamedMessage> = {
         content,
         model,
         sender,
@@ -94,7 +95,8 @@ export const newStreamedMessage = async ({
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
+        signal : abortController?.current?.signal
     });
 
     if (!response.ok) {
@@ -107,9 +109,10 @@ export const newStreamedMessage = async ({
 
     const reader = response.body.getReader();
     const decoder = new TextDecoder();
+    
     let fullMessage = '';
-
-    while (true) {
+    
+   /* while (true) {
         const {done, value} = await reader.read();
 
         if (done) {
@@ -119,8 +122,39 @@ export const newStreamedMessage = async ({
 
         const chunk = decoder.decode(value, {stream: true});
         fullMessage += chunk;
+        console.log(JSON.parse(fullMessage));
         onChange(chunk)
+    }*/
+
+    while (true) {
+        const { done, value } = await reader.read();
+        
+        if (done) {
+            onFinish(fullMessage);
+            break;
+        }
+
+        const chunk = decoder.decode(value, { stream: true });
+        
+        const chunks = chunk.split("\n");
+
+        for (let i = 0; i < chunks.length - 1; i++) {
+            try {
+                const parsedChunk = JSON.parse(chunks[i]);
+                onChange({
+                    chainOfThought : parsedChunk?.chain_of_thought,
+                    finalResponse : parsedChunk?.final_response,
+                });
+                
+                fullMessage = parsedChunk?.processed_chunk;
+
+            } catch (error) {
+                console.error("Error parsing JSON chunk:", error);
+            }
+        }
+
     }
+
 }
 
 

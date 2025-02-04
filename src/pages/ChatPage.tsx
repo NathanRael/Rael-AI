@@ -9,7 +9,7 @@ import {useParams} from "react-router-dom";
 import MessageList from "@/components/pages/MessageList.tsx";
 import {useQuery} from "@tanstack/react-query";
 import {fetchMessages} from "@/api/MessagesApi.ts";
-import MessageFeed from "@/components/pages/MessageFeed.tsx";
+import MessageContent from "@/components/pages/MessageContent.tsx";
 import {queryKeys} from "@/api/queryKeys.ts";
 import {fetchChatbotType} from "@/api/chatbotTypesApi.ts";
 import ChatbotTypeCard from "@/components/pages/ChatbotTypeCard.tsx";
@@ -58,11 +58,30 @@ const ChatPage = () => {
             <Stack direction={'vertical'} className={' pb-[160px]'} gap={40}>
                 <Stack className={` h-fit ${INPUT_WIDTH} space-y-6`} align={'start'}>
                     <MessageList messages={messages!} error={error as Error} loading={isLoading}/>
-                    {submitting && <Stack className={`max-md:w-full ${INPUT_WIDTH}`}> <MessageFeed file_id={fileId} sender={'user'}
-                                                                                                   content={optimisticMessage!}/></Stack>}
-                    {streamedMessage && submitting && <Stack className={`max-md:w-full ${INPUT_WIDTH}`}> <MessageFeed file_id={''} sender={'bot'}
-                                                                                                   content={streamedMessage!}/></Stack>}
-                    {submitting && <MessageLoader/>}
+                    {submitting &&
+                        (
+                            <>
+                                <Stack className={`max-md:w-full ${INPUT_WIDTH}`}>
+                                    <MessageContent 
+                                        file_id={fileId} 
+                                        sender={'user'} 
+                                        content={optimisticMessage!}
+                                    />
+                                </Stack>
+                                <Stack className={`max-md:w-full ${INPUT_WIDTH}`}>
+                                    <MessageContent
+                                        sender={'bot'}
+                                        streamed
+                                        streamedMessage={streamedMessage}
+                                        content={''}
+                                        file_id={''}
+                                    />
+                                </Stack>
+                                <MessageLoader/>
+                            </>
+                        )
+                    }
+
                 </Stack>
                 {
                     (!isFetchingChatbotType && !isLoading && !submitting) && (
@@ -72,7 +91,8 @@ const ChatPage = () => {
                     )
 
                 }
-                <div className={cn(`fixed bottom-10 max-md:bottom-2 left-1/2 -translate-x-1/2  ${INPUT_WIDTH}`, 'max-md:w-[96%]')}>
+                <div
+                    className={cn(`fixed bottom-10 max-md:bottom-2 left-1/2 -translate-x-1/2  ${INPUT_WIDTH}`, 'max-md:w-[96%]')}>
                     <ChatInput/>
                 </div>
                 <div ref={containerRef}/>

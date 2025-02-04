@@ -1,6 +1,5 @@
 ﻿import {apiClient} from "@/utils/api.ts";
 
-
 export interface Model {
     name : string;
     capability : string;
@@ -12,5 +11,5 @@ export const fetchModels = async (formated: boolean = false, model_type?:'vision
     if (model_type)
         return (response.data as Model[]).filter((model) => model.capability === model_type);
     
-    return response.data as string[];
+    return response.data as string[]; 
 }

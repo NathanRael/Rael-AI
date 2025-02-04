@@ -1,4 +1,4 @@
-﻿import MessageFeed from "@/components/pages/MessageFeed.tsx";
+﻿import MessageContent from "@/components/pages/MessageContent.tsx";
 import {Stack, Button} from "rael-ui"
 import {INPUT_WIDTH} from "@/constants/style.ts";
 import LoaderUI from "@/components/ui/LoaderUI.tsx";
@@ -31,7 +31,7 @@ const MessageList = ({messages, loading, error}: MessageListProps) => {
     return (
         <Stack direction={'vertical'} className={`max-md:w-full ${INPUT_WIDTH}`} gap={64}>
             {
-                messages?.map((message) => (<MessageFeed key={message.id} {...message}/>))
+                messages?.map((message) => (<MessageContent key={message.id} {...message}/>))
             }
         </Stack>
     )

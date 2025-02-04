@@ -37,7 +37,6 @@ export const requireEnv = ({name, errorMessage}: { name: string | undefined, err
     return envVar
 }
 
-
 export const getSettingName = (pathname: string): string | null => {
     const pathnameRegex: RegExp = /([a-z0-9]+)\/([a-z0-9]+)/i;
     const match = pathname.match(pathnameRegex)
@@ -47,6 +46,5 @@ export const getSettingName = (pathname: string): string | null => {
 
 
 export const hasToOnboard = (userPreferences: UserPreference | undefined): boolean => {
-    // return !userPreferences?.has_onboarded 
     return !userPreferences?.has_onboarded || userPreferences?.main_chatbot_types?.length === 0
 }
