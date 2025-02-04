@@ -1,9 +1,9 @@
 ﻿import useScroll from "@/hooks/useScroll.ts";
 import useSmartTextarea from "@/hooks/useSmartTextarea.ts";
-import {ArrowUp} from "lucide-react";
+import {ArrowUp, StopCircle} from "lucide-react";
 import {Icon, Textarea} from "rael-ui";
 import {useNavigate, useParams, useSearchParams} from "react-router-dom";
-import {useEffect, useMemo, useState} from "react";
+import {useEffect, useMemo, useRef, useState} from "react";
 import {useQueryClient} from "@tanstack/react-query";
 import {generateMessage} from "@/api/promptsApi.ts";
 import {useUserStore} from "@/store/userStore.ts";
@@ -24,6 +24,8 @@ const ChatInput = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const queryClient = useQueryClient();
+
+    const messageAbortController = useRef<AbortController | null>(null);
 
     const user = useUserStore((state) => state.user);
 
@@ -60,20 +62,34 @@ const ChatInput = () => {
 
     const handleSubmitMessageAdapter = async (message: string, conversationId: string, chatbotTypeId: string, fileId: string, model?: string | null) => {
         const newModel = model || selectedModel;
-        
-        await submitMessage({
-            inputValue: message,
-            fileId,
-            model: newModel,
-            conversationId,
-            chatbotTypeId,
-            onSuccess: async () => {
-                await queryClient.invalidateQueries({queryKey: [queryKeys.chat]});
-                await queryClient.invalidateQueries({queryKey: [queryKeys.conversationList]});
-            },
-            onValidInput: () => setMessage(''),
-            onFinally: () => scrollToBottom(document.body.scrollHeight),
-        })
+        messageAbortController.current = new AbortController();
+
+        try {
+            await submitMessage({
+                inputValue: message,
+                fileId,
+                model: newModel,
+                conversationId,
+                chatbotTypeId,
+                abortController: messageAbortController,
+                onSuccess: async () => {
+                    await queryClient.invalidateQueries({queryKey: [queryKeys.chat]});
+                    await queryClient.invalidateQueries({queryKey: [queryKeys.conversationList]});
+                },
+                onValidInput: () => setMessage(''),
+                onFinally: () => scrollToBottom(document.body.scrollHeight),
+            })
+        } catch (error) {
+            messageAbortController.current.abort('Message stopped by client')
+        } finally {
+            messageAbortController.current = null;
+        }
+    }
+
+    const handleStopBotMessage = () => {
+        if (messageAbortController.current) {
+            messageAbortController.current.abort();
+        }
     }
 
 
@@ -158,7 +174,9 @@ const ChatInput = () => {
                                             onChange={(file) => setFile(file)}/>}
                 rightContent={
                     <>
-                        <SubmitButton canSubmit={canSubmit} handleSubmit={handleSubmit}/>
+                        {
+                            submitting ? <StopButton handleStopMessage={handleStopBotMessage} /> : <SubmitButton canSubmit={canSubmit} handleSubmit={handleSubmit}/>
+                        }
                     </>
 
                 }
@@ -178,3 +196,12 @@ const SubmitButton = ({canSubmit, handleSubmit}: { canSubmit: boolean, handleSub
             size={16}/></Icon>
     )
 }
+const StopButton = ({handleStopMessage}: { handleStopMessage: () => void }) => {
+    return (
+        <Icon role={'button'} type={'submit'} 
+              className={'rounded-2xl button-gradient'}
+              onClick={handleStopMessage}><StopCircle
+            size={20}/></Icon>
+    )
+}
+
